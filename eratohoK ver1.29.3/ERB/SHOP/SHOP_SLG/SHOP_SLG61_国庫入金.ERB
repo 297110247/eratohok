@@ -32,7 +32,7 @@ RETURN 1
 ;「国庫入金」の次行説明指定内容
 ;-------------------------------------------------
 @SHOP_SLG_NEXT_LINE_ADD_TEXT61
-PRINTFORM %"汇率:" + NUM_FORMAT(GET_SUM_ECONOMY(CFLAG:MASTER:所属) / 100000 + 1), 11%
+PRINTFORM %"費率:" + NUM_FORMAT(GET_SUM_ECONOMY(CFLAG:MASTER:所属) / 100000 + 1), 12%
 
 ;-------------------------------------------------
 ;「国庫入金」本体
