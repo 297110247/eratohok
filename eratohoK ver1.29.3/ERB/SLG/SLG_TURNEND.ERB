@@ -24,6 +24,10 @@ ENDIF
 CALL FISHER_YATES_SHAFFLE(MAX_COUNTRY)
 ARRAYCOPY "SHAFFLE_ARRAY", "勢力行動順"
 
+;(従属国パッチ)従属国状態の確認
+CALL CHECK_Markgraf_start
+CALL CHECK_Markgraf_end
+
 
 ;国家間の隣接関係マップの作成(処理の高速化)
 CALL TMP_CREATE_COUNTRY_NEIBORING_MAP

@@ -1,0 +1,56 @@
+﻿;-------------------------------------------------
+;■定数
+;-------------------------------------------------
+;辺境伯の最大数
+#DIM CONST MAX_TREATY_M = 100
+
+;辺境伯に対する宗主国の最大数
+#DIM CONST MAX_TREATY_M_su = 100
+
+;植民地の最大数
+#DIM CONST MAX_TREATY_CO = 100
+
+;植民地に対する宗主国の最大数
+#DIM CONST MAX_TREATY_CO_su = 100
+
+;傀儡国の最大数
+#DIM CONST MAX_TREATY_P = 100
+
+;傀儡国に対する宗主国の最大数
+#DIM CONST MAX_TREATY_P_su = 100
+
+;-------------------------------------------------
+;■条約に関する変数
+;-------------------------------------------------
+
+;その国は他国と従属被従属関係が存在する(独立国=0 宗主国=1 辺境伯=2 植民地=3 傀儡国=4)
+#DIM SAVEDATA COUNTRY_Protectorate, MAX_COUNTRY
+
+;辺境伯関係が存在する
+#DIM SAVEDATA IS_TREATY_M, MAX_TREATY_M
+
+;辺境伯参加国(最後の要素:0=辺境伯 1=宗主国)
+#DIM SAVEDATA TREATY_M_COUNTRY, MAX_TREATY_M, MAX_TREATY_COUNTRY, 2
+
+;植民地関係が存在する
+#DIM SAVEDATA IS_TREATY_CO, MAX_TREATY_CO
+
+;植民地参加国(最後の要素:0=植民地 1=宗主国)
+#DIM SAVEDATA TREATY_CO_COUNTRY, MAX_TREATY_CO, MAX_TREATY_COUNTRY, 2
+
+;傀儡国関係が存在する
+#DIM SAVEDATA IS_TREATY_P, MAX_TREATY_P
+
+;傀儡国参加国(最後の要素:0=傀儡国 1=宗主国)
+#DIM SAVEDATA TREATY_P_COUNTRY, MAX_TREATY_P, MAX_TREATY_COUNTRY, 2
+
+;連邦関係が存在する
+#DIM SAVEDATA IS_TREATY_UNI, MAX_COUNTRY
+
+;連邦参加国(最後の要素:0=連邦参加国 1=連邦主導国)
+#DIM SAVEDATA TREATY_UNI_COUNTRY, MAX_COUNTRY, MAX_COUNTRY, 2
+
+;-------------------------------------------------
+;■勢力に関する変数 ※0番の勢力は無所属で固定
+;-------------------------------------------------
+#DIM SUMMON_SUMMON

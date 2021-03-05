@@ -313,6 +313,11 @@ ENDIF
 #DIM 効果量
 #DIM 持ち出し額
 #DIM 判定値
+
+;(従属国パッチ)AIが辺境伯か植民地,傀儡国であるときはRETURN
+SIF COUNTRY_Protectorate:勢力 >= 2
+	RETURN
+
 ;停戦以上の状態ならRETURN
 SIF TMP_COUNTRY_RELATION:勢力:相手勢力 >= 1
 	RETURN
@@ -384,6 +389,10 @@ MONEY:相手勢力 += 持ち出し額
 #DIM 効果量
 #DIM 判定値
 #DIM 持ち出し額
+
+;(従属国パッチ)AIが辺境伯か植民地,傀儡国であるときはRETURN
+SIF COUNTRY_Protectorate:勢力 >= 2
+	RETURN
 
 ;連合以上の状態ならRETURN
 SIF TMP_COUNTRY_RELATION:勢力:相手勢力 >= 2
@@ -667,6 +676,10 @@ CALL CLEAR_AI_DIPLOMACY_PLAN(勢力, 相手勢力)
 SIF DAY < SLG_PP:1
 	RETURNF 0
 
+;(従属国パッチ)AIが辺境伯か植民地,傀儡国であるときは連合を発議できない
+SIF COUNTRY_Protectorate:勢力 >= 2
+	RETURNF 0
+
 ;同時に成立する連合は一つ
 SIF MATCH(TREATY_U_TARGET, 0) != MAX_TREATY_U
 	RETURNF 0
@@ -722,6 +735,10 @@ RETURNF 0
 宣言勢力君主 = GET_COUNTRY_BOSS(宣言勢力)
 
 SIF IS_SP_COUNTRY(勢力)
+	RETURNF 0
+
+;(従属国パッチ)AIが辺境伯か植民地,傀儡国であるときは連合に参加できない
+SIF COUNTRY_Protectorate:勢力 >= 2
 	RETURNF 0
 
 SIF TMP_COUNTRY_RELATION:勢力:相手勢力 != 0

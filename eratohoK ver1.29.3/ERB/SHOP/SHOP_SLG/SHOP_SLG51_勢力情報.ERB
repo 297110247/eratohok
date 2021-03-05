@@ -196,6 +196,15 @@ ENDIF
 ;正式
 IF ARG:2
 	SELECTCASE TMP_COUNTRY_RELATION:(ARG:0):(ARG:1)
+	;(従属国パッチ)宗主国=6 辺境伯=7 植民地=8 傀儡国=9
+		CASE 9
+			RETURNF "傀儡国　"
+		CASE 8
+			RETURNF "殖民地　"
+		CASE 7
+			RETURNF "辺境伯　"
+		CASE 6
+			RETURNF "宗主国　"
 		CASE 4
 			RETURNF "永久同盟"
 		CASE 3
@@ -216,23 +225,24 @@ IF ARG:2
 ;10-14:記号表記
 
 ELSE
-	SELECTCASE TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) + CONFIG:319 * 5
+	SELECTCASE TMP_COUNTRY_RELATION:(ARG:0):(ARG:1)
+	;(従属国パッチ)CONFIG:319に係る処理を消去 宗主国=6 辺境伯=7 植民地=8 傀儡国=9
 		CASE 4
 			RETURNF "永"
 		CASE 9
-			RETURNF "∞"
+			RETURNF "傀"
 		CASE 3
 			RETURNF "盟"
 		CASE 8
-			RETURNF "＋"
+			RETURNF "殖"
 		CASE 2
 			RETURNF "連"
 		CASE 7
-			RETURNF "‡"
+			RETURNF "辺"
 		CASE 1
 			RETURNF "停"
 		CASE 6
-			RETURNF "∴"
+			RETURNF "主"
 		CASE 0, 5, 10
 			IF TMP_COUNTRY_UNION_TARGET:(ARG:0) == ARG:1
 				SELECTCASE CONFIG:319
@@ -251,6 +261,15 @@ ENDIF
 ;-------------------------------------------------
 @TMP_SETCOLOR_COUNTRY_RELATION(ARG:0, ARG:1)
 SELECTCASE TMP_COUNTRY_RELATION:(ARG:0):(ARG:1)
+;(傀儡国パッチ)6から9は暫定的にカラー_白を指定
+	CASE 9
+		SETCOLOR カラー_白
+	CASE 8
+		SETCOLOR カラー_白
+	CASE 7
+		SETCOLOR カラー_白
+	CASE 6
+		SETCOLOR カラー_白
 	CASE 4
 		SETCOLOR カラー_永久同盟
 	CASE 3
@@ -313,40 +332,8 @@ FOR LOCAL:0, 1, MAX_COUNTRY
 		PRINTL 
 	ENDIF
 NEXT
+;(従属国パッチ)CONFIG:319に係る処理を消去
 
-IF CONFIG:319
-	PRINT 凡例　
-
-	SETCOLOR カラー_永久同盟
-	PRINTFORM \@CONFIG:319 ? ∞ # 永 \@：永久同盟
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR カラー_同盟
-	;PRINT ∽：同盟
-	PRINTFORM \@CONFIG:319 ? ＋ # 盟 \@：同盟
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR カラー_オレンジ
-	PRINTFORM \@CONFIG:319 ? ‡ # 連 \@：連合
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR カラー_停戦
-	PRINTFORM \@CONFIG:319 ? ∴ # 停 \@：停戦
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR カラー_討伐
-	PRINTFORM \@CONFIG:319 ? × # 討 \@：討伐
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR カラー_敵
-	PRINTL ・：通常
-	RESETCOLOR
-ENDIF
 ;-------------------------------------------------
 ;勢力間の共感値・評価値の表示
 ;※TMP_CREATE_BOSS_NAME_MAP関数で君主略名マップを事前に作成しておく必要がある
@@ -390,58 +377,8 @@ FOR LOCAL:0, 1, MAX_COUNTRY
 		PRINTL 
 	ENDIF
 NEXT
+;(従属国パッチ)CONFIG:319に係る処理を消去
 
-IF CONFIG:319
-	PRINT 凡例　
-
-	SETCOLOR 0x12eca3
-	PRINTFORM \@CONFIG:319 ? ◎ # 友 \@：友好
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x23b1b1
-	PRINTFORM \@CONFIG:319 ? ○ # 好 \@：好意
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x9528cc
-	PRINTFORM \@CONFIG:319 ? ◇ # 注 \@：注視
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x482889
-	PRINTFORM \@CONFIG:319 ? ⇔ # ラ \@：好敵
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x808080
-	PRINT ・：中立
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x8600c8
-	PRINTFORM \@CONFIG:319 ? ≫ # 天 \@：天敵
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0x842c2c
-	PRINTFORM \@CONFIG:319 ? † # 悪 \@：険悪
-	RESETCOLOR
-	PRINT ｜
-
-	SETCOLOR 0xff0000
-	PRINTFORM \@CONFIG:319 ? ≠ # 仇 \@：仇敵
-	RESETCOLOR
-
-	IF !RAND:500
-		PRINT ｜
-
-		SETCOLOR 0x333333
-		PRINTFORM ⑨：笨蛋
-		RESETCOLOR
-	ENDIF
-	PRINTL
-ENDIF
 
 ;●デバッグ用の関係詳細表示
 ;FOR LOCAL:0, 1, MAX_COUNTRY

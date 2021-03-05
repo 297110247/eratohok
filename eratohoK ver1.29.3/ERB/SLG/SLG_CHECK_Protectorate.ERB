@@ -1,0 +1,80 @@
+﻿;-------------------------------------------------
+;辺境伯になっているかチェック
+;-------------------------------------------------
+@CHECK_Markgraf_start
+FOR LOCAL:0, 0, MAX_COUNTRY
+	SIF !IS_COUNTRY(LOCAL:0)
+	;国が存在していないときは判定をパス
+	CONTINUE
+	SIF COUNTRY_Protectorate:(LOCAL:0) == 2
+	;すでに辺境伯であるときは判定をパス
+	CONTINUE
+	LOCAL:1 = GET_COUNTRY_BOSS(LOCAL:0)
+	IF CFLAG:(LOCAL:1):1 != LOCAL:0
+	;「所属」と「特殊状態」が文字化けしたため「1」と「12」を代用。
+	;LOCAL:0の君主であるLOCAL:1が,LOCAL:0の君主ではない
+		IF CFLAG:(LOCAL:1):12 == 0
+		;特殊状態が士官であるとき
+			FOR LOCAL:2, 0, MAX_COUNTRY
+				IF CFLAG:(LOCAL:1):1 == LOCAL:2
+				;LOCAL:1がLOCAL:2の士官である
+					CALL INIT_Markgraf(LOCAL:0, LOCAL:2)
+					PRINTFORMW %ANAME(LOCAL:1)%被%ANAME(GET_COUNTRY_BOSS(LOCAL:2))%任命为了辺境伯
+					PRINTFORMW %ANAME(LOCAL:1)%\@ COUNTRY_Protectorate:(LOCAL:0) == 2 ? 成为了辺境伯 # 发生了错误 \@
+					PRINTFORMW %ANAME(GET_COUNTRY_BOSS(LOCAL:2))%\@ COUNTRY_Protectorate:(LOCAL:2) == 1 ? 是宗主国 # 发生了错误 \@
+				ENDIF
+			NEXT
+		ELSEIF CFLAG:(LOCAL:1):12 == 1
+		;特殊状態が放浪であるとき
+			PRINTFORMW 君主%ANAME(LOCAL:1)%踏上了寻找自我的旅程
+		ELSEIF CFLAG:(LOCAL:1):12 == 2
+		;特殊状態が死亡であるとき
+			PRINTFORMW 君主%ANAME(LOCAL:1)%驾崩了
+		ENDIF
+	ENDIF
+NEXT
+;-------------------------------------------------
+;辺境伯から解除されているかチェック
+;-------------------------------------------------
+@CHECK_Markgraf_end
+FOR LOCAL:0, 0, MAX_COUNTRY
+	SIF !IS_COUNTRY(LOCAL:0)
+	;国が存在していないときは判定をパス
+	CONTINUE
+	IF COUNTRY_Protectorate:(LOCAL:0) == 2
+	;辺境伯であるときは判定を継続
+		FOR LOCAL:1, 0, MAX_COUNTRY
+			LOCAL:2 = GET_COUNTRY_BOSS(LOCAL:0)
+			IF TMP_COUNTRY_RELATION:(LOCAL:0):(LOCAL:1) == 7 && CFLAG:(LOCAL:2):1 != LOCAL:1
+			;判定対象国がLOCAL:1の辺境伯であって,判定対象国の君主の所属がLOCAL:1でないとき
+				;削除対象となる関係の検索
+				FOR LOCAL:3, 0, MAX_TREATY_M
+					FOR LOCAL:4, 0, MAX_TREATY_COUNTRY
+						IF TREATY_M_COUNTRY:(LOCAL:3):(LOCAL:4):0 == LOCAL:0
+							FOR LOCAL:5, 0, MAX_TREATY_COUNTRY
+								IF TREATY_M_COUNTRY:(LOCAL:3):(LOCAL:5):1 == LOCAL:1
+									GOTO BREAK_LABEL
+								ENDIF
+							NEXT
+						ENDIF
+					NEXT
+				NEXT
+			ENDIF
+		NEXT
+		$BREAK_LABEL
+		IF LOCAL:3 != MAX_TREATY_M && TREATY_M_COUNTRY:(LOCAL:3):(LOCAL:5):1 == LOCAL:1
+			PRINTFORMW %ANAME(LOCAL:2)%被%ANAME(GET_COUNTRY_BOSS(LOCAL:1))%罢免了辺境伯的位置
+			; 条約の終了
+			TREATY_M_COUNTRY:(LOCAL:3):(LOCAL:4):0 = 0
+			TREATY_M_COUNTRY:(LOCAL:3):(LOCAL:5):1 = 0
+			COUNTRY_Protectorate:(LOCAL:0) = 0
+			COUNTRY_Protectorate:(LOCAL:1) = 0
+			IS_TREATY_M:(LOCAL:3) = 0
+			; 関係マップの更新
+			TMP_COUNTRY_RELATION:(LOCAL:0):(LOCAL:1) = 0
+			TMP_COUNTRY_RELATION:(LOCAL:1):(LOCAL:0) = 0
+			TMP_COUNTRY_RELATION_TERM:(LOCAL:0):(LOCAL:1) = 0
+			TMP_COUNTRY_RELATION_TERM:(LOCAL:1):(LOCAL:0) = 0
+		ENDIF
+	ENDIF
+NEXT

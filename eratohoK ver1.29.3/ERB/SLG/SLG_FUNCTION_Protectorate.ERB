@@ -1,0 +1,141 @@
+﻿;-------------------------------------------------
+;ARG:0とARG:1の勢力の間にARG:0を辺境伯,ARG:1を宗主国とする条約を成立させる関数
+;成功したら1 空きがなければ0
+;-------------------------------------------------
+@INIT_Markgraf(ARG:0, ARG:1)
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+FOR LOCAL:0, 0, MAX_TREATY_M
+	IF IS_TREATY_M:(LOCAL:0) <=0
+		; 空きがあれば成立
+		; 締結
+		COUNTRY_Protectorate:(ARG:0) = 2
+		COUNTRY_Protectorate:(ARG:1) = 1
+		TREATY_M_COUNTRY:(LOCAL:0):0:0 = ARG:0
+		TREATY_M_COUNTRY:(LOCAL:0):1:1 = ARG:1
+		IS_TREATY_M:(LOCAL:0) = 1
+		
+		; 関係マップの更新
+		TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) = 6
+		TMP_COUNTRY_RELATION:(ARG:1):(ARG:0) = 7
+		TMP_COUNTRY_RELATION_TERM:(ARG:0):(ARG:1) = 9999
+		TMP_COUNTRY_RELATION_TERM:(ARG:1):(ARG:0) = 9999
+		
+		CALL INIT_Union(ARG:0, ARG:1)
+		;連邦を作成,あるいはARG:1が主導する連邦にARG:0が加盟
+		
+		RETURN 1
+	ENDIF
+NEXT
+RETURN 0
+
+;-------------------------------------------------
+;ARG:0とARG:1の勢力の間にARG:0を植民地,ARG:1を宗主国とする条約を成立させる関数
+;成功したら1 空きがなければ0
+;-------------------------------------------------
+@INIT_Colony(ARG:0, ARG:1)
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+FOR LOCAL:0, 0, MAX_TREATY_CO
+	IF IS_TREATY_CO:(LOCAL:0) <=0
+		; 空きがあれば成立
+		; 締結
+		COUNTRY_Protectorate:(ARG:0) = 3
+		COUNTRY_Protectorate:(ARG:1) = 1
+		TREATY_CO_COUNTRY:(LOCAL:0):0:0 = ARG:0
+		TREATY_CO_COUNTRY:(LOCAL:0):1:1 = ARG:1
+		IS_TREATY_CO:(LOCAL:0) = 1
+		
+		; 関係マップの更新
+		TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) = 6
+		TMP_COUNTRY_RELATION:(ARG:1):(ARG:0) = 8
+		TMP_COUNTRY_RELATION_TERM:(ARG:0):(ARG:1) = 9999
+		TMP_COUNTRY_RELATION_TERM:(ARG:1):(ARG:0) = 9999
+		
+		CALL INIT_Union(ARG:0, ARG:1)
+		;連邦を作成,あるいはARG:1が主導する連邦にARG:0が加盟
+		
+		RETURN 1
+	ENDIF
+NEXT
+RETURN 0
+;-------------------------------------------------
+;ARG:0とARG:1の勢力の間にARG:0を傀儡国,ARG:1を宗主国とする条約を成立させる関数
+;成功したら1 空きがなければ0
+;-------------------------------------------------
+@INIT_Pupet(ARG:0, ARG:1)
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+FOR LOCAL:0, 0, MAX_TREATY_P
+	IF IS_TREATY_P:(LOCAL:0) <=0
+		; 空きがあれば成立
+		; 締結
+		COUNTRY_Protectorate:(ARG:0) = 4
+		COUNTRY_Protectorate:(ARG:1) = 1
+		TREATY_P_COUNTRY:(LOCAL:0):0:0 = ARG:0
+		TREATY_P_COUNTRY:(LOCAL:0):1:1 = ARG:1
+		IS_TREATY_P:(LOCAL:0) = 1
+		
+		; 関係マップの更新
+		TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) = 6
+		TMP_COUNTRY_RELATION:(ARG:1):(ARG:0) = 9
+		TMP_COUNTRY_RELATION_TERM:(ARG:0):(ARG:1) = 9999
+		TMP_COUNTRY_RELATION_TERM:(ARG:1):(ARG:0) = 9999
+		
+		CALL INIT_Union(ARG:0, ARG:1)
+		;連邦を作成,あるいはARG:1が主導する連邦にARG:0が加盟
+		
+		RETURN 1
+	ENDIF
+NEXT
+RETURN 0
+
+;-------------------------------------------------
+;従属国ARG:0に宗主国ARG:1が締結しているものと同様の条約を成立させる関数
+;-------------------------------------------------
+@INIT_Protectorate_TREATY(ARG:0, ARG:1)
+#DIM 宗主国外交関係
+#DIM 外交関係期間
+#DIM 宗主国君主
+#DIM 従属国君主
+#DIM 相手国君主
+
+宗主国君主 = GET_COUNTRY_BOSS(ARG:1)
+従属国君主 = GET_COUNTRY_BOSS(ARG:0)
+
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	宗主国外交関係 = CHECK_COUNTRY_RELATION_F(ARG:1, LOCAL:0)
+	相手国君主 = GET_COUNTRY_BOSS(LOCAL:0)
+	IF 宗主国外交関係 == 1
+		;LOCAL:0がARG:1と停戦のとき
+		外交関係期間 = TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:0)
+		PRINTFORML %ANAME(従属国君主)%,%ANAME(宗主国君主)%与%ANAME(相手国君主)%停战了
+		CALL INIT_CEASEFIRE(ARG:0, LOCAL:0, 外交関係期間) 
+	ELSEIF 宗主国外交関係 == 2
+		;LOCAL:0がARG:1と連合のとき,停戦条約締結
+		外交関係期間 = TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:0)
+		PRINTFORML %ANAME(従属国君主)%,%ANAME(宗主国君主)%的联合与%ANAME(相手国君主)%停战了
+		CALL INIT_CEASEFIRE(ARG:0, LOCAL:0, 外交関係期間) 
+	ELSEIF 宗主国外交関係 == 3
+		;LOCAL:0がARG:1と同盟のとき
+		外交関係期間 = TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:0)
+		PRINTFORML %ANAME(従属国君主)%,%ANAME(宗主国君主)%的同盟与%ANAME(相手国君主)%结成了同盟
+		CALL INIT_ALLIANCE(ARG:0, LOCAL:0, 外交関係期間)
+	ELSEIF 宗主国外交関係 == 4
+		;LOCAL:0がARG:1と永久同盟のとき
+		;本来宗主国の永久同盟国は既に宗主国と連邦を形成しているはずだが念のため
+		PRINTFORML %ANAME(従属国君主)%,%ANAME(宗主国君主)%的永久同盟，与%ANAME(相手国君主)%结成了永久同盟
+		CALL INIT_ALLIANCE(ARG:0, LOCAL:0, 9999)
+	ENDIF
+NEXT
+		

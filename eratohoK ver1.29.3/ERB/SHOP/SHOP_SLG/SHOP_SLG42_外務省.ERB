@@ -1,0 +1,232 @@
+﻿;(従属国パッチ)外務省の基本部分
+
+;-------------------------------------------------
+;「外務省」の名称
+;-------------------------------------------------
+@SHOP_SLG_NAME42
+RESULTS:0 '= "外交部"
+
+;-------------------------------------------------
+;「外務省」の選択可否
+;-------------------------------------------------
+@SHOP_SLG_CHECK42
+SIF FLAG:クリアフラグ
+	RETURN 0
+SIF FLAG:観戦モード
+	RETURN 0
+SIF CFLAG:MASTER:所属 == 0
+	RETURN 0
+SIF COUNTRY_IS_CLOSED:(CFLAG:MASTER:所属)
+	RETURN 0
+RETURN 1
+
+;-------------------------------------------------
+;「外務省」の左カラムメニューの入力処理
+;-------------------------------------------------
+@SHOP_SLG_EVENTBUY42
+CALL Colonial_Office
+RETURN 1
+
+;-------------------------------------------------
+;「外務省」本体
+;-------------------------------------------------
+@Colonial_Office
+#DIM FIRST_LINE
+FIRST_LINE = LINECOUNT
+
+;国家間の隣接関係マップの作成(処理の高速化)
+CALL TMP_CREATE_COUNTRY_NEIBORING_MAP
+;勢力関係マップを作成
+CALL TMP_CREATE_RELATION_MAP
+CALL TMP_CREATE_IS_FREE_MAP
+CALL TMP_CREATE_POLITICS_POWER_MAP
+CALL TMP_CREATE_SUM_SOLDIER_MAP
+
+CALL SINGLE_DRAWLINE
+PRINTL ★外交部
+CALL SINGLE_DRAWLINE
+
+LOCALS:0 = 建立殖民地
+LOCALS:1 = 建立傀儡国
+LOCALS:10 = 自国士官的移籍
+LOCALS:11 = 召喚従属国的士官
+LOCALS:12 = 派遣奴隶到外交部
+LOCALS:13 = 收押奴隶
+LOCALS:20 = 转让领土
+LOCALS:21 = 接收领土
+LOCALS:22 = 转让资金
+LOCALS:23 = 转让士兵
+LOCALS:24 = 接收士兵
+LOCALS:30 = 让従属国独立
+LOCALS:31 = 合并従属国
+LOCALS:40 = 特殊行動
+LOCALS:50 = 与永久同盟国・従属国交流
+LOCALS:51 = 使役奴隷
+LOCALS:52 = 运营学校
+
+;未実装部分は選択不可
+LOCAL:112 = 1
+LOCAL:113 = 1
+LOCAL:130 = 1
+LOCAL:131 = 1
+LOCAL:140 = 1
+LOCAL:150 = 1
+LOCAL:151 = 1
+LOCAL:152 = 1
+
+PRINT ◇建立従属国◇
+FOR LOCAL:0, 0, 10
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINT ◇士官的调动◇
+FOR LOCAL:0, 10, 20
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINT ◇従属国資源的分配◇
+FOR LOCAL:0, 20, 30
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINT ◇管理従属国◇
+FOR LOCAL:0, 30, 40
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINT ◇特殊行動◇
+FOR LOCAL:0, 40, 50
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINT ◇管理士官◇
+FOR LOCAL:0, 50, 60
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINTL
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF RESULT >= 0 && RESULT < 60 && !LOCAL:(RESULT + 100)
+	;植民地を作成する
+	IF RESULT == 0
+		CALL Colonial_Office_MAKE_colony
+	;傀儡国を作成する
+	ELSEIF RESULT == 1
+		CALL Colonial_Office_MAKE_puppet
+	;自国の士官を移籍させる
+	ELSEIF RESULT == 10
+		CALL Colonial_Office_TRANSFER_CHARA
+	;従属国の士官を召喚する
+	ELSEIF RESULT == 11
+		CALL Colonial_Office_SUMMON_CHARA
+	;奴隷を外務省に派遣する
+	
+	;奴隷を収監する
+	
+	;領土を譲渡する
+	ELSEIF RESULT == 20
+		CALL Colonial_Office_TRANSFER_state
+	;領土を譲受ける
+	ELSEIF RESULT == 21
+		CALL Colonial_Office_ACQUISITION_state
+	;資金を譲渡する
+	ELSEIF RESULT == 22
+		CALL Colonial_Office_TRANSFER_funds
+	;兵士を譲渡する
+	ELSEIF RESULT == 23
+		CALL Colonial_Office_TRANSFER_soldier
+	;兵士を譲受ける
+	ELSEIF RESULT == 24
+		CALL Colonial_Office_ACQUISITION_soldier
+	;従属国を独立させる
+	
+	;従属国を統合する
+	
+	;連邦を形成する
+	
+	;連邦に加盟させる
+	
+	;連邦から追放する
+	
+	;永久同盟国や従属国と交流する
+	
+	;奴隷を使役する
+	
+	;学校を運営する
+	ENDIF
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+

@@ -1,0 +1,256 @@
+﻿;-------------------------------------------------
+;植民地を作成する
+;-------------------------------------------------
+
+@Colonial_Office_MAKE_colony
+#DIM 植民地君主予定
+#DIM 辺境伯変数
+#DIM 都市
+#DIM 都市所持勢力
+#DIM 新植民地
+
+;従属国は植民地作成不可
+IF COUNTRY_Protectorate:(CFLAG:MASTER:所属) >= 2
+	PRINTFORML 従属国不能建立殖民地
+	PRINTFORMW 返回到殖民地管理画面
+	RETURN 0
+ENDIF
+
+;勢力に空きがなければ不可
+IF GET_NEW_COUNTRY() == -1
+	PRINTFORML 势力到达极限，不能再扩张了
+	PRINTFORMW 返回到殖民地管理画面
+	RETURN 0
+ENDIF
+
+;植民地の君主となる自国士官の選択
+PRINTFORML 选择你想成为殖民地君主的本国士官
+CALL SINGLE_DRAWLINE
+CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("MAKE_colony", "MAKE_colony")
+植民地君主予定 = RESULT
+IF RESULT == -1
+	PRINTFORMW 返回到殖民地管理画面
+	REDRAW 1
+	RETURN 0
+ENDIF
+
+FOR 辺境伯変数, 0, MAX_COUNTRY
+	IF GET_COUNTRY_BOSS(辺境伯変数) == 植民地君主予定
+		;ある勢力の君主が植民地君主予定である(=植民地君主予定が辺境伯である)とき作成不可
+		PRINTFORML 辺境伯不能建立殖民地
+		PRINTFORMW 返回到殖民地管理画面
+		RETURN 0
+	ENDIF
+NEXT
+
+PRINTFORML 请选择要成为殖民地的本国领土
+CALL SINGLE_DRAWLINE
+CALL SET_CITY_COLOR_COUNTRY
+CALL DRAWMAP
+CALL RESET_CITY_COLOR
+CALL SINGLE_DRAWLINE
+
+PRINTBUTTON " 0[取消]", 0
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+SIF RESULT == 0
+	RETURN
+
+IF !INRANGE(RESULT, 1000, 1000 + MAX_CITY - 1)
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+
+都市 = RESULT - 1000
+都市所持勢力 = CITY_OWNER:都市
+
+IF CITY_TYPE:都市 == 1 || GET_RELAYNAME(都市) == "無名"
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+
+IF 都市所持勢力 != CFLAG:MASTER:所属
+	PRINTFORMW 只能选择自己国家的领土
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+IF GET_OWN_CITY(都市所持勢力) == 1
+	PRINTFORML 没有可以转让的土地了
+	PRINTFORMW 返回到殖民地管理画面
+	REDRAW 1
+	RETURN 0
+ENDIF
+
+
+PRINTFORML %ANAME(植民地君主予定)%要在%GET_RELAYNAME(都市)%进行殖民吗？
+CALL ASK_MULTI("殖民", "取消", "返回")
+
+IF RESULT == 1
+	RETURN
+ELSEIF RESULT == 2
+	RESTART
+ENDIF
+
+新植民地 = GET_NEW_COUNTRY()
+
+CITY_OWNER:都市 = 新植民地
+COUNTRY_BOSS:新植民地 = GET_ID(植民地君主予定)
+COUNTRY_SOLDIER:新植民地 = CITY_ECONOMY:都市 / 20
+CITY_SOLDIER:都市 = 2000
+
+CALL CHANGE_COUNTRY(植民地君主予定, 新植民地)
+
+CALL COUNTRY_SET_TECHNOLOGY(新植民地)
+
+CALL INIT_Colony(新植民地, CFLAG:MASTER:所属)
+
+CALL DIPLOMACY_IMPROVE_RELATION(新植民地, 500)
+
+CALL SINGLE_DRAWLINE
+
+PRINTL 请选择新殖民地的颜色
+CALL SINGLE_DRAWLINE
+CALL CHANGE_COUNTRY_COLOR(新植民地, 1)
+
+PRINTFORML %ANAME(植民地君主予定)%在%GET_RELAYNAME(都市)%进行了殖民
+CALL INIT_Protectorate_TREATY(新植民地, CFLAG:MASTER:所属)
+
+RETURN
+
+@SELECT_CHARA_LIST_SHOW_LOGIC_MAKE_colony(対象)
+#DIM 対象
+RETURN GET_COUNTRY_BOSS(CFLAG:対象:所属) != 対象 && CFLAG:対象:所属 == CFLAG:MASTER:所属 && !IS_ANIMAL(対象) && CFLAG:対象:行動不能状態 != 行動不能_子供 && 対象 != MASTER
+
+@SELECT_CHARA_LIST_SELECT_LOGIC_MAKE_colony(対象)
+#DIM 対象
+RETURN IS_FREE(対象) && CFLAG:対象:捕虜先 == 0
+
+
+;-------------------------------------------------
+;傀儡国を作成する
+;-------------------------------------------------
+@Colonial_Office_MAKE_puppet
+#DIM 傀儡国君主予定
+#DIM 都市
+#DIM 都市所持勢力
+#DIM 新傀儡国
+
+;従属国は傀儡国作成不可
+IF COUNTRY_Protectorate:(CFLAG:MASTER:所属) >= 2
+	PRINTFORML 従属国不能建立傀儡国
+	PRINTFORMW 返回到殖民地管理画面
+	RETURN 0
+ENDIF
+
+;勢力に空きがなければ不可
+IF GET_NEW_COUNTRY() == -1
+	PRINTFORML 势力到达极限，不能再扩张了
+	PRINTFORMW 返回到殖民地管理画面
+	RETURN 0
+ENDIF
+
+;傀儡国の君主となる自国捕虜の選択
+PRINTFORML 请从自己国家的俘虏中选择成为傀儡国君主的角色
+CALL SINGLE_DRAWLINE
+CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("MAKE_puppet", "MAKE_puppet")
+傀儡国君主予定 = RESULT
+IF RESULT == -1
+	PRINTFORMW 返回到殖民地管理画面
+	REDRAW 1
+	RETURN 0
+ENDIF
+
+PRINTFORML 请选择要成为傀儡国的本国领土
+CALL SINGLE_DRAWLINE
+CALL SET_CITY_COLOR_COUNTRY
+CALL DRAWMAP
+CALL RESET_CITY_COLOR
+CALL SINGLE_DRAWLINE
+
+PRINTBUTTON " 0[取消]", 0
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+SIF RESULT == 0
+	RETURN
+
+IF !INRANGE(RESULT, 1000, 1000 + MAX_CITY - 1)
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+
+都市 = RESULT - 1000
+都市所持勢力 = CITY_OWNER:都市
+
+IF CITY_TYPE:都市 == 1 || GET_RELAYNAME(都市) == "無名"
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+
+IF 都市所持勢力 != CFLAG:MASTER:所属
+	PRINTFORMW 只能选择自己国家的领土
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+IF GET_OWN_CITY(都市所持勢力) == 1
+	PRINTFORML 没有可以转让的土地了
+	PRINTFORMW 返回到殖民地管理画面
+	REDRAW 1
+	RETURN 0
+ENDIF
+
+
+PRINTFORML 要让%ANAME(傀儡国君主予定)%在%GET_RELAYNAME(都市)%建立傀儡政权吗？
+CALL ASK_MULTI("建立", "取消", "返回")
+
+IF RESULT == 1
+	RETURN
+ELSEIF RESULT == 2
+	RESTART
+ENDIF
+
+新傀儡国 = GET_NEW_COUNTRY()
+
+CITY_OWNER:都市 = 新傀儡国
+COUNTRY_BOSS:新傀儡国 = GET_ID(傀儡国君主予定)
+COUNTRY_SOLDIER:新傀儡国 = CITY_ECONOMY:都市 / 20
+CITY_SOLDIER:都市 = 2000
+
+CFLAG:傀儡国君主予定:捕虜先 = 0
+CALL CHANGE_COUNTRY(傀儡国君主予定, 新傀儡国)
+
+CALL COUNTRY_SET_TECHNOLOGY(新傀儡国)
+
+CALL INIT_Pupet(新傀儡国, CFLAG:MASTER:所属)
+
+;傀儡国君主に特殊なフラグを付与する
+CFLAG:傀儡国君主予定:700 = 1
+
+CALL SINGLE_DRAWLINE
+
+PRINTL 请选择新傀儡国的颜色
+CALL SINGLE_DRAWLINE
+CALL CHANGE_COUNTRY_COLOR(新傀儡国, 1)
+
+PRINTFORML %ANAME(傀儡国君主予定)%在%GET_RELAYNAME(都市)%建立了傀儡政权
+CALL INIT_Protectorate_TREATY(新傀儡国, CFLAG:MASTER:所属)
+
+RETURN
+
+@SELECT_CHARA_LIST_SHOW_LOGIC_MAKE_puppet(対象)
+#DIM 対象
+RETURN GET_COUNTRY_BOSS(CFLAG:対象:所属) != 対象 && (CFLAG:対象:所属 == CFLAG:MASTER:所属 || CFLAG:対象:所属 == 0) && !IS_ANIMAL(対象) && 対象 != MASTER && CFLAG:対象:捕虜先 == CFLAG:MASTER:所属
+
+@SELECT_CHARA_LIST_SELECT_LOGIC_MAKE_puppet(対象)
+#DIM 対象
+RETURN CFLAG:対象:捕虜先 == CFLAG:MASTER:所属
+

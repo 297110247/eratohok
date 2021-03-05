@@ -41,11 +41,11 @@ SIF IS_SP_CHARA(MTAR:0)
 ;慰安モブも不可
 SIF TALENT:(MTAR:0):慰安婦
 	RETURN 0
-;相手が君主なら不可
-FOR LOCAL:0, 0, MAX_COUNTRY
-	SIF COUNTRY_BOSS:(LOCAL:0) == GET_ID(MTAR:0)
-		RETURN 0
-NEXT
+;相手が君主なら不可(従属国パッチ)コメントアウト,相手が君主であるときは辺境伯任命となる
+;FOR LOCAL:0, 0, MAX_COUNTRY
+;	SIF COUNTRY_BOSS:(LOCAL:0) == GET_ID(MTAR:0)
+;		RETURN 0
+;NEXT
 RETURN 1
 
 ;-------------------------------------------------
@@ -200,10 +200,20 @@ IF TCVAR:(MTAR:0):24 >= TCVAR:(MTAR:0):25
 			PRINTFORMW %ANAME(MTAR:0)%成為了我國的士官
 			CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
 		ELSE
+			
+			;(従属国パッチ)相手が君主であるときは辺境伯任命
+			FOR LOCAL:1, 0, MAX_COUNTRY
+				IF COUNTRY_BOSS:(LOCAL:1) == GET_ID(MTAR:0)
+					PRINTFORMW %ANAME(MTAR:0)%势力成为了我国的辺境伯
+					CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
+					GOTO PRO_JUMP
+				ENDIF
+			NEXT
+			
 			CALL CHECK_COUNTRY_RELATION(CFLAG:MASTER:所属, CFLAG:(MTAR:0):所属)
 
-			;永久同盟中の国家に所属している場合
-			IF RESULT == 4
+			;永久同盟中の国家に所属している場合(従属国パッチ)従属国に所属する者対しても同様の処理
+			IF RESULT == 4 || RESULT >= 7
 				PRINTFORMW %ANAME(MTAR:0)%成為了我國的士官
 				CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
 
@@ -214,6 +224,7 @@ IF TCVAR:(MTAR:0):24 >= TCVAR:(MTAR:0):25
 				;移動フラグを立てておく
 				CFLAG:(MTAR:0):自国勧誘成功フラグ = 1
 			ENDIF
+			$ PRO_JUMP
 		ENDIF
 	ENDIF
 

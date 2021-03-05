@@ -16,6 +16,16 @@ IF CHECK_COUNTRY_RELATION_F(勢力, 相手勢力) != 3
 	RETURN 0
 ENDIF
 
+IF COUNTRY_Protectorate:相手勢力 > 1
+	PRINTFORMW 你不能和你的従属国締結永久同盟
+	RETURN 0
+ENDIF
+
+IF IS_TREATY_UNI:相手勢力 == 1
+	PRINTFORMW 你不能和已经组成联邦的人结成永久同盟
+	RETURN 0
+ENDIF
+
 IF IS_SP_COUNTRY(相手勢力)
 	PRINTFORMW 不可能和這樣的人結成夥伴
 	RETURN 0
@@ -35,6 +45,7 @@ IF REL_LIKE:相手君主:君主 >= 1200 && REL_HATE:相手君主:君主 <= 0
 	SETCOLOR カラー_注意
 	PRINTFORMW 和%ANAME(相手君主)%的無期限同盟成立了
 	RESETCOLOR
+	CALL INIT_Union(相手勢力, CFLAG:MASTER:所属)
 ;不成立
 ELSE
 	PRINTFORML 但是、%ANAME(相手君主)%拒絶了%ANAME(君主)%的提案

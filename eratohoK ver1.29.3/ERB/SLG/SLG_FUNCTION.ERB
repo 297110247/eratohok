@@ -1259,6 +1259,7 @@ RETURNF -1
 ;-------------------------------------------------
 ;ARG:0番の勢力とARG:1番の勢力の関係を返す関数（式中タイプ）
 ;RESULT:0 …… 敵対=0 停戦=1 連合=2 期限付き同盟=3 永久同盟=4 自国=5
+	;従属国パッチ (ARG:0がARG:1に対して)宗主国=6 辺境伯=7 植民地=8 傀儡国=9
 ;RESULT:1 …… 最も優先度の高い関係の残り期間
 ;-------------------------------------------------
 @CHECK_COUNTRY_RELATION_F(ARG:0, ARG:1)
@@ -1268,6 +1269,126 @@ SIF GROUPMATCH(0, ARG:0, ARG:1)
 
 SIF ARG:0 == ARG:1
 	RETURNF 5
+
+;(従属国パッチ)辺境伯の判定
+FOR LOCAL:0, 0, MAX_TREATY_M
+
+	SIF IS_TREATY_M:(LOCAL:0) <= 0
+	;辺境伯条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURNF 7
+NEXT
+
+;(従属国パッチ)植民地の判定
+FOR LOCAL:0, 0, MAX_TREATY_CO
+
+	SIF IS_TREATY_CO:(LOCAL:0) <= 0
+	;植民地条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURNF 8
+NEXT
+
+;(従属国パッチ)傀儡国の判定
+FOR LOCAL:0, 0, MAX_TREATY_P
+
+	SIF IS_TREATY_P:(LOCAL:0) <= 0
+	;傀儡国条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURNF 9
+NEXT
+
+;(従属国パッチ)宗主国(辺境伯)の判定
+FOR LOCAL:0, 0, MAX_TREATY_M
+
+	SIF IS_TREATY_M:(LOCAL:0) <= 0
+	;辺境伯条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 2
+		RETURNF 6
+NEXT
+
+;(従属国パッチ)宗主国(植民地)の判定
+FOR LOCAL:0, 0, MAX_TREATY_CO
+
+	SIF IS_TREATY_CO:(LOCAL:0) <= 0
+	;植民地条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 3
+		RETURNF 6
+NEXT
+
+;(従属国パッチ)宗主国(傀儡国)の判定
+FOR LOCAL:0, 0, MAX_TREATY_P
+
+	SIF IS_TREATY_P:(LOCAL:0) <= 0
+	;傀儡国条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 4
+		RETURNF 6
+NEXT
 
 ;同盟の判定
 FOR LOCAL:0, 0, MAX_TREATY_A
@@ -1329,6 +1450,7 @@ RETURNF 0
 ;-------------------------------------------------
 ;ARG:0番の勢力とARG:1番の勢力の関係を返す関数
 ;RESULT:0 …… 敵対=0 停戦=1 連合=2 期限付き同盟=3 永久同盟=4 自国=5
+	;(従属国パッチ)宗主国=6 辺境伯=7 植民地=8 傀儡国=9
 ;RESULT:1 …… 最も優先度の高い関係の残り期間
 ;-------------------------------------------------
 @CHECK_COUNTRY_RELATION(ARG:0, ARG:1)
@@ -1339,6 +1461,126 @@ SIF GROUPMATCH(0, ARG:0, ARG:1)
 
 SIF ARG:0 == ARG:1
 	RETURN 5
+
+;(従属国パッチ)ARG:1がARG:0の辺境伯であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_M
+
+	SIF IS_TREATY_M:(LOCAL:0) <= 0
+	;辺境伯条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURN 7
+NEXT
+
+;(従属国パッチ)ARG:1がARG:0の植民地であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_CO
+
+	SIF IS_TREATY_CO:(LOCAL:0) <= 0
+	;植民地条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURN 8
+NEXT
+
+;(従属国パッチ)ARG:1がARG:0の傀儡国であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_P
+
+	SIF IS_TREATY_P:(LOCAL:0) <= 0
+	;傀儡国条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 1
+		RETURN 9
+NEXT
+
+;(従属国パッチ)ARG:1がARG:0の宗主国(辺境伯)であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_M
+
+	SIF IS_TREATY_M:(LOCAL:0) <= 0
+	;辺境伯条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 2
+		RETURN 6
+NEXT
+
+;(従属国パッチ)ARG:1がARG:0の宗主国(植民地)であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_CO
+
+	SIF IS_TREATY_CO:(LOCAL:0) <= 0
+	;植民地条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 3
+		RETURN 6
+NEXT
+
+;(従属国パッチ)ARG:1がARG:0の宗主国(傀儡国)であるかの判定
+FOR LOCAL:0, 0, MAX_TREATY_P
+
+	SIF IS_TREATY_P:(LOCAL:0) <= 0
+	;植民地条約が存在しないときは判定をパス
+		CONTINUE
+
+	LOCAL:2 = 0
+	LOCAL:3 = 0
+	
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			LOCAL:2 = 1
+		SIF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:1
+			LOCAL:3 = 1
+	NEXT
+	SIF LOCAL:2 && LOCAL:3 && COUNTRY_Protectorate:(ARG:0) == 4
+		RETURN 6
+NEXT
 
 ;同盟の判定
 FOR LOCAL:0, 0, MAX_TREATY_A
@@ -1564,6 +1806,368 @@ FOR LOCAL:0, 0, MAX_TREATY_A
 				COUNTRY_TREATY_NO:(ARG:0):0 ++
 				COUNTRY_TREATY_NO:(ARG:1):0 ++
 		ENDSELECT
+		;(従属国パッチ)ARG:0が宗主国であるとき,全てのARG:0の従属国はARG:1との間で同盟を締結する
+		IF COUNTRY_Protectorate:(ARG:0) == 1
+			FOR LOCAL:1, 0, MAX_TREATY_M
+				;辺境伯の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						;ある辺境伯条約においてARG:0が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記辺境伯条約における辺境伯を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_1
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_1
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_1
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_CO
+				;植民地の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						;ある植民地条約においてARG:0が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記植民地条約における植民地を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_3
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_3
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_3
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_P
+				;傀儡国の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						;ある傀儡国条約においてARG:0が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記傀儡国条約における傀儡国を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_4
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了同盟关系
+										GOTO PRO_JUMP_4
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_4
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+		
+		;(従属国パッチ)ARG:1が宗主国であるとき,全てのARG:1の従属国はARG:0との間で同盟を締結する
+		IF COUNTRY_Protectorate:(ARG:1) == 1
+			FOR LOCAL:1, 0, MAX_TREATY_M
+				;辺境伯の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						;ある辺境伯条約においてARG:1が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記辺境伯条約における辺境伯を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_2
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_2
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_2
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_CO
+				;植民地の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						;ある植民地条約においてARG:1が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記植民地条約における植民地を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_5
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_5
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_5
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_P
+				;傀儡国の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						;ある傀儡国条約においてARG:1が宗主国である
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								;LOCAL:4に上記傀儡国条約における傀儡国を代入
+								FOR LOCAL:5, 0, MAX_TREATY_A
+								;同盟関係の空きを探す
+									IF (TREATY_A_COUNTRY:(LOCAL:5):0 == LOCAL:4 && TREATY_A_COUNTRY:(LOCAL:5):1 == ARG:1) || (TREATY_A_COUNTRY:(LOCAL:5):0 == ARG:1 && TREATY_A_COUNTRY:(LOCAL:5):1 == LOCAL:4)
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+										TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_6
+									ELSEIF TREATY_A_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_A_TERM:(LOCAL:5) = ARG:2
+										TREATY_A_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_A_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了同盟关系
+										GOTO PRO_JUMP_6
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_6
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+		
 		RETURN 1
 	ENDIF
 NEXT
@@ -1634,6 +2238,331 @@ FOR LOCAL:0, 0, MAX_TREATY_C
 				COUNTRY_TREATY_NO:(ARG:0):0 ++
 				COUNTRY_TREATY_NO:(ARG:1):0 ++
 		ENDSELECT
+		
+		;(従属国パッチ)ARG:0が宗主国であるとき,全てのARG:0の従属国はARG:1との間で停戦条約を締結する
+		IF COUNTRY_Protectorate:(ARG:0) == 1
+			FOR LOCAL:1, 0, MAX_TREATY_M
+			;辺境伯の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了停战条约
+										GOTO PRO_JUMP_3
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_3
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_CO
+			;植民地の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了停战条约
+										GOTO PRO_JUMP_9
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_9
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_P
+			;傀儡国の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:0
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:1):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:1):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:1
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:1) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:1):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:1) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:1):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:1):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:1):0 ++
+										ENDSELECT
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:1))%势力缔结了停战条约
+										GOTO PRO_JUMP_10
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_10
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+		;(従属国パッチ)ARG:1が宗主国であるとき,全てのARG:1の従属国はARG:0との間で停戦条約を締結する
+		IF COUNTRY_Protectorate:(ARG:1) == 1
+			FOR LOCAL:1, 0, MAX_TREATY_M
+			;辺境伯の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_M_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 辺境伯%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了停战条约
+										GOTO PRO_JUMP_4
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_4
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_CO
+			;植民地の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_CO_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 殖民地%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了停战条约
+										GOTO PRO_JUMP_11
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_11
+					ENDIF
+				NEXT
+			NEXT
+			FOR LOCAL:1, 0, MAX_TREATY_P
+			;傀儡国の処理
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:2):1 == ARG:1
+						FOR LOCAL:3, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0 >= 1
+								LOCAL:4 = TREATY_P_COUNTRY:(LOCAL:1):(LOCAL:3):0
+								FOR LOCAL:5, 0, MAX_TREATY_C
+								;停戦関係の空きを探す
+									IF TREATY_C_TERM:(LOCAL:5) <= 0
+										; 空きがあれば成立
+										
+										; 関係マップのカウンタを戻す
+										CUR_RELATION = TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0)
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 --
+												COUNTRY_TREATY_NO:(ARG:0):1 --
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 --
+												COUNTRY_TREATY_NO:(ARG:0):0 --
+										ENDSELECT
+										
+										; 締結
+										TREATY_C_TERM:(LOCAL:5) = ARG:2
+										TREATY_C_COUNTRY:(LOCAL:5):0 = LOCAL:4
+										TREATY_C_COUNTRY:(LOCAL:5):1 = ARG:0
+										; 関係マップの更新
+										IF NEW_RELATION > CUR_RELATION
+											TMP_COUNTRY_RELATION:(LOCAL:4):(ARG:0) = NEW_RELATION
+											TMP_COUNTRY_RELATION:(ARG:0):(LOCAL:4) = NEW_RELATION
+											TMP_COUNTRY_RELATION_TERM:(LOCAL:4):(ARG:0) = ARG:2
+											TMP_COUNTRY_RELATION_TERM:(ARG:0):(LOCAL:4) = ARG:2
+											CUR_RELATION = NEW_RELATION
+										ENDIF
+										SELECTCASE CUR_RELATION
+											CASE 1
+												COUNTRY_TREATY_NO:(LOCAL:4):1 ++
+												COUNTRY_TREATY_NO:(ARG:0):1 ++
+											CASE 3, 4
+												COUNTRY_TREATY_NO:(LOCAL:4):0 ++
+												COUNTRY_TREATY_NO:(ARG:0):0 ++
+										ENDSELECT
+										PRINTFORMW 傀儡国%ANAME(GET_COUNTRY_BOSS(LOCAL:4))%与%ANAME(GET_COUNTRY_BOSS(ARG:0))%势力缔结了停战条约
+										GOTO PRO_JUMP_12
+									ENDIF
+								NEXT
+							ENDIF
+						NEXT
+						$ PRO_JUMP_12
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
 		RETURN 1
 	ENDIF
 NEXT
@@ -2097,6 +3026,9 @@ NEXT
 ;所属都市の解除は行わないため、必要に応じて別途処理すること
 ;-------------------------------------------------
 @DESTROY_COUNTRY(ARG:0)
+#DIM 宗主国
+#DIM 従属国
+
 LOCAL:3 = GET_COUNTRY_BOSS(ARG:0)
 
 ;調教要求をされていたorしていた勢力滅亡時に変数をリセット
@@ -2146,6 +3078,141 @@ FOR LOCAL:0, 0, MAX_TREATY_C
 		ENDIF
 	NEXT
 NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_M
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)辺境伯である場合
+		IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			IS_TREATY_M:(LOCAL:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				宗主国 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+				COUNTRY_Protectorate:宗主国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION:(宗主国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION_TERM:(宗主国):(ARG:0) = 0
+				
+				TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_CO
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)植民地である場合
+		IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				宗主国 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+				COUNTRY_Protectorate:宗主国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION:(宗主国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION_TERM:(宗主国):(ARG:0) = 0
+				
+				TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_P
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)傀儡国である場合
+		IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+			TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				宗主国 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+				COUNTRY_Protectorate:宗主国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION:(宗主国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(宗主国) = 0
+				TMP_COUNTRY_RELATION_TERM:(宗主国):(ARG:0) = 0
+				
+				TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_M
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)辺境伯の宗主国である場合
+		IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):1 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			IS_TREATY_M:(LOCAL:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				従属国 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):0
+				COUNTRY_Protectorate:従属国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION:(従属国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION_TERM:(従属国):(ARG:0) = 0
+				
+				TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):0 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_CO
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)植民地の宗主国である場合
+		IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):1 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				従属国 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):0
+				COUNTRY_Protectorate:従属国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION:(従属国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION_TERM:(従属国):(ARG:0) = 0
+				
+				TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):0 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_TREATY_P
+	FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+		;(従属国パッチ)傀儡国の宗主国である場合
+		IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 == ARG:0
+			TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):1 = 0
+			COUNTRY_Protectorate:(ARG:0) = 0
+			FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+				従属国 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):0
+				COUNTRY_Protectorate:従属国 = 0
+				
+				; 関係マップの更新
+				TMP_COUNTRY_RELATION:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION:(従属国):(ARG:0) = 0
+				TMP_COUNTRY_RELATION_TERM:(ARG:0):(従属国) = 0
+				TMP_COUNTRY_RELATION_TERM:(従属国):(ARG:0) = 0
+				
+				TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):0 = 0
+			NEXT
+		ENDIF
+	NEXT
+NEXT
+
 
 LOCAL = FINDELEMENT(TREATY_U_TARGET,ARG:0)
 

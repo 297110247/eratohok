@@ -135,6 +135,18 @@ NEXT
 SIF 対象 == MASTER
 	RETURN 1
 
+;(従属国パッチ)対象が滅亡勢力の君主であって滅亡勢力に属していないとき(=対象が辺境伯であるとき)必ず逃亡成功
+IF  対象 == GET_COUNTRY_BOSS(滅亡勢力) && CFLAG:対象:所属 != 滅亡勢力
+	PRINTFORML %ANAME(GET_COUNTRY_BOSS(CFLAG:対象:所属))%的辺境伯%ANAME(対象)%直接成为了%ANAME(GET_COUNTRY_BOSS(CFLAG:対象:所属))%的士官
+	RETURN 0
+ENDIF
+
+;(従属国パッチ)CFLAG:対象:700が真であり(=傀儡である)かつ陥落していない,かつ滅ぼした勢力が特殊勢力でないとき,逃げられない
+IF CFLAG:対象:700 == 1 && (!IS_LOVER(対象) && !IS_SLAVE(対象)) && !IS_SP_COUNTRY(滅ぼした勢力)
+	PRINTFORML 傀儡%ANAME(対象)%被保护了
+	RETURN 1
+ENDIF
+
 ;主人公勢力が滅ぼし、対象が陥落済み
 IF 滅ぼした勢力 == CFLAG:MASTER:所属 && (IS_LOVER(対象) || IS_SLAVE(対象))
 	CALL KOJO_EVENT(対象, 331)
@@ -197,6 +209,55 @@ IF RAND:10000 < 捕縛率
 	RETURN 1
 ENDIF
 
+;(従属国パッチ)対象の所属が辺境伯であったとき
+IF COUNTRY_Protectorate:滅亡勢力 == 2
+	FOR LOCAL:0, 0, MAX_TREATY_M
+		FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+			IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == 滅亡勢力
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+						LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+						CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+						PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						RETURN 0
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+;(従属国パッチ)対象の所属が植民地であったとき
+ELSEIF COUNTRY_Protectorate:滅亡勢力 == 3
+	FOR LOCAL:0, 0, MAX_TREATY_CO
+		FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+			IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == 滅亡勢力
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+						LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+						CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+						PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						RETURN 0
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+;(従属国パッチ)対象の所属が傀儡国であったとき
+ELSEIF COUNTRY_Protectorate:滅亡勢力 == 4
+	FOR LOCAL:0, 0, MAX_TREATY_P
+		FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+			IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == 滅亡勢力
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+						LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+						CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+						PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						RETURN 0
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+ENDIF
 PRINTFORML %ANAME(対象)%好像逃走了…
 ;状態フラグを逃走状態に
 CFLAG:対象:特殊状態 = 特殊状態_放浪
@@ -248,6 +309,19 @@ ENDIF
 IF 対象 == MASTER
 	CALL MASTER_CAPTURED(勝利勢力)
 	RETURN RESULT
+;(従属国パッチ)CFLAG:対象:700が真であり(=傀儡である)かつ陥落していないとき必ず登用される
+ELSEIF CFLAG:対象:700 == 1 && (!IS_LOVER(対象) && !IS_SLAVE(対象))
+	IF CFLAG:対象:所属 == CFLAG:MASTER:所属
+		SETCOLOR カラー_警告
+		PRINTFORMW %ANAME(対象)%答应了登用
+	ELSE
+		SETCOLOR カラー_注意
+		PRINTFORML %ANAME(対象)%被登用了
+	ENDIF
+	RESETCOLOR
+	CALL CHANGE_COUNTRY(対象, 勝利勢力, 1)
+	CFLAG:対象:700 = 0
+	RETURN 0
 ELSE
 	;主人公以外は登用を試みる
 	SELECTCASE JUDGE_ASSIGN(対象, 敗北勢力, 勝利勢力)
@@ -329,6 +403,56 @@ ELSEIF 友好度 >= 800 && 敵対度 < 100
 	ENDIF
 	;対象が無所属、ないし所属勢力の都市0（滅亡時）なら放浪させる
 	IF !IS_COUNTRY(CFLAG:対象:所属) || GET_OWN_CITY(CFLAG:対象:所属) == 0
+		;(従属国パッチ)所属勢力が従属国であるとき宗主国の士官となる
+		;(従属国パッチ)対象の所属が辺境伯であったとき
+		IF COUNTRY_Protectorate:(CFLAG:対象:所属) == 2
+			FOR LOCAL:0, 0, MAX_TREATY_M
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+								PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+								RETURN 1
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が植民地であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 3
+			FOR LOCAL:0, 0, MAX_TREATY_CO
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+								PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+								RETURN 1
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が傀儡国であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 4
+			FOR LOCAL:0, 0, MAX_TREATY_P
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+								PRINTFORML %ANAME(対象)%逃亡到了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+								RETURN 1
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
 		SIF CFLAG:対象:捕虜先
 			CALL CAPTURE(対象, 0)
 		CFLAG:対象:特殊状態 = 特殊状態_放浪
@@ -354,6 +478,57 @@ ELSE
 		PRINTFORMW %ANAME(対象)%好像被打入了大牢
 	ENDIF
 	CALL CAPTURE(対象, 勝利勢力)
+	
+	;(従属国パッチ)所属勢力が滅亡しかつ所属勢力が従属国であるとき,所属勢力を宗主国に変更する
+	;(従属国パッチ)対象の所属が辺境伯であったとき
+	IF GET_OWN_CITY(CFLAG:対象:所属) == 0
+		IF COUNTRY_Protectorate:(CFLAG:対象:所属) == 2
+			FOR LOCAL:0, 0, MAX_TREATY_M
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が植民地であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 3
+			FOR LOCAL:0, 0, MAX_TREATY_CO
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が傀儡国であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 4
+			FOR LOCAL:0, 0, MAX_TREATY_P
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+	ENDIF
+	
 	RETURN 2
 ENDIF
 
@@ -376,7 +551,7 @@ $RESELECT_LOOP
 IF IS_COUNTRY(対象勢力) && CFLAG:対象:捕虜先 == 対象勢力
 	LOCAL:1 = GET_COUNTRY_BOSS(対象勢力)
 	LOCAL:2 = GET_COUNTRY_BOSS(CFLAG:対象:所属)
-	PRINTFORML %LOCAL:1 != -1 ? ANAME(LOCAL:1) + "の" # ""%捕虜となっていた%LOCAL:2 != -1 ? ANAME(LOCAL:2) + "所属の" # ""%%ANAME(対象)%を保護しました
+	PRINTFORML 被%LOCAL:1 != -1 ? ANAME(LOCAL:1) + "的" # ""%俘虏的%LOCAL:2 != -1 ? ANAME(LOCAL:2) + "所属的" # ""%%ANAME(対象)%被保护了起来
 	PRINTFORML 請決定如何処置%ANAME(対象)%
 ELSE
 	PRINTFORML 請決定如何処置%ANAME(対象)%
@@ -434,6 +609,52 @@ ELSEIF RESULT == 1
 	IF CFLAG:対象:捕虜先 != 0
 		;捕虜設定を解除
 		CALL CAPTURE(対象, 0)
+	;(従属国パッチ)所属勢力が滅亡しかつ所属勢力が従属国であるとき,所属勢力を宗主国に変更する
+	;(従属国パッチ)対象の所属が辺境伯であったとき
+	ELSEIF GET_OWN_CITY(CFLAG:対象:所属) == 0 && COUNTRY_Protectorate:(CFLAG:対象:所属) == 2
+		FOR LOCAL:0, 0, MAX_TREATY_M
+			FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+				IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+					FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+						IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+							LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+							CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+							PRINTFORML %ANAME(対象)%逃亡到了宗主国%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						ENDIF
+					NEXT
+				ENDIF
+			NEXT
+		NEXT
+	;(従属国パッチ)対象の所属が植民地であったとき
+	ELSEIF GET_OWN_CITY(CFLAG:対象:所属) == 0 && COUNTRY_Protectorate:(CFLAG:対象:所属) == 3
+		FOR LOCAL:0, 0, MAX_TREATY_CO
+			FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+				IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+					FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+						IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+							LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+							CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+							PRINTFORML %ANAME(対象)%逃亡到了宗主国%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						ENDIF
+					NEXT
+				ENDIF
+			NEXT
+		NEXT
+	;(従属国パッチ)対象の所属が傀儡国であったとき
+	ELSEIF GET_OWN_CITY(CFLAG:対象:所属) == 0 && COUNTRY_Protectorate:(CFLAG:対象:所属) == 4
+		FOR LOCAL:0, 0, MAX_TREATY_P
+			FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+				IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+					FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+						IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+							LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+							CALL CHANGE_COUNTRY(対象, LOCAL:3, 1)
+							PRINTFORML %ANAME(対象)%逃亡到了宗主国%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%
+						ENDIF
+					NEXT
+				ENDIF
+			NEXT
+		NEXT
 	ELSE
 		;状態フラグを逃走状態に
 		CFLAG:(対象):特殊状態 = 特殊状態_放浪
@@ -447,6 +668,57 @@ ELSEIF RESULT == 2
 	CALL KOJO_EVENT(対象, 335)
 	PRINTFORMW 把%ANAME(対象)%投入了大牢
 	CALL CAPTURE(対象, 捕獲勢力)
+	
+	;(従属国パッチ)所属勢力が滅亡しかつ所属勢力が従属国であるとき,所属勢力を宗主国に変更する
+	;(従属国パッチ)対象の所属が辺境伯であったとき
+	IF GET_OWN_CITY(CFLAG:対象:所属) == 0
+		IF COUNTRY_Protectorate:(CFLAG:対象:所属) == 2
+			FOR LOCAL:0, 0, MAX_TREATY_M
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が植民地であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 3
+			FOR LOCAL:0, 0, MAX_TREATY_CO
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が傀儡国であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 4
+			FOR LOCAL:0, 0, MAX_TREATY_P
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+	ENDIF
+	
 	RETURN 2
 
 ELSEIF RESULT == 4
@@ -454,6 +726,57 @@ ELSEIF RESULT == 4
 	PRINTFORMW 把%ANAME(対象)%軟禁了
 	CALL CAPTURE(対象, 捕獲勢力)
 	CFLAG:対象:軟禁中 = 1
+	
+	;(従属国パッチ)所属勢力が滅亡しかつ所属勢力が従属国であるとき,所属勢力を宗主国に変更する
+	;(従属国パッチ)対象の所属が辺境伯であったとき
+	IF GET_OWN_CITY(CFLAG:対象:所属) == 0
+		IF COUNTRY_Protectorate:(CFLAG:対象:所属) == 2
+			FOR LOCAL:0, 0, MAX_TREATY_M
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が植民地であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 3
+			FOR LOCAL:0, 0, MAX_TREATY_CO
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		;(従属国パッチ)対象の所属が傀儡国であったとき
+		ELSEIF COUNTRY_Protectorate:(CFLAG:対象:所属) == 4
+			FOR LOCAL:0, 0, MAX_TREATY_P
+				FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+					IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:1):0 == (CFLAG:対象:所属)
+						FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+							IF TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0
+								LOCAL:3 = TREATY_P_COUNTRY:(LOCAL:0):(LOCAL:2):1
+								CALL CHANGE_COUNTRY(対象, LOCAL:3)
+								PRINTFORML %ANAME(対象)%所属的势力的宗主国变更为了%ANAME(GET_COUNTRY_BOSS(LOCAL:3))%势力
+							ENDIF
+						NEXT
+					ENDIF
+				NEXT
+			NEXT
+		ENDIF
+	ENDIF
+	
 	RETURN 4
 
 ELSEIF RESULT == 3
