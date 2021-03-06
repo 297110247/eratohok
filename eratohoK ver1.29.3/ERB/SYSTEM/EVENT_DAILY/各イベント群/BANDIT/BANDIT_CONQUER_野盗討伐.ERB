@@ -11,9 +11,9 @@ RETURN 40
 ;〇期以降になると発生するとか、デイリー側で利用している変数が-1だったら起こさない　みたいなはじき方をするときに使う
 ;---------------------
 @EVENT_DAILY_BANDIT_CONQUER_DECISION()
-#DIM 土匪
-土匪 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
-SIF 土匪 == -1
+#DIM 野盗
+野盗 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
+SIF 野盗 == -1
 	RETURN 0
 SIF IS_SP_COUNTRY(CFLAG:MASTER:所属)
 	RETURN 0
@@ -36,7 +36,7 @@ RETURN デイリー_ジャンル_特殊勢力
 ;旧仕様で作ったことある人向けにいうと「旧仕様のデイリー本体冒頭で-1を返すような状況」
 ;---------------------
 @EVENT_DAILY_BANDIT_CONQUER
-#DIM 土匪
+#DIM 野盗
 #DIM 候補, 3
 #DIM 人数
 #DIM 武闘合計
@@ -46,30 +46,43 @@ VARSET 候補
 VARSET 武闘合計
 VARSET 知略合計
 
-土匪 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
+野盗 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
 
 
 IF DVAR:野盗討伐_発生フラグ == 0
-	PRINTFORML 某日、%ANAME(MASTER)%收到了报告
-	PRINTFORMW 居然抓住了那个难对付的土匪们的基地！
+	PRINTFORML 有一天，%ANAME(MASTER)%收到了报告
+	;TranslatedMark ある日、%ANAME(MASTER)%の元に報告が入った
+	PRINTFORMW 竟然发现了那些可恶土匪们的藏身地！
+	;TranslatedMark なんと、あのにくき野盗どものアジトの場所を掴んだというのだ！
 ELSEIF DVAR:野盗討伐_発生フラグ == 1
-	PRINTFORML 以前把他们弄得一塌糊涂的土匪们，最近好像又出现了
-	PRINTFORMW 以前不屑一顾的土匪们，最近好像又出现了。
+	PRINTFORML 以前已经击溃过的土匪们，最近好像又出现了
+	;TranslatedMark 以前ボコボコにしてやった野盗どもだが、どうも最近、また現れているらしい
+	PRINTFORMW 差不多该再讨伐一次了吧……
+	;TranslatedMark そろそろ、もう一度討伐してやるべきか……
 ELSEIF DVAR:野盗討伐_発生フラグ == 2
-	PRINTFORML 以前潜入失败后隐匿行踪的土匪，发现了新的基地。
-	PRINTFORMW 那时候的怨恨，现在正是要报仇的时候……
+	PRINTFORML 这是以前潜入失败之后就失去踪迹的土匪团，但新的据点已经查明了
+	;TranslatedMark 以前潜入に失敗してから行方をくらましていた野盗だが、新たなアジトの場所が判明した
+	PRINTFORMW 现在正是报彼时之仇的时候……
+	;TranslatedMark あのときの恨みを、今こそ晴らすときだ……
 ENDIF
-PRINTFORML 因为是些卑鄙的家伙，如果太多人去就会被逃跑
-PRINTFORMW 我认为派遣极少数精英进行讨伐的作战是合适的
+PRINTFORML 因为他们是卑鄙的家伙，所以如果太多人前去的话他们会直接逃掉的
+;TranslatedMark 卑怯な奴らのことだから、あまり大勢でいくと逃げられてしまう
+PRINTFORMW 你认为应该派遣少量的精锐作战
+;TranslatedMark ごく小数の精鋭を送って討伐する作戦が適しているように思われる
 PRINTFORM 这里的话，派
+;TranslatedMark ここは
 CALL COLOR_PRINT("3", カラー_注意)
-PRINTFORML 人左右的部下去为好。
-PRINTFORMW 问题是，送谁去呢……
+PRINTFORML 人左右的部下，让他们到土匪根据地从内部进行破坏比较好吧
+;TranslatedMark 人程度の部下を送り、一暴れしてきてもらうのがよいだろう
+PRINTFORMW 问题是派谁……
+;TranslatedMark 問題は、誰を送るかだが……
 CALL SELECT_CHARA_LIST_MULTI_SLG(3)
 
 IF SELECTED_CHARA_NUM == 0
-	PRINTFORML ……不，不会胡乱让部下陷入危险吧。
-	PRINTFORMW 重新这样考虑的%ANAME(MASTER)%决定谁都不派遣
+	PRINTFORML ……不，也不能随便让部下陷入危险吧
+	;TranslatedMark ……いや、むやみに部下を危険にさらすこともないだろう
+	PRINTFORMW 重新思考后的%ANAME(MASTER)%决定谁也不派
+	;TranslatedMark そう考え直した%ANAME(MASTER)%は、誰も派遣しないことにした
 	RETURN 1
 ENDIF
 
@@ -87,7 +100,9 @@ SIF 候補:2 >= 0
 	PRINTFORM 、%ANAME(候補:2)%
 SIF 人数 > 1
 	PRINTFORM 们
+	;TranslatedMark たち
 PRINTFORMW 被送进了野盗们的根据地……
+;TranslatedMark を、野盗どもの根城に送り出した……
 PRINTFORML
 CALL SINGLE_DRAWLINE
 ;1/3で重視されるのが知略になる
@@ -97,37 +112,52 @@ LOCAL:1 = RAND:3 ? (武闘合計 * 2 + 知略合計) # (武闘合計 + 知略合
 LOCAL:2 = MAX(RAND:201 + RAND:201 + RAND:201, 100) * (SP_COUNTRY_RANK:(特殊勢力_野盗) + 9) / 10
 ;成功パターン、なお同数は失敗
 IF LOCAL:1 > LOCAL:2
-	PRINTFORMW 好象潜入顺利
+	PRINTFORMW 潜入好像很顺利
+	;TranslatedMark 潜入はうまくいったようだ
 	SELECTCASE RAND:5
 		CASE 0
-			PRINTFORML %ANAME(候補:(RAND:(人数)))%成功入侵了根城，一网打尽了他们
-			PRINTFORML 也解放了被囚禁的附近的村姑们
+			PRINTFORML %ANAME(候補:(RAND:(人数)))%巧妙地侵入了城堡，将他们一网打尽
+			;TranslatedMark %ANAME(候補:(RAND:(人数)))%は根城にうまく侵入し、彼らを一網打尽にした
+			PRINTFORML 并且把被囚禁在那里，原本是附近村落里的少女们也给解放了
+			;TranslatedMark 囚われていた近場の村娘などのことも解放してやった
 		CASE 1
-			PRINTFORML %ANAME(候補:(RAND:(人数)))%无声地排除监视，不被注意地入侵了
-			PRINTFORML 并且持续奇袭，谁都不被发现，毁灭了根城
+			PRINTFORML %ANAME(候補:(RAND:(人数)))%无声无息地干掉了哨兵，无人察觉地侵入了
+			;TranslatedMark %ANAME(候補:(RAND:(人数)))%は音もなく見張りを排除し、気づかれることなく侵入した
+			PRINTFORML 接着继续进行奇袭，在没有敌人注意到的情况下，将根据地毁灭了
+			;TranslatedMark そして奇襲を続け、誰にも気づかれることなく、根城を壊滅させた
 		CASE 2
-			PRINTFORML %ANAME(候補:(RAND:(人数)))%他化身为旅行的街头艺人，混入了他们的宴会。
-			PRINTFORML 他们发现异常是在酒里混入的麻痹药有效的时候开始的……
+			PRINTFORML %ANAME(候補:(RAND:(人数)))%化作旅行的街头艺人，混入了他们的宴会中
+			;TranslatedMark %ANAME(候補:(RAND:(人数)))%は旅の大道芸人に化け、彼らの宴会に混ざり込んだ
+			PRINTFORML 等到他们发现异常，已经是在酒里搀杂的麻药开始见效的时候了……
+			;TranslatedMark 彼らが異常に気づくのは、酒に混ぜられた痺れ薬が効いてきたころになってからだった……
 		CASE 3
-			PRINTFORML %ANAME(候補:(RAND:(人数)))%は化身为娼妇，开始着手他们的首领。
-			PRINTFORML 闺中首领刚脱下衣服就向他袭击，成功地讨伐了他……
+			PRINTFORML %ANAME(候補:(RAND:(人数)))%假扮成娼妇，被带过去见他们的首领
+			;TranslatedMark %ANAME(候補:(RAND:(人数)))%は娼婦に化け、彼らの首領に取り入ったようだ
+			PRINTFORML 在房间里，首领刚脱下衣服，她就趁机袭击了过去，干净利落地干掉了他……
+			;TranslatedMark 閨で首領が服を脱いだ途端に襲いかかり、彼を見事に討ち取った……
 		CASE 4
-			PRINTFORML %ANAME(候補:(RAND:(人数)))%变成了预定为他们贡品的村姑娘
-			PRINTFORML 他们发现异常是在遭受猛烈一击后倒在地上……
+			PRINTFORML %ANAME(候補:(RAND:(人数)))%装作将要作为贡品献给他们的少女
+			;TranslatedMark %ANAME(候補:(RAND:(人数)))%は彼らの貢ぎものになる予定だった村娘に化けた
+			PRINTFORML 直到被尖锐的一击打倒在地前，他们都没有发现异常……
+			;TranslatedMark 彼らが異常に気づいたのは、鋭い一撃を食らい地に倒れ伏した後のことだった……
 	ENDSELECT
 	CALL SINGLE_DRAWLINE
-	PRINTFORMW 这样一来土匪暂时不会出现
-	PRINTFORMW 让土匪头疼的其他势力，似乎也肯定地看待了这一行动……
+	PRINTFORMW 这样下去应该一段时间不会出现土匪了吧
+	;TranslatedMark これでしばらく野盗はあらわれないだろう
+	PRINTFORMW 为土匪而烦恼的其他势力，也似乎很赞同这种行动……
+	;TranslatedMark 野盗に頭を悩ませていた他の勢力も、この働きを肯定的にみているようだ……
 	SETCOLOR カラー_注意
-	PRINTFORMW 土匪暂时不出现了
-	PRINTFORMW 与其他势力的关系大幅改善
+	PRINTFORMW 土匪们一段时间内不再出现了
+	;TranslatedMark 野盗がしばらく出現しなくなった
+	PRINTFORMW 和其他势力的关系有了很大的改善
+	;TranslatedMark 他の勢力との関係が大きく改善した
 	RESETCOLOR
 	;野盗部隊を全て解体、サスペンド期間追加、関係改善
 	DVAR:野盗討伐_発生フラグ = 1
-	CALL CLEAR_ALL_UNIT(土匪)
+	CALL CLEAR_ALL_UNIT(野盗)
 	BANDIT_POP_SUSPENDED = 10
 	FOR LOCAL, 0, MAX_COUNTRY
-		SIF IS_COUNTRY(LOCAL) && LOCAL != 土匪
+		SIF IS_COUNTRY(LOCAL) && LOCAL != 野盗
 			CALL CHANGE_RELATION_C_TO_C(LOCAL, CFLAG:MASTER:所属, 500, -300)
 	NEXT
 	RETURN 1
@@ -136,6 +166,7 @@ ELSE
 	DVAR:野盗討伐_発生フラグ = 2
 	SETCOLOR カラー_注意
 	PRINTFORML 潜入作战好像失败了……
+	;TranslatedMark 潜入作戦は失敗してしまったようだ……
 	RESETCOLOR
 
 
@@ -145,300 +176,555 @@ ELSE
 			LOCAL:1 = RAND:22
 			SELECTCASE LOCAL:1
 				CASE 0
-					PRINTFORML 是潜入了谁也不被发现的%ANAME(候補:LOCAL)%,不过，被发现了
-					PRINTFORMW 被呼吁支援被多数土匪包围了的%ANAME(候補:LOCAL)%，抵抗也没有徒劳地被埋伏
-					PRINTFORML 挥舞了刀具,不过，在那里发现是%ANAME(候補:LOCAL)%相当的「上玉」的
-					PRINTFORMW 他们的目的是，对%ANAME(候補:LOCAL)%施加暴行，变成了陵辱的事
-					PRINTFORML 太い手が%ANAME(候補:LOCAL)%の%STR_BODY("身体", 候補:LOCAL)%を這い、その服を剥ぎ取っていく
-					PRINTFORMW 以及前戏也草草了事，压住闹腾的%ANAME(候補:LOCAL)%，那个秘部拧进了肉棒
-					PRINTFORML 开始讨厌的%ANAME(候補:LOCAL)%也在性交快乐之前，渐渐地放声匿迹
-					PRINTFORMW 因为他们打了%ANAME(候補:LOCAL)%的可疑的注射，所以决定了
-					PRINTFORML 男人擅自摇动腰%ANAME(候補:LOCAL)%品味阴道内，%ANAME(候補:LOCAL)%也弯腰接受那个
-					PRINTFORMW 不久%ANAME(候補:LOCAL)%的阴道内浓厚的白浊被放出的话，她尽情违背绝顶
-					PRINTFORML 但是，并没有就此结束
-					PRINTFORMW 因为被她课了的，是这个基地全体人员的对手……
+					PRINTFORML 本来%ANAME(候補:LOCAL)%应当无人察觉的潜入行动，被土匪们发现了
+					;TranslatedMark 誰にも気づかれないよう潜入した%ANAME(候補:LOCAL)%だったが、見つかってしまった
+					PRINTFORMW 土匪们叫来了增援，瞬间被众多强盗包围着的%ANAME(候補:LOCAL)%，纵然抵抗也不敌，最终被压在了地上
+					;TranslatedMark 応援を呼ばれ多数の野盗に囲まれた%ANAME(候補:LOCAL)%は、抵抗もむなしく組み伏せられる
+					PRINTFORML 挥舞着刀的土匪们，发现%ANAME(候補:LOCAL)%是一块"上等货"
+					;TranslatedMark 刃物を振りかざしたが、そこで%ANAME(候補:LOCAL)%がかなりの「上玉」であることに気づく
+					PRINTFORMW 他们从原本的对%ANAME(候補:LOCAL)%施加暴力转变为陵辱
+					;TranslatedMark 彼らの目的は、%ANAME(候補:LOCAL)%に暴行を加えることから、陵辱することへと変わった
+					PRINTFORML 粗大的手在%ANAME(候補:LOCAL)%的%STR_BODY("身体", 候補:LOCAL)%上四处摸着，然后剥下了那件衣服
+					;TranslatedMark 太い手が%ANAME(候補:LOCAL)%の%STR_BODY("身体", 候補:LOCAL)%を這い、その服を剥ぎ取っていく
+					PRINTFORMW 然后草草地做完了前戏，粗暴地抓住了%ANAME(候補:LOCAL)%，把肉棒扭进了秘部里
+					;TranslatedMark そして前戯もそこそこに、暴れる%ANAME(候補:LOCAL)%を押さえつけ、その秘部へ肉棒をねじ込んだ
+					PRINTFORML 最初十分厌恶的%ANAME(候補:LOCAL)%，在性交的快乐面前，渐渐地放弃了呼救
+					;TranslatedMark 初めは嫌悪していた%ANAME(候補:LOCAL)%も、性交の快楽の前に、次第に声を蕩かしていく
+					PRINTFORMW 那是他们已经在%ANAME(候補:LOCAL)%身上注射的奇怪针剂而导致的
+					;TranslatedMark それは、彼らが怪しげな注射を%ANAME(候補:LOCAL)%に打ったことで、決定的になった
+					PRINTFORML 男人随意地摇着腰品味%ANAME(候補:LOCAL)%的阴道内的感觉，%ANAME(候補:LOCAL)%也扭着腰接受着
+					;TranslatedMark 男は自分勝手に腰を振って%ANAME(候補:LOCAL)%の膣内を味わい、%ANAME(候補:LOCAL)%も腰をくねらせそれを受け入れる
+					PRINTFORMW 不久，土匪在%ANAME(候補:LOCAL)%的阴道内射出了浓厚的白浊液，她尽情地仰着身，达到了绝顶
+					;TranslatedMark やがて%ANAME(候補:LOCAL)%の膣内に濃厚な白濁が放たれると、彼女は思いきり背を反らして絶頂する
+					PRINTFORML 但是，并没有因此而结束
+					;TranslatedMark だが、それで終わりなどはしなかった
+					PRINTFORMW 因为她接下来还要面对布置在这个据点的所有人……
+					;TranslatedMark 彼女に課せられたのは、このアジト全員の相手なのだから……
 				CASE 1
-					PRINTFORML 首先是打算排除监视的%ANAME(候補:LOCAL)%,不过，被发现了
-					PRINTFORMW 的监视者不叫来支援，取而代之使之高兴，露出了自己的一物
-					PRINTFORML 为什么会这样……是厌恶的%ANAME(候補:LOCAL)%,不过，背不能代替肚子
-					PRINTFORMW 一边持续一边也叼进那个，一边慢慢地一边说着
-					PRINTFORML 雄性味和臭味在口内蔓延。明明那不是快乐的东西，却让她心疼不已。
-					PRINTFORMW 女人的本能，无可否认地作出了反应
-					PRINTFORML 不久，男子将%ANAME(候補:LOCAL)%的口内充分撒上白浊
-					PRINTFORMW 虽然没有被命令，但%ANAME(候補:LOCAL)%却发现自己咽下了被吐出的子种。
-					PRINTFORML 不管如何，应该可以入侵的……安心的%ANAME(候補:LOCAL)%,不过太天真了
-					PRINTFORML 监视的男人不遵守约定。大声呐喊，聚集了应援
-					PRINTFORMW 他们纷纷凌辱了转眼之间被包围的%ANAME(候補:LOCAL)%
+					PRINTFORML 打算先干掉哨兵的%ANAME(候補:LOCAL)%，被他们发现了
+					;TranslatedMark まずは見張りを排除しようとした%ANAME(候補:LOCAL)%だったが、感づかれてしまった
+					PRINTFORMW 哨兵没有呼叫增援，作为条件要求%ANAME(候補:LOCAL)%让他愉悦，然后露出了自己的肉棒
+					;TranslatedMark 見張りは応援を呼ばない代わりにコレを悦ばせろと、己の一物を露出した
+					PRINTFORML 为什么要这样……虽然%ANAME(候補:LOCAL)%对此很厌恶，但反正没有别的办法了
+					;TranslatedMark なぜこんなものを……と、嫌悪する%ANAME(候補:LOCAL)%だったが、背に腹は代えられない
+					PRINTFORMW 把它含进了嘴里，慢慢地前后动了起来
+					;TranslatedMark えづきながらもそれを咥え込み、ゆっくりとながらしゃぶりはじめた
+					PRINTFORML 嘴里蔓延着雄性的腥臭味。那明明不是件愉快的事情，因此让她内心深处隐隐作痛
+					;TranslatedMark 口内に雄の味と臭いが広がる。それは快いものではないはずだというのに、彼女の奥底を疼かせる
+					PRINTFORMW 女性的身体本能，不管是否愿意都会作出反应
+					;TranslatedMark 女の本能が、否応なしに反応してしまっているのだ
+					PRINTFORML 不久，男人在%ANAME(候補:LOCAL)%的嘴里射进了满满的白浊液
+					;TranslatedMark やがて男は、%ANAME(候補:LOCAL)%の口内にたっぷりと白濁をまき散らす
+					PRINTFORMW 明明没有被命令，%ANAME(候補:LOCAL)%却自己吞下了原本打算吐出去的精液
+					;TranslatedMark 命じられてもいないというのに、%ANAME(候補:LOCAL)%は、気づけば吐き出された子種を自ら嚥下していた
+					PRINTFORML 不管怎么说，这样就可以侵入了……安下心来的%ANAME(候補:LOCAL)%，太天真了
+					;TranslatedMark ともあれ、これで侵入できるはずだ……安心する%ANAME(候補:LOCAL)%だったが、甘かった
+					PRINTFORML 放哨的男人没有遵守约定。大声叫喊，把其他土匪叫了过来
+					;TranslatedMark 見張りの男は約束を守らなかった。大声を上げ、応援を集めたのだ
+					PRINTFORMW 一瞬间就被包围了，他们一个接一个地凌辱了被压制住的%ANAME(候補:LOCAL)%……
+					;TranslatedMark あっという間に囲まれ、組み敷かれた%ANAME(候補:LOCAL)%を、彼らは次々と陵辱していった……
 				CASE 2
-					PRINTFORML %ANAME(候補:LOCAL)%变成了街头艺人，混入了他们的宴会
-					PRINTFORMW 本打算给酒注入麻痹药，但反而被灌了可疑的药
-					PRINTFORML 烂醉如泥，前后不知不觉陷入了%ANAME(候補:LOCAL)%的衣服，土匪们剥下
-					PRINTFORML そしてその%STR_BODY("胸部", 候補:LOCAL)%を乱暴に揉みしだき、秘部に指をねじ込んで弄ぶ
-					PRINTFORMW 由于安眠药和媚药和酒的效果，%ANAME(候補:LOCAL)%无法抵抗，只能哮喘
-					PRINTFORML やがて彼らの頭が、その長大な一物を%ANAME(候補:LOCAL)%の%STR_BODY("陰唇：処女確認", 候補:LOCAL)%に押し当てる
-					PRINTFORML 被快乐所陶醉，什么都不懂%ANAME(候補:LOCAL)%毫无羞耻地追求它
-					PRINTFORMW 如果希望的话，男人一边哈哈地笑，一边把凶恶的东西拧进她湿透的洞里
-					PRINTFORML 对于穿越脑海般的快乐，、%ANAME(候補:LOCAL)%露出了雌性凌乱的表情
-					PRINTFORML 不久头领呻吟射精，%ANAME(候補:LOCAL)%从腹中象被消沉一样的快感，
-					PRINTFORMW 多次迎来了法悦……
-					PRINTFORMW その後、%ANAME(候補:LOCAL)%は部下どもに「提供」され、酒の肴に何度もいただかれてしまった……
+					PRINTFORML %ANAME(候補:LOCAL)%装作街头艺人，混入了他们的宴会中
+					;TranslatedMark %ANAME(候補:LOCAL)%は大道芸人に化け、彼らの宴会に混ざり込んだ
+					PRINTFORMW 本来打算给土匪们的酒下药的她，结果反而被下了奇怪的药
+					;TranslatedMark 酒に痺れ薬を盛るつもりだったのだが、逆に怪しげな薬を盛られてしまった
+					PRINTFORML 醉醺醺、失去理性意识的%ANAME(候補:LOCAL)%的衣服，被野盗们剥下
+					;TranslatedMark 酩酊し、前後不覚に陥った%ANAME(候補:LOCAL)%の服を、野盗どもは剥ぎ取っていく
+					PRINTFORML 然后粗暴地揉搓那个%STR_BODY("胸", 候補:LOCAL)%，用手指玩弄着秘部
+					;TranslatedMark そしてその%STR_BODY("胸", 候補:LOCAL)%を乱暴に揉みしだき、秘部に指をねじ込んで弄ぶ
+					PRINTFORMW 由于安眠药、媚药和酒的效果，%ANAME(候補:LOCAL)%无法抵抗，只是不停地喘着气
+					;TranslatedMark 睡眠薬と媚薬と酒の効果で、%ANAME(候補:LOCAL)%は大した抵抗もできずただ喘がされるしかない
+					PRINTFORML 不久他们的首领，将他巨大的肉棒顶在了%ANAME(候補:LOCAL)%的%STR_BODY("陰唇：処女確認", 候補:LOCAL)%上
+					;TranslatedMark やがて彼らの頭が、その長大な一物を%ANAME(候補:LOCAL)%の%STR_BODY("陰唇：処女確認", 候補:LOCAL)%に押し当てる
+					PRINTFORML 沉醉在快乐中而变得什么无法分辨的%ANAME(候補:LOCAL)%，恬不知耻，充耳不闻地求着它插入
+					;TranslatedMark 快楽に蕩かされ何も分からなくなっている%ANAME(候補:LOCAL)%は、恥も外聞もなくそれを求めた
+					PRINTFORMW 既然你期待的话——男人一边哈哈地狞笑着，一边把凶恶的肉棒插进了她湿润的小穴里
+					;TranslatedMark お望みならばと、男はげらげら笑いながら、凶悪なモノを彼女の濡れた穴にねじ込んだ
+					PRINTFORML 在仿佛穿透脑壳般的快乐中，%ANAME(候補:LOCAL)%露出了淫乱雌性一般的表情
+					;TranslatedMark 脳天を突き抜けるような快楽に、%ANAME(候補:LOCAL)%は乱れきった雌の表情を浮かべた
+					PRINTFORML 不久，当首领呻吟射精的时候，%ANAME(候補:LOCAL)%从腹中感受到了被融化的快感
+					;TranslatedMark やがて頭領が呻き射精すると、%ANAME(候補:LOCAL)%は腹の中から蕩かされるような快感に、
+					PRINTFORMW 迎来了连续几次绝顶的愉悦……
+					;TranslatedMark 何度も法悦を迎えた……
+					PRINTFORMW 在那之后，%ANAME(候補:LOCAL)%被部下们"提供"给了那个人，此后一直作为他的下酒菜……
+					;TranslatedMark その後、%ANAME(候補:LOCAL)%は部下どもに「提供」され、酒の肴に何度もいただかれてしまった……
 					CFLAG:(候補:LOCAL):薬物依存 += 100
 				CASE 3
-					PRINTFORML %ANAME(候補:LOCAL)%变成了街头艺人，混入了他们的宴会
-					PRINTFORMW 本打算给酒注入麻痹药，但反而被灌了可疑的药
-					PRINTFORML 对前后不知不觉陷入了的%ANAME(候補:LOCAL)%，土匪们真的命令做街头表演
-					PRINTFORMW 要登上桌子，做即席的街头秀
-					PRINTFORML 一般情况下都会拒绝，但现在的%ANAME(候補:LOCAL)%却没有认真的思考
-					PRINTFORML 亲自登上桌子，随着他们的伴奏跳着舞，晒着肌肤
-					PRINTFORMW 最后一件，内衣被拆除，身体的美丽让他们屏住了呼吸
-					PRINTFORML 男人们命令%ANAME(候補:LOCAL)%自慰
-					PRINTFORMW %ANAME(候補:LOCAL)%是被说的那样，很大地扩展脚，举出肮脏的声音安慰自己
-					PRINTFORML 不久，变得无法忍耐的男人们，将她从桌子上拉下垫上去
-					PRINTFORMW そして、己の長大な一物を濡れそぼつ%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘裂にねじ込んだ
-					PRINTFORML 更加，口内和菊穴，象同样一样地肉棒进入
-					PRINTFORMW 被激烈地挖回所有的孔，一边被染白一边，%ANAME(候補:LOCAL)%好多次绝顶了……
+					PRINTFORML %ANAME(候補:LOCAL)%装作街头艺人，混入了他们的宴会中
+					;TranslatedMark %ANAME(候補:LOCAL)%は大道芸人に化け、彼らの宴会に混ざり込んだ
+					PRINTFORMW 本来打算给土匪的酒下药的她，结果反而被下了奇怪的药
+					;TranslatedMark 酒に痺れ薬を盛るつもりだったのだが、逆に怪しげな薬を盛られてしまった
+					PRINTFORML 对于失去理性意识的%ANAME(候補:LOCAL)%，野盗们命令她表演真正的大道艺
+					;TranslatedMark 前後不覚に陥った%ANAME(候補:LOCAL)%に、野盗どもは本当に大道芸をするよう命じた
+					PRINTFORMW 让她登上桌子，做即兴表演
+					;TranslatedMark テーブルの上に上って、即席のストリップショーをしろというのだ
+					PRINTFORML 正常来说应当拒绝的，然而现在的%ANAME(候補:LOCAL)%已经无法认真思考了
+					;TranslatedMark 普通ならば拒否するところだろうが、今の%ANAME(候補:LOCAL)%にまともな思考は存在しない
+					PRINTFORML 自己登上桌子，配合着他们的伴奏，跳着舞，裸露出了她的皮肤
+					;TranslatedMark 自らテーブルに登り、彼らが囃すのに合わせて踊りながら、その肌を晒していく
+					PRINTFORMW 最后一件的内衣被取出之后，他们因她那美丽的身躯而屏住了呼吸
+					;TranslatedMark 最後の一枚、下着が取り払われ、その肢体の美しさに彼らは息を呑んだ
+					PRINTFORML 男人们就这样命令%ANAME(候補:LOCAL)%自慰
+					;TranslatedMark 男達はそのまま、%ANAME(候補:LOCAL)%に自慰をするよう命じる
+					PRINTFORMW %ANAME(候補:LOCAL)%按照土匪们所说的那样，将脚伸开，发出粗野的声音来自慰
+					;TranslatedMark %ANAME(候補:LOCAL)%は言われるがまま、大きく脚を広げ、はしたない声をあげて己を慰める
+					PRINTFORML 过了一会，无法忍耐的男人们把她从桌子上拖下来，把她压在了下面
+					;TranslatedMark そのうちに、我慢のできなくなった男達は、彼女をテーブルから引きずりおろして組み敷く
+					PRINTFORMW 然后，把他们自己的肉棒湿润之后，插进%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘裂里
+					;TranslatedMark そして、己の長大な一物を濡れそぼつ%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘裂にねじ込んだ
+					PRINTFORML 而且，不管是口腔还是菊穴，都同样会有阴茎侵入
+					;TranslatedMark さらには、口内にも菊穴にも、同じようにペニスが入り込んでくる
+					PRINTFORMW 所有的洞穴都在被激烈地抽插着，被染成白色，%ANAME(候補:LOCAL)%却因此多次绝顶……
+					;TranslatedMark あらゆる穴を激しく抉り返され、白く染められながら、%ANAME(候補:LOCAL)%は何度も絶頂してしまった……
 					CFLAG:(候補:LOCAL):薬物依存 += 100
 				CASE 4
-					PRINTFORML %ANAME(候補:LOCAL)%混入了土匪们提供的村姑们之中
-					PRINTFORMW 可是，隐藏持(有)了的武器找到了！
-					PRINTFORMW 当然武器被夺走，在被剥去衣服的手脚被安上了枷锁的状态下，%ANAME(候補:LOCAL)%被带进了基地
-					PRINTFORML 就算只是村姑，也不会遭遇好事，一旦成为入侵者，他们当然也不会温柔的
-					PRINTFORMW 与墙相连的%ANAME(候補:LOCAL)%
-					PRINTFORML 粗暴的手势，执拗地瞄准性感带的那个手势，%ANAME(候補:LOCAL)%的呼吸逐渐变得粗暴
-					PRINTFORMW 一个小时也是这样，%ANAME(候補:LOCAL)%的身体完全发情了
-					PRINTFORML その%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部に肉棒が押し当てられたとき、%ANAME(候補:LOCAL)%の口から漏れたのは、拒否の言葉ではなく小さな嬌声だった
-					PRINTFORML 嘲笑说打算被侵犯感到的那样的话，男人用一击，深深地贯穿%ANAME(候補:LOCAL)%的阴道孔
-					PRINTFORMW 燃烧一样的快感跑，%ANAME(候補:LOCAL)%很大地弯腰身苦闷
-					PRINTFORMW 对这些家伙……这种想法是由激烈的抽送带来的快乐。
-					PRINTFORMW 包围着的男人们，一边看着%ANAME(候補:LOCAL)%混乱的身姿一边处理着阴茎
-					PRINTFORMW 不久阴道内的肉棒鼓起，白浊被吐出的话，%ANAME(候補:LOCAL)%提高特别高(贵)的声音，作为女人的快乐狂乱了……
-					PRINTFORMW そしてそれを祝福するように、周囲の男達は彼女に白濁をぶちまけていった……
+					PRINTFORML %ANAME(候補:LOCAL)%混入了提供给强盗们的村民少女们之中
+					;TranslatedMark %ANAME(候補:LOCAL)%は野盗どもに提供される村娘たちの中に紛れ込んだ
+					PRINTFORMW 但是，他们发现了隐藏的武器！
+					;TranslatedMark しかし、隠し持っていた武器が見つかってしまった！
+					PRINTFORMW 于是武器被夺走，衣服被剥下，手脚被戴上枷锁，%ANAME(候補:LOCAL)%被带到了据点
+					;TranslatedMark 当然武器は奪われ、服を剥ぎ取られ手足に枷をつけられた状態で、%ANAME(候補:LOCAL)%はアジトへ連れ込まれた
+					PRINTFORML 当然，普通的村女并不会遭到什么好的待遇，而如果是入侵者的话，更不会被他们温柔对待了
+					;TranslatedMark ただの村娘でもろくな目には遭わないのに、侵入者となれば当然、彼らが優しくするはずもない
+					PRINTFORMW %ANAME(候補:LOCAL)%被镣铐扣在墙壁边，土匪们以身体检查的名义在她身上摸索着
+					;TranslatedMark 壁に繋がれた%ANAME(候補:LOCAL)%を、身体検査と称して野盗どもはまさぐっていく
+					PRINTFORML 他们用手粗暴地，不停地在%ANAME(候補:LOCAL)%的性感带上动作着，%ANAME(候補:LOCAL)%的呼吸渐渐变得迷乱起来
+					;TranslatedMark 乱暴な手つきながら、性感帯を執拗に狙うその手つきに、%ANAME(候補:LOCAL)%の呼吸は次第に荒くなっていく
+					PRINTFORMW 就这样过了一个小时，%ANAME(候補:LOCAL)%的身体完全进入了发情状态
+					;TranslatedMark 一時間もそのようにされ、%ANAME(候補:LOCAL)%の身体はすっかり発情してしまっていた
+					PRINTFORML 当肉棒顶住了%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部的时候，从%ANAME(候補:LOCAL)%的口中漏出的不是拒绝的话，而是小小的娇声
+					;TranslatedMark その%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部に肉棒が押し当てられたとき、%ANAME(候補:LOCAL)%の口から漏れたのは、拒否の言葉ではなく小さな嬌声だった
+					PRINTFORML 感觉像是嘲笑自己被侵犯的样子一样，那个男人一下子就用肉棒深深地贯穿了%ANAME(候補:LOCAL)%的阴道
+					;TranslatedMark 犯されようというのに感じている様を嘲笑うと、男は一撃で、%ANAME(候補:LOCAL)%の膣穴を深々と貫く
+					PRINTFORMW 燃烧般的快感在体内奔涌着，%ANAME(候補:LOCAL)%用力地向后仰，身体摇动着
+					;TranslatedMark 焼けるような快感が走り、%ANAME(候補:LOCAL)%は大きく背中を反らし身悶えた
+					PRINTFORML 被这样的家伙……刚刚有这样的想法，但很快被激烈的抽插带来的快乐冲走了
+					;TranslatedMark こんな奴らに……という考えは、激しい抽送による快楽が押し流していく
+					PRINTFORMW 周围的男人们，一边看着%ANAME(候補:LOCAL)%凌乱的身姿，一边用手捋着阴茎
+					;TranslatedMark 取り囲む男達は、%ANAME(候補:LOCAL)%の乱れる姿を見ながら陰茎を扱きあげている
+					PRINTFORMW 不久，在阴道内的抽插着的阴茎开始膨胀起来，在白浊液涌入的同时，%ANAME(候補:LOCAL)%发出了更高的声音，作为女人的快乐让她狂乱着……
+					;TranslatedMark やがて膣内のペニスが膨れ上がり、白濁が吐き出されると、%ANAME(候補:LOCAL)%は一際高い声を上げ、女としての快楽に狂った……
+					PRINTFORMW 然后像是为了祝福她一样，周围的男人们也向她身上撒满了白浊液……
+					;TranslatedMark そしてそれを祝福するように、周囲の男達は彼女に白濁をぶちまけていった……
 				CASE 5
-					PRINTFORML %ANAME(候補:LOCAL)%混入了土匪们提供的村姑们之中
-					PRINTFORMW 但是，一进入秘所就被打了可疑的药，忘了自我
-					PRINTFORML 药效一发就将理性发挥出来，她无法抵抗雌性的本能
-					PRINTFORMW 和其他女人一样、自己脱掉衣服、已经湿润了%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%用手指一边搅拌淫裂，一边想要性交。
-					PRINTFORML 如果%ANAME(候補:LOCAL)%是像“上帝”一样的的请求的话，他们是不会拒绝的
-					PRINTFORMW 被仰卧着的%ANAME(候補:LOCAL)%覆盖后，开始用淫荡的母洞动腰
-					PRINTFORML %ANAME(候補:LOCAL)%积极地扭动腰，互相缠绕舌头，贪图快乐
-					PRINTFORMW 不久，男子在她的阴道洞里放出白浊，%ANAME(候補:LOCAL)%
-					PRINTFORML 此后她，不仅仅是阴道，口和屁股孔，手和乳房也使用，让男人们持续快乐
-					PRINTFORMW 事情一结束，就仿效其他的女儿们亲自进入监狱，开始等待再次相交的时候……
+					PRINTFORML %ANAME(候補:LOCAL)%混入了提供给强盗们的村民少女们之中
+					;TranslatedMark %ANAME(候補:LOCAL)%は野盗どもに提供される村娘たちの中に紛れ込んだ
+					PRINTFORMW 但是，一进入据点就被打了奇怪的药，让她失去了理性意识
+					;TranslatedMark しかし、アジトに入るなり怪しい薬を打たれ、我を忘れてしまった
+					PRINTFORML 药效一下子就让她的理性蒸发了，让她变得无法违抗雌性本能
+					;TranslatedMark 薬効が理性を一発で飛ばし、彼女は雌の本能に逆らえなくなってしまう
+					PRINTFORMW 和其他的女孩子一样，自己脱下衣服之后扔在地上，用手指来回拨弄已经湿透的%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%淫裂，渴求着性交
+					;TranslatedMark 他の娘同様、自ら服を脱ぎ捨てると、既にどろどろに濡れそぼっている%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%淫裂を指で掻き回しながら、性交をねだった
+					PRINTFORML 对于像%ANAME(候補:LOCAL)%这样的"上等货"的渴求，他们并没有拒绝
+					;TranslatedMark %ANAME(候補:LOCAL)%のような「上玉」のお願いとあれば、彼らが断るはずもなかった
+					PRINTFORMW 将仰卧的%ANAME(候補:LOCAL)%压在身下后，开始动腰用肉棒叩击着淫荡的雌穴
+					;TranslatedMark 仰向けに寝かせた%ANAME(候補:LOCAL)%に覆い被さると、淫らな雌穴に腰を叩きつけ始めた
+					PRINTFORML %ANAME(候補:LOCAL)%积极地扭着腰，和对方的舌头交缠着，贪图着性交的快乐
+					;TranslatedMark %ANAME(候補:LOCAL)%は積極的に腰をくねらせ、舌を絡ませあい、快楽を貪っていく
+					PRINTFORMW 不久男子在她的阴道里释放出白浊液，%ANAME(候補:LOCAL)%激烈地绝顶，感受到了令人狂乱的快乐
+					;TranslatedMark やがて男が彼女の膣穴に白濁を解き放つと、%ANAME(候補:LOCAL)%は狂いそうなほどの快楽に激しく絶頂した
+					PRINTFORML 之后，她不仅被使用了阴道，还被使用了口和菊穴、手和乳房，男人们继续享受着她
+					;TranslatedMark その後も彼女は、膣のみならず口や尻穴、手や乳房も使い、男達を楽しませつづけた
+					PRINTFORMW 结束后，她和其他少女们一样自己进入了牢房，开始等待再次性交的时候……
+					;TranslatedMark ことが終わると、他の娘達にならって自ら牢に入り、再び交わるときを待ち始めた……
 					CFLAG:(候補:LOCAL):薬物依存 += 100
 				CASE 6
-					PRINTFORML %ANAME(候補:LOCAL)%化身为娼妇，成功潜入土匪首领闺中
-					PRINTFORMW 误算的是，他的技术达到了异样的程度
-					PRINTFORML 碰一碰让他大意吧……这样的想法，受到像要融化一样的爱抚，吹跑了。
-					PRINTFORML 对于出现在眼前的他的一物，%ANAME(候補:LOCAL)%忘记了自己的任务
-					PRINTFORML 粗壮而雄壮而坚硬，其热度如同会烧伤口腔一般，使其官能燃烧起来
-					PRINTFORMW 当其注意到的时候，她像真正的娼妇一样，不，更热心，更热心地为他服务。
-					PRINTFORMW 不久白浊被放出了的话，%ANAME(候補:LOCAL)%一边从心里觉得好吃，一边咽下了那个
-					PRINTFORML %STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部に、長大なモノが押し当てられる。彼女は自ら脚を開き、それを迎え入れる
-					PRINTFORMW 并且，对在肉桩里(上)穿了雌孔的快乐，暂且醉意持续了……
-					PRINTFORMW 在终结的时候，在他的怀里撒娇的一个妓女在那里……
+					PRINTFORML %ANAME(候補:LOCAL)%装作娼妇，成功潜入了土匪首领的房间
+					;TranslatedMark %ANAME(候補:LOCAL)%は娼婦に化け、野盗の首領の閨に潜り込むことには成功した
+					PRINTFORMW 但没有料到的是，他的床上功夫异常厉害
+					;TranslatedMark 誤算だったのは、彼が異様なまでのテクニシャンだったということだ
+					PRINTFORML 先让他麻痹大意吧……这样的想法，在经受了被仿佛让人融化般的爱抚之后，就被她抛至九霄云外了
+					;TranslatedMark 少し触らせて油断させよう……という考えは、蕩かすような愛撫を受け、吹き飛んでしまった
+					PRINTFORML 望着眼前突出的他的肉棒，%ANAME(候補:LOCAL)%忘记了自己的任务，将它含进了嘴里
+					;TranslatedMark 眼前に突き出された彼の一物に、%ANAME(候補:LOCAL)%は己の任務も忘れてしゃぶりついてしまう
+					PRINTFORML 又粗又雄壮又坚硬，让口腔像是被灼伤一样热了起来，不断地燃起自己的肉欲
+					;TranslatedMark 太く雄々しく硬いそれは、口腔を火傷させそうなほどに熱く、官能を燃え上がらせてくる
+					PRINTFORMW 等回过神的时候，她就已经像真正的娼妇一样，不，比娼妇更热心地为他奉仕着
+					;TranslatedMark 気がつけば、本物の娼婦のように、いやそれ以上に熱心に、彼に奉仕してしまっていた
+					PRINTFORMW 不久，白浊液在她嘴里释放的时候，%ANAME(候補:LOCAL)%从心底里感到美味，并将其吞咽了下去
+					;TranslatedMark やがて白濁が放たれると、%ANAME(候補:LOCAL)%は心から美味だと感じながら、それを嚥下していった
+					PRINTFORML 随即，那个粗壮的肉棒压在了%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部上。她自己张开腿，迎接它
+					;TranslatedMark %STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部に、長大なモノが押し当てられる。彼女は自ら脚を開き、それを迎え入れる
+					PRINTFORMW 然后，在雌穴被肉棒抽插的快乐之中沉醉了一段时间……
+					;TranslatedMark そして、雌穴を肉杭に穿たれる快楽に、しばらくの間酔いしれ続けた……
+					PRINTFORMW 等到结束的时候，已经完全变成了一个在他的手臂里撒娇的妓女……
+					;TranslatedMark コトが終わるころには、彼の腕の中で甘える、一人の娼婦がそこにいた……
 				CASE 7
-					PRINTFORML %ANAME(候補:LOCAL)%化身为娼妇，成功潜入土匪首领闺中
-					PRINTFORML 可是，他好象注意到%ANAME(候補:LOCAL)%是假的
-					PRINTFORMW 本想趁着间隙袭击他，但却在下一个瞬间受到了攻击，昏倒了……
+					PRINTFORML %ANAME(候補:LOCAL)%装作娼妇，成功潜入了土匪首领的房间
+					;TranslatedMark %ANAME(候補:LOCAL)%は娼婦に化け、野盗の首領の閨に潜り込むことには成功した
+					PRINTFORML 但是，他似乎发现了%ANAME(候補:LOCAL)%是假的
+					;TranslatedMark しかし、彼は%ANAME(候補:LOCAL)%が偽物だということに気づいていたらしい
+					PRINTFORMW 当%ANAME(候補:LOCAL)%看到了破绽准备袭击的时候，却在下个瞬间受到攻击，昏倒了……
+					;TranslatedMark 隙を見せたから襲いかかったつもりが、次の瞬間には攻撃を受け、昏倒させられた……
 					PRINTFORML 
-					PRINTFORMW 睁开眼睛%ANAME(候補:LOCAL)%，发现自己被男人侵犯了
-					PRINTFORML 更准确的说，不是“男人”而是“男人们”
-					PRINTFORMW 在昏过去的期间，首领将她系在锁链上，并向部下们提供了这样的服务。
-					PRINTFORML 是闹腾的%ANAME(候補:LOCAL)%,不过，锁链堵住那个
-					PRINTFORMW 即使厌恶，已经放出种子好多次的阴道孔和屁股孔，也没有大的抵抗接受了肉棒
-					PRINTFORML 被骂了好几次，脸颊被张开，喉咙里被肉棒小戳着，直到她们都满意为止，
-					PRINTFORMW 不断地被安慰者……
+					PRINTFORMW 醒来的%ANAME(候補:LOCAL)%发现自己正在被男人侵犯着
+					;TranslatedMark 目を覚ました%ANAME(候補:LOCAL)%は、自分が男に犯されていることに気がついた
+					PRINTFORML 正确地说，是被一群男人们
+					;TranslatedMark より正確には、「男に」ではなく「男達に」、だ
+					PRINTFORMW 在失去意识的时候，首领把她锁在了锁链上，然后把她提供给了部下们
+					;TranslatedMark 気を失っている間に、首領は彼女を鎖に繋ぎ、そして部下達に提供したらしい
+					PRINTFORML 虽然%ANAME(候補:LOCAL)%激烈地进行挣扎，但锁链却压制住了她的动作
+					;TranslatedMark 暴れる%ANAME(候補:LOCAL)%だが、鎖がそれを抑え込む
+					PRINTFORMW 即使试着讨厌，已经被放了很多次种子的阴道孔和屁股孔，也没有什么大的抵抗就接受了肉棒
+					;TranslatedMark 嫌がってみても、既に何度も種を放たれた膣穴や尻穴は、大した抵抗もなく肉棒を受け入れてしまう
+					PRINTFORML 被骂了好几次，脸被撑了起来，喉咙里被阴茎刺了一下，她直到他们都满意为止
+					;TranslatedMark 何度も罵倒され、頬を張られ、喉奥をペニスで小突かれながら、彼女は彼ら全員が満足するまで、
+					PRINTFORMW 被不断地安慰着……
+					;TranslatedMark 延々と慰み者にされつづけた……
 				CASE 8
-					PRINTFORML %ANAME(候補:LOCAL)%在基地的正中央被他们发现了
-					PRINTFORMW 虽然做了抵抗，但对方实在太多了。寡不敌众，结果还是败北了
-					PRINTFORML 他们将%ANAME(候補:LOCAL)%的衣服剥下全裸，命令他用生命换取土下座
-					PRINTFORMW 为什么对这些家伙……虽然这么想，但是不服从就没有生命。就等于没有选择
-					PRINTFORML 咬紧嘴唇的同时，%ANAME(候補:LOCAL)%深深地低下头，把额头放在地上
-					PRINTFORMW 男人们哈哈地笑着，竟然以那个姿势侵犯她
-					PRINTFORML 别说闹腾了，就连一点点动都不被允许，%ANAME(候補:LOCAL)%继续被侵犯
-					PRINTFORMW 在阴道洞里，男人们轮换着从内侧把她弄白……
+					PRINTFORML %ANAME(候補:LOCAL)%在据点的正中央被他们发现了
+					;TranslatedMark %ANAME(候補:LOCAL)%は、アジトのど真ん中で彼らに見つかってしまった
+					PRINTFORMW 虽然抵抗了，但是对方人数太多了。众寡悬殊，结果失败了
+					;TranslatedMark 抵抗はしたが、相手はあまりにも多い。多勢に無勢で、結局は敗北してしまう
+					PRINTFORML 他们剥下%ANAME(候補:LOCAL)%的衣服，并且命令她如果想活命就必须土下座
+					;TranslatedMark 彼らは%ANAME(候補:LOCAL)%の服を剥ぎ取り全裸にすると、命と引き換えに、土下座するように命じた
+					PRINTFORMW 为什么会有这样的家伙……虽然这么想，但是如果不服从的话就会死，毫无选择
+					;TranslatedMark なぜこんな奴らに……とは思うが、従わなければ命はない。選択肢はないも同然だった
+					PRINTFORML 咬着嘴唇，%ANAME(候補:LOCAL)%深深地低下头，额头贴在地上
+					;TranslatedMark 唇を噛みしめながらも、%ANAME(候補:LOCAL)%は深々と頭を下げ、地に額をつけた
+					PRINTFORMW 男人们一边哈哈地笑着，一边以那个姿势侵犯着她
+					;TranslatedMark 男達はげらげらと笑いながら、あろうことかその姿勢のまま彼女を犯していく
+					PRINTFORML 土下座的她，连细微的动作都不被允许，更别说抵抗，在这种姿势下，%ANAME(候補:LOCAL)%被不停地侵犯着
+					;TranslatedMark 暴れることはおろかわずかに動くことすら許されない中で、%ANAME(候補:LOCAL)%は犯され続ける
+					PRINTFORMW 阴茎孔和屁股孔，男人们交相替换着，用浑浊的白色玷污了她的身体内侧……
+					;TranslatedMark 膣穴に尻穴にと、男達は代わる代わる、何度も何度も彼女を内側から白く汚していった……
 				CASE 9
-					PRINTFORML %ANAME(候補:LOCAL)%潜入土匪首领的房间，成功地与他决战
-					PRINTFORMW %ANAME(候補:LOCAL)%的误算是他以上的强者
-					PRINTFORML 败北的%ANAME(候補:LOCAL)%被当作肉便器捕获
-					PRINTFORMW 她的%STR_BODY("身体", 候補:LOCAL)%埋在墙壁里，只有下半身被暴露出来
-					PRINTFORML 土匪们有点排泄的感觉，把肉棒拧进%ANAME(候補:LOCAL)%的肉孔里
-					PRINTFORMW 然后擅自摇动腰部，在最里面释放出子种
-					PRINTFORML 虽然说下众的种被种植，%ANAME(候補:LOCAL)%发出淫乱的瑜伽声音
-					PRINTFORMW 为了使她高效率地成为肉便器，首领预先投入了大量的媚药
-					PRINTFORML 如果不被侵犯，如果被侵犯快乐快要发疯了，，
-					PRINTFORMW 继续扮演肉棒的服务角色......
+					PRINTFORML %ANAME(候補:LOCAL)%成功地潜入了强盗首领的房间，与他进行了战斗
+					;TranslatedMark %ANAME(候補:LOCAL)%は野盗の首領の部屋に忍び込み、彼との決戦にもちこむことには成功した
+					PRINTFORMW 没有料到的是，他的战斗力比%ANAME(候補:LOCAL)%还厉害
+					;TranslatedMark 誤算だったのは、彼が%ANAME(候補:LOCAL)%以上の使い手だったということだ
+					PRINTFORML 失败的%ANAME(候補:LOCAL)%被他们抓住当作肉便器
+					;TranslatedMark 敗北した%ANAME(候補:LOCAL)%は、肉便器として捕らえられてしまった
+					PRINTFORMW 她的%STR_BODY("身体", 候補:LOCAL)%被埋入墙壁，只露出了下半身
+					;TranslatedMark 彼女の%STR_BODY("身体", 候補:LOCAL)%は壁に埋め込まれ、下半身だけがさらけ出されている
+					PRINTFORML 那些土匪们，把她作为他们的排泄便器，在%ANAME(候補:LOCAL)%的肉穴里插入阴茎
+					;TranslatedMark 野盗の男達は、ちょっと排泄をするような感覚で、%ANAME(候補:LOCAL)%の肉穴にペニスをねじ込む
+					PRINTFORMW 然后自己随意地晃动着腰，在最深处释放出种子
+					;TranslatedMark そして自分勝手に腰を振りたくり、その一番奥で子種を解き放っていく
+					PRINTFORML 虽然被射入了那些下流的人们的精液，但是%ANAME(候補:LOCAL)%却发出了淫荡的叫声
+					;TranslatedMark 下衆どもの種を植え付けられているというのに、%ANAME(候補:LOCAL)%は淫らなヨガり声をあげている
+					PRINTFORMW 为了让她更快地适应肉便器的角色，首领事先给她服用了大量的媚药
+					;TranslatedMark 彼女を効率よく肉便器とするため、首領はあらかじめ大量の媚薬を投与していたのだ
+					PRINTFORML 如果不被侵犯的话就会欲望高涨，而被侵犯的话就会在快感中狂乱，而她却一味地、
+					;TranslatedMark 犯されなければ欲望で、犯されていれば快楽で気が狂いそうになりながら、彼女はひたすらに、
+					PRINTFORMW 继续扮演为阴茎服务的角色……
+					;TranslatedMark ペニスに奉仕するモノとしての役割を果たし続けた……
 				CASE 10
-					PRINTFORML %ANAME(候補:LOCAL)%潜入土匪首领的房间，成功地与他决战
-					PRINTFORML 但当他施放一个可疑的咒语时，她的自由就失去了
-					PRINTFORMW 在确认魔法效果后，领导者脱下衣服%ANAME(候補:LOCAL)%并将其扔出房间......
-					PRINTFORML 如果你不能自己移动手指，你就无法帮助它。 %ANAME(候補:LOCAL)%将立即在地面上找到
-					PRINTFORML ，当从%ANAME(候補:LOCAL)%的口中，可能是一个邀请男人的不雅词已经开始滴落
-					PRINTFORML 而且、自己的大腿、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%用手指打开秘部、还附带了热情的“服务
-					PRINTFORMW 当然，男子非常兴奋，开始大声叫同事们……
-					PRINTFORML 在被男人们包围了周围中，%ANAME(候補:LOCAL)%用象媚一样的声音要求性交
-					PRINTFORMW 认为这是求之不得的事情，于是男人们开始争先恐后地聚集%ANAME(候補:LOCAL)%附近
-					PRINTFORML 这样的%ANAME(候補:LOCAL)%就好像自己希望的那样，但实际上完全不希望做爱，
-					PRINTFORMW 和几十个男人整天在一起……
+					PRINTFORML %ANAME(候補:LOCAL)%成功地潜入了强盗首领的房间，与他进行了战斗
+					;TranslatedMark %ANAME(候補:LOCAL)%は野盗の首領の部屋に忍び込み、彼との決戦にもちこむことには成功した
+					PRINTFORML 然而，当他开始吟诵着什么奇怪的咒语时，她的身体忽然失去了控制
+					;TranslatedMark しかし、彼が何事か怪しげな呪文を呟くと、身体の自由が利かなくなってしまった
+					PRINTFORMW 确认魔法起了作用后，首领脱下了%ANAME(候補:LOCAL)%的衣服，把她扔到了房间外面……
+					;TranslatedMark 魔法が効いたことを確認すると、首領は%ANAME(候補:LOCAL)%の服を脱がせ、部屋の外に放り出した……
+					PRINTFORML 如果一个指头都不能按自己的意思动的话，那她什么事情都做不了。%ANAME(候補:LOCAL)%很快就被另外一个土匪发现
+					;TranslatedMark 指一本自分の意思で動かせない状態では、どうしようもない。%ANAME(候補:LOCAL)%はすぐに野盗に見つかってしまう
+					PRINTFORML 然后%ANAME(候補:LOCAL)%的口中，竟然开始说出诱惑男人的淫秽话语
+					;TranslatedMark すると%ANAME(候補:LOCAL)%の口からは、あろうことか、男を誘う淫らな言葉が垂れ流され始めたではないか
+					PRINTFORML 而且，附带着热情的“服务”，她自己也岔开双腿，用手指拨开了%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部
+					;TranslatedMark しかも、自らがに股になり、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%秘部を指で広げる、情熱的な「サービス」付きだった
+					PRINTFORMW 这个男人自然非常兴奋，把他的同伙大声喊了过来……
+					;TranslatedMark 当然、男は大いに興奮し、同僚どもを大声で呼び始めた……
+					PRINTFORML 男人们围住了她，%ANAME(候補:LOCAL)%用谄媚的声音请求性交
+					;TranslatedMark 周囲を男達に取り囲まれた中で、%ANAME(候補:LOCAL)%は媚びるような声で性交をねだる
+					PRINTFORMW 男人们开始争先恐后地在%ANAME(候補:LOCAL)%里插入……
+					;TranslatedMark 願ってもないことだと、男達は我先にと%ANAME(候補:LOCAL)%に群がり始めた……
+					PRINTFORML 然后，%ANAME(候補:LOCAL)%就得到了自己的身体所渴求的性交，尽管她的内心完全并不希望如此
+					;TranslatedMark そうして%ANAME(候補:LOCAL)%は、あたかも自ら望んでいるかのような、しかし実際には全く望んでいないセックスを、
+					PRINTFORMW 和几十个男人整整过了一天……
+					;TranslatedMark 何十人という男と丸一日させられた……
 				CASE 11
-					PRINTFORML 败北的%ANAME(候補:LOCAL)%被带上枷锁，被带上项圈，被带领
-					PRINTFORML 然后让附近的村子全裸散步
-					PRINTFORMW 的身体上大量写着土匪们施舍的猥亵涂鸦……
-					PRINTFORML 土匪们命令在路上和男人擦肩而过，用嘴巴和乳房服务
-					PRINTFORMW 一边脖子被按住刀具，一边也遵从%ANAME(候補:LOCAL)%
-					PRINTFORML 男人也不帮助我。土匪的可怕是本地人的他也掌握着，比什么都，
-					PRINTFORMW 没有一个白痴会舍弃女人的裸体机会
-					PRINTFORML 从脸到%STR_BODY("胸：修飾", 候補:LOCAL)%胸部，白色的东西粘在一起的时候
-					PRINTFORMW 两人走到了村子中心的广场
-					PRINTFORML 然后在村民全员观看中，公开了阴道内射精做爱秀……
-					PRINTFORMW 之后，%ANAME(候補:LOCAL)%被村民们提供，让全员年轻……
+					PRINTFORML 失败了的%ANAME(候補:LOCAL)%，被戴上枷锁，被戴上项圈，被带去见首领
+					;TranslatedMark 敗北した%ANAME(候補:LOCAL)%は、枷をはめられ、首輪をかけられ、リードをつけられた
+					PRINTFORML 然后为了示众，全裸地让她到附近的村子"散步"
+					;TranslatedMark そして見せしめとして、全裸で近くの村を「散歩」させられた
+					PRINTFORMW 在她的身体上，绘着大量被强盗们画的下流涂鸦……
+					;TranslatedMark その身体には、野盗どもによって施された卑猥な落書きが大量に書き込まれている……
+					PRINTFORML 在路上和男人擦肩而过的时候，土匪们命令她用嘴和乳房来服务
+					;TranslatedMark 道行くところで男とすれ違えば、口や乳房で奉仕するよう野盗達は命令する
+					PRINTFORMW 因为被人用刀按在脖子上，所以%ANAME(候補:LOCAL)%不得不遵从
+					;TranslatedMark 首筋に刃物を押し当てられながらでは、%ANAME(候補:LOCAL)%も従うしかなかった
+					PRINTFORML 那个男人也并没有帮忙。作为当地人的他也明白土匪们的恐怖，最重要的是
+					;TranslatedMark 男も助けてはくれない。野盗の恐ろしさは地元の者である彼も把握しているし、なにより、
+					PRINTFORMW 没有一个傻瓜会放弃被女人服务的机会
+					;TranslatedMark 女にヌいてもらえるチャンスを捨てるようなアホはいなかったのだ
+					PRINTFORML 从脸到%STR_BODY("胸：修飾", 候補:LOCAL)%胸，白色的浊液终于粘在上面的时候
+					;TranslatedMark 顔面から%STR_BODY("胸：修飾", 候補:LOCAL)%胸のあたりにかけてまで、白いものがべっとりとへばりついたころ、
+					PRINTFORMW 两个人才好不容易走到了村子中心的广场
+					;TranslatedMark 二人は村の中心の広場に辿り着いた
+					PRINTFORML 然后在所有村民都在看着的情况下，她被要求进行公开阴道射精表演...
+					;TranslatedMark そして村人全員が見ている中で、公開膣内射精セックスショーをさせられた……
+					PRINTFORMW 之后，%ANAME(候補:LOCAL)%"提供"给了村民，作为所有年轻人的性交对象使用……
+					;TranslatedMark その後、%ANAME(候補:LOCAL)%は村人達に「提供」され、若い衆全員の相手をさせられた……
 				CASE 12
-					PRINTFORML 败北的%ANAME(候補:LOCAL)%被用作土匪首领的个人享受
-					PRINTFORMW 和他的宠物狗，被强行转移了
-					PRINTFORML 哭着喊着讨厌%ANAME(候補:LOCAL)%,不过，对只有繁殖欲的狗来说，与对手的情况等没有关系
-					PRINTFORMW 只是一味地，本能的奔赴，不断继续摇动腰部
-					PRINTFORML 虽说是畜生的肉棒，但东西是东西。她逐渐感到快乐
-					PRINTFORMW 明知这样是不对的，还是会扭腰的
-					PRINTFORML 首领嘲笑着她对畜生感到叉开腿的样子。
-					PRINTFORMW 不久狗射精，象合起一样地%ANAME(候補:LOCAL)%绝顶的话，笑声更加高涨了……
+					PRINTFORML 失败的%ANAME(候補:LOCAL)%被用于强盗首领的个人"娱乐"中
+					;TranslatedMark 敗北した%ANAME(候補:LOCAL)%は、野盗の首領の個人的な「楽しみ」に使われた
+					PRINTFORMW 她被迫和狗一起被他带出去散歩
+					;TranslatedMark 彼のペットである犬と、無理矢理にまぐわされたのだ
+					PRINTFORML 虽然%ANAME(候補:LOCAL)%哭喊着不要，但是对于只想繁殖的狗来说，对方接受与否并不影响它的交配
+					;TranslatedMark 泣き叫んで嫌がる%ANAME(候補:LOCAL)%だが、繁殖欲しかない犬にとってみれば、相手の都合など関係ない
+					PRINTFORMW 只是一味地，按照本能的驱使，不停地用阴茎抽插着阴道，随着动作拍击着她的腰
+					;TranslatedMark ただひたすらに、本能の赴くまま、へこへこと腰を打ち付け続ける
+					PRINTFORML 虽然插入的对象只是畜生，但阴茎终究是阴茎。她逐渐察觉到了快感
+					;TranslatedMark 畜生のペニスとはいえ、モノはモノ。彼女は次第に快楽を覚えてしまう
+					PRINTFORMW 虽然知道这样不行，但腰还是因为快感而开始配合着动起来了
+					;TranslatedMark こんなことはいけないとは分かっていても、腰がくねってしまうのだ
+					PRINTFORML 首领嘲笑着她向畜生张开大腿的样子
+					;TranslatedMark 獣畜生に股を開き感じている様を、首領は嘲笑っている
+					PRINTFORMW 不久，狗射精了，而%ANAME(候補:LOCAL)%也同时绝顶，他的笑声更高涨了……
+					;TranslatedMark やがて犬が射精し、あわせるように%ANAME(候補:LOCAL)%が絶頂すると、笑い声はさらに高まった……
 					EXP:(候補:LOCAL):獣姦経験 += 10
 				CASE 13
-					PRINTFORML 败北而失去意识的%ANAME(候補:LOCAL)%醒来，发现自己的身体变得很糟糕
-					PRINTFORMW 对两乳房痛楚的穿孔工具，并且下腹不是刻着心形徽章吗？
-					PRINTFORML 以及现在，仰面被台捆绑的%ANAME(候補:LOCAL)%被男人们包围着
-					PRINTFORML 看着本应只抱有厌恶之心的东西，%ANAME(候補:LOCAL)%不知为何感到饥渴
-					PRINTFORMW その飢えは、男に覆い被さられ、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%膣口と亀頭とが密着した途端、さらに強まった
-					PRINTFORML 男子将肉棒插入。%ANAME(候補:LOCAL)%快乐瑜伽，背朝上。于是，饥饿稍微平息了一点
-					PRINTFORMW 原来如此，这就是满足饥渴的方法吗？注意到了%ANAME(候補:LOCAL)%的人，自己挥动腰，寻求男人
-					PRINTFORML 不久，男子放出种子，最饥渴的地方，正好是刻有心形图案的地方，
-					PRINTFORMW 难以形容的幸福感不断膨胀
-					PRINTFORML 一连串的感觉是心形纹的效果很明显，虽然知道道理，但是身体还是无法掩饰的
-					PRINTFORMW 满足于的男人拔出肉棒，她既不害羞也不外貌，向她索要了下一根肉棒……
+					PRINTFORML 失败后失去意识的%ANAME(候補:LOCAL)%醒来后，发现自己的身体状况变得很糟糕
+					;TranslatedMark 敗北し気を失った%ANAME(候補:LOCAL)%が目を覚ますと、己の身体がひどいことになっていることに気づく
+					PRINTFORMW 两个乳房上的穿孔传来隐隐刺痛，同时发现了小腹上刻着的心形纹印
+					;TranslatedMark 両乳房に痛々しいピアスが、そして下腹にハートの紋章が刻まれているではないか
+					PRINTFORML 现在，被仰着绑在台子上的%ANAME(候補:LOCAL)%，被男人们包围着
+					;TranslatedMark そして今、仰向けで台に縛り付けられている%ANAME(候補:LOCAL)%は、男どもに取り囲まれている
+					PRINTFORML 看到原本只会令她厌恶的肉棒的时候，不知为何%ANAME(候補:LOCAL)%因此感到饥饿
+					;TranslatedMark 嫌悪しか抱かないはずのモノを見、%ANAME(候補:LOCAL)%はなぜか飢えを感じてしまう
+					PRINTFORMW 那种饥饿感，被男人压在身下，%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%阴道口和龟头紧贴在一起的瞬间，变得更加强烈了
+					;TranslatedMark その飢えは、男に覆い被さられ、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%膣口と亀頭とが密着した途端、さらに強まった
+					PRINTFORML 男人用阴茎狠狠地插进了小穴。%ANAME(候補:LOCAL)%发出了愉悦的娇声，受到强烈的刺激而朝后仰去。然后，饥饿只稍微平息了一点点
+					;TranslatedMark 男がペニスを突き入れる。%ANAME(候補:LOCAL)%は快楽にヨガり、背を反らす。すると飢えは、ほんの少しだけ収まった
+					PRINTFORMW 原来如此，这是充饥的方法吗。注意到了这一点的%ANAME(候補:LOCAL)%，自己晃动着了腰，开始向男人求爱
+					;TranslatedMark なるほどこれが、飢えを満たす術か。そう気づいた%ANAME(候補:LOCAL)%は、自ら腰を振り、男を求めていく
+					PRINTFORML 不久男子在她体内释放出种子，原来传来饥饿感的源泉，正是刻着心形纹印的的地方
+					;TranslatedMark やがて男が種を放つと、もっとも飢えていた場所、ちょうどハートの紋が刻まれているあたりで、
+					PRINTFORMW 难以形容的幸福感逐渐膨胀起来
+					;TranslatedMark えもいわれぬ幸福感が膨らんでいった
+					PRINTFORML 虽然很明显她一系列的感觉是心形纹印的作用，但是即使知道原因，身体也无法克制
+					;TranslatedMark 一連の感覚がハートの紋の効能であることは明らかだが、理屈は分かっていても、身体はごまかせなかった
+					PRINTFORMW 心满意足的男子拔出了阴茎之后，她毫无羞耻，充耳不闻地索求着下一根肉棒……
+					;TranslatedMark 満足した男がペニスを引き抜くと、彼女は恥も外聞もなく、次の肉棒をねだってしまった……
 				CASE 14
-					PRINTFORML %ANAME(候補:LOCAL)%目光呆滞，嘿嘿地笑着
-					PRINTFORMW 对败北了的她，土匪打进了极限量的药物
-					PRINTFORML 为了让男人们摩擦着肉棒，想摸摸乳房和秘部，%ANAME(候補:LOCAL)%不会反抗
-					PRINTFORMW 不仅仅是，甚至连自己都接受了
-					PRINTFORML 对她不抵抗的事是好事，男人们陆续向%ANAME(候補:LOCAL)%聚集
-					PRINTFORMW 头发，口，手，乳房，阴道孔，屁股孔，大致能使用的地方全部使用，他们以%ANAME(候補:LOCAL)%处理性欲
-					PRINTFORML 压倒性的快乐由于药效被增加量，%ANAME(候補:LOCAL)%对快要成为废人的快乐，只有快乐，鸦片……
-					PRINTFORMW 一边打好几瓶追加的药物，土匪们一边打%ANAME(候補:LOCAL)%字面那样一整天轮奸……
+					PRINTFORML %ANAME(候補:LOCAL)%眼神变得非常奇怪，欸嘿欸嘿地笑着
+					;TranslatedMark %ANAME(候補:LOCAL)%はうつろな目で、えへらえへらと笑っている
+					PRINTFORMW 土匪向失败的她注入了足量的毒品
+					;TranslatedMark 敗北した彼女に、野盗は限界ぎりぎりの量の薬物を打ち込んだのだ
+					PRINTFORML 不论男人们在皮肤、乳房还是秘部上摩擦阴茎，%ANAME(候補:LOCAL)%都毫不抵抗
+					;TranslatedMark その肌に男どもがペニスを擦りつけてこようと、乳房や秘部をまさぐってこようと、%ANAME(候補:LOCAL)%は抵抗しない
+					PRINTFORMW 不仅如此，甚至还自己去主动接受它们
+					;TranslatedMark それどころか、むしろ自らそれらを受け入れていくほどだった
+					PRINTFORML 因为她已经不抵抗了，所以男人们一个接一个地涌向%ANAME(候補:LOCAL)%
+					;TranslatedMark 彼女が抵抗しないことをいいことに、男達は次々と%ANAME(候補:LOCAL)%に群がっていく
+					PRINTFORMW 头发、嘴巴、手、乳房、阴道孔、屁股孔等，凡是能使用的地方都会使用，他们用%ANAME(候補:LOCAL)%来处理性欲
+					;TranslatedMark 髪、口、手、乳房、膣穴、尻穴と、およそ使えるところは全て使い、彼らは%ANAME(候補:LOCAL)%で性欲を処理していく
+					PRINTFORML 压倒性的快感因药效而增加，%ANAME(候補:LOCAL)%在快要成为废人的快感中，只是因为不断的绝顶而抽搐着，露出阿嘿颜……
+					;TranslatedMark 圧倒的な快楽が薬効で増量され、%ANAME(候補:LOCAL)%は廃人になり果てそうな快楽に、ただただヨガり、アヘるしかなかった……
+					PRINTFORMW 野盗们又追加注射了好几瓶药物，然后继续那样一整天轮奸%ANAME(候補:LOCAL)%……
+					;TranslatedMark 追加の薬物を何本も打ちながら、野盗達は%ANAME(候補:LOCAL)%を文字通り丸一日中輪姦し続けた……
 					CFLAG:(候補:LOCAL):薬物依存 += 100
 				CASE 15
-					PRINTFORML 动物那难听的哭声和艳丽的女声在畜舍回响
-					PRINTFORMW 土匪们，决定利用作为不谦逊的侵入者%ANAME(候補:LOCAL)%，猪的繁殖用
-					PRINTFORML 被繁殖台装上了的%ANAME(候補:LOCAL)%，比她有三周雄猪骂着，摇着腰
-					PRINTFORMW 虽说是挥动着腰，但她还是多少人分体重的活塞。
-					PRINTFORML 她只是在被扭曲了的肉棒挖的压倒性的快乐前，使之白眼苦闷
-					PRINTFORML 不久，猪开始向她最深处的畜生献上咒文
-					PRINTFORML 的量不寻常，她的子宫顿时膨胀，从外面看也像是孕妇
-					PRINTFORMW 满足了的猪抽出东西的话，扑通扑通扑通地有气势，白的东西从她的阴道逆流了……
+					PRINTFORML 盖过了动物们的声音，娇艳的女声在畜舍不断回响
+					;TranslatedMark 動物の聞き苦しいいななきと、艶やかな女の声が畜舎に響く
+					PRINTFORMW 土匪们决定将态度骄横的入侵者%ANAME(候補:LOCAL)%用于猪的繁殖
+					;TranslatedMark 野盗どもは、不遜な侵入者である%ANAME(候補:LOCAL)%を、豚の繁殖用に利用することにしたのだ
+					PRINTFORML 被放在繁殖台上的%ANAME(候補:LOCAL)%，被一只比她大三倍的猪压在身下，摇晃着腰
+					;TranslatedMark 繁殖台に乗せられた%ANAME(候補:LOCAL)%に、彼女より三回りはあろうかという雄豚がのしかかり、腰を振っている
+					PRINTFORMW 即使她晃动着腰身想要挣脱阴茎，但她所面对的来回抽插，是不知她几倍体重的猪进行的
+					;TranslatedMark 腰を振るとはいっても、彼女何人分もの体重によるピストンだ
+					PRINTFORML 在被扭曲的阴茎插入抽离过程中得到的压倒性的快感面前，她毫无反抗能力，翻出了白眼，身体因为难以忍受的刺激而抽搐着
+					;TranslatedMark 彼女はただただ、ねじくれたペニスに抉られる圧倒的快楽の前に、目を白黒させて悶えるしかなかった
+					PRINTFORMW 不久，猪开始向她的最深处倾倒畜生的精液
+					;TranslatedMark やがて豚が、彼女の最も奥深くに、畜生のスペルマをぶちまけ始める
+					PRINTFORML 其量非同寻常，很快她的子宫就膨胀起来了，从外面看起来就像孕妇一样
+					;TranslatedMark その量は尋常ではなく、たちまち彼女の子宮は膨れ上がり、外から見ても分かる妊婦のような有り様になった
+					PRINTFORMW 满足的猪把阴茎抽出来之后，浓厚的白色浊液源源不断地从她的阴道里流出来……
+					;TranslatedMark 満足した豚が一物を引き抜くと、どぼどぼどぼと勢いよく、白いものが彼女の膣から逆流した……
 					EXP:(候補:LOCAL):獣姦経験 += 10
 				CASE 16
-					PRINTFORML 败北的%ANAME(候補:LOCAL)%蒙受着凄惨的陵辱
-					PRINTFORML 衣服也被剥下，内衣也被剥夺的状态下，她好几次被作为女人出生的身体所践踏
-					PRINTFORMW 轮奸已经持续了几个小时。她的身体已经没有不白的地方了
-					PRINTFORML 并且贯穿她的男人们，好象迎接了界限
-					PRINTFORMW 最初阴道，其次口，屁股，男人们依次射精
-					PRINTFORML 明明被侵犯了，在无法忍受的快乐面前，%ANAME(候補:LOCAL)%发出了甜蜜的声音
-					PRINTFORMW 当肉棒被从洞里拔出来的时候，其他男子马上开始侵犯了肉棒……
+					PRINTFORML 失败的%ANAME(候補:LOCAL)%受到了凄惨的陵辱
+					;TranslatedMark 敗北した%ANAME(候補:LOCAL)%は、凄惨な陵辱をうけている
+					PRINTFORML 衣服也被剥下来，内衣也被夺走了，她作为女人的身体一次又一次地被践踏
+					;TranslatedMark 服も剥ぎ取られ、下着も奪われた状態で、彼女は何度も何度も、女として生まれた身体を踏みにじられていく
+					PRINTFORMW 轮奸已经持续了几个小时了。她的身体已经没有还没染上白浊的地方了
+					;TranslatedMark 輪姦は既に何時間と続いていた。もはや彼女の身体で、白くないところはない
+					PRINTFORML 而且，侵犯她的男人们，似乎已经到了极限
+					;TranslatedMark そしてまた、彼女を貫く男達は、限界を迎えたようだった
+					PRINTFORMW 一开始是阴道，后来是嘴巴，屁股，男人们依次射精
+					;TranslatedMark 最初に膣、次に口、尻と、男達は順々に射精していく
+					PRINTFORML 尽管不停地被侵犯，但在无法忍受的快感面前，%ANAME(候補:LOCAL)%依旧发出了甜美的娇喘
+					;TranslatedMark 犯されているというのに、堪えられない快楽の前に、%ANAME(候補:LOCAL)%は甘い声をあげてしまう
+					PRINTFORMW 每次阴茎从小穴里拔出来，就会有第二个男人马上开始接着侵犯……
+					;TranslatedMark ペニスが穴から引き抜かれると、すぐさま別の男がそこを犯し始めるのだった……
 				CASE 17
-					PRINTFORML 败北了的%ANAME(候補:LOCAL)%受到着凄惨的陵辱
-					PRINTFORMW 衣服也被剥下，内衣也被剥夺的状态，她好几次作为女人出生的身体被践踏
-					PRINTFORMW 被她包围的男人，竟然和别的男人一起在%ANAME(候補:LOCAL)%的阴道里拧了两根肉棒！
-					PRINTFORML 强行推进最敏感的部分，%ANAME(候補:LOCAL)%由于强烈的快乐和疼痛而发出悲鸣
-					PRINTFORML 虽然是这样，但是不可能得到放弃。因为他们想听那个，所以做了那样的事
-					PRINTFORMW 结果陵辱在她昏迷了半天后，终于结束了……
+					PRINTFORML 失败的%ANAME(候補:LOCAL)%受到了凄惨的凌辱
+					;TranslatedMark 敗北した%ANAME(候補:LOCAL)%は、凄惨な陵辱を受けている
+					PRINTFORMW 衣服也被剥下来，内衣也被夺走了，她作为女人的身体一次又一次地被践踏
+					;TranslatedMark 服も剥ぎ取られ、下着も奪われた状態で、彼女は何度も何度も、女として生まれた身体を踏みにじられていく
+					PRINTFORMW 包围她的男人，竟然和另一个男人一起，把两个阴茎塞进了%ANAME(候補:LOCAL)%的阴道里！
+					;TranslatedMark 彼女を取り囲む男は、あろうことか、別の男と一緒に、%ANAME(候補:LOCAL)%の膣穴に二本のペニスをねじ込んだ！
+					PRINTFORML 最敏感的部分被强行扩张，%ANAME(候補:LOCAL)%因为强烈的快乐和痛苦而悲鸣
+					;TranslatedMark もっとも敏感な部分を無理矢理押し広げられ、%ANAME(候補:LOCAL)%は強烈な快楽と痛みによる悲鳴をあげる
+					PRINTFORML 但是，他们并不会因此而停止。因为他们想听到的正是她的悲鸣，所以做了那样的事
+					;TranslatedMark だが、やめてなどもらえるはずもない。彼らはそれを聞きたくて、そのようなことをしているのだから
+					PRINTFORMW 结果，在她昏迷了半天之后，才结束了这场凌辱……
+					;TranslatedMark 結局陵辱は、彼女が気を失って半日たったころに、ようやく終息した……
 				CASE 18
-					PRINTFORML 被捉住的%ANAME(候補:LOCAL)%全裸被拘留，被漂布者
-					PRINTFORMW 当然，男人们只是眺望着那个享受也不应该结束
-					PRINTFORML 土匪们聚集在她身上、随心所欲地责弄着那个%STR_BODY("身体：修飾", 候補:LOCAL)%肉体
-					PRINTFORML 捏起乳头，捏造阴核，硬拉出快乐
-					PRINTFORMW 虽然觉得很讨厌，但在受到刺激之前，身体还是坦率地记得快乐
-					PRINTFORML 不久，男人们，在%ANAME(候補:LOCAL)%的所有孔里(上)扭进肉棒，激烈地抽送
-					PRINTFORML 不断被打的性感，%ANAME(候補:LOCAL)%只能眼黑使之苦闷
-					PRINTFORMW 男人们放出种子的话，那个热情%ANAME(候補:LOCAL)%激烈地绝顶了
-					PRINTFORML 土匪们一边侵犯一边嘲笑愚蠢地iku先生，一边持续犯%ANAME(候補:LOCAL)%
-					PRINTFORMW 陵辱持续了一整天……
+					PRINTFORML 被捉住的%ANAME(候補:LOCAL)%，脱光衣服之后拘束起来，进行公开裸露
+					;TranslatedMark 捕らえられた%ANAME(候補:LOCAL)%は、全裸で拘束され、さらし者にされている
+					PRINTFORMW 当然，这些男人并不仅仅只是用于观赏
+					;TranslatedMark 当然、男達がそれをただ眺めて楽しむだけで済ませるはずもなかった
+					PRINTFORML 土匪们聚在她身边，随意地玩弄着她的%STR_BODY("身体：修飾", 候補:LOCAL)%肉体
+					;TranslatedMark 野盗達は彼女に群がり、その%STR_BODY("身体：修飾", 候補:LOCAL)%肉体を好き放題に弄んでいる
+					PRINTFORML 捏着乳头，揉搓阴核，强行引起她身体的快感
+					;TranslatedMark 乳首をつねりあげ、陰核を捏ね回して、無理矢理に快楽を引き出していく
+					PRINTFORMW 即使觉得讨厌，但在被给予的刺激面前，身体也会坦率地记住快感
+					;TranslatedMark 嫌だとは思っていても、与えられる刺激を前に、身体は素直に快楽を覚えてしまう
+					PRINTFORML 很快，男人们就把肉棒塞进%ANAME(候補:LOCAL)%的所有洞穴，激烈地抽插
+					;TranslatedMark やがて男達は、%ANAME(候補:LOCAL)%のあらゆる穴に肉棒をねじ込み、激しく抽送していく
+					PRINTFORML 不断着被叩击着性感带，%ANAME(候補:LOCAL)%只能翻着白眼，在强烈的刺激下无力地挣扎着
+					;TranslatedMark 絶えず叩きつけられる性感に、%ANAME(候補:LOCAL)%は目を白黒させて悶えるしかなかった
+					PRINTFORMW 男人们一释放出精液，%ANAME(候補:LOCAL)%就激烈地绝顶了
+					;TranslatedMark 男達が種を放つと、その熱さに%ANAME(候補:LOCAL)%は激しく絶頂してしまった
+					PRINTFORML 土匪们一边嘲笑着因为被侵犯而露出下流丑态的她，一边继续侵犯着%ANAME(候補:LOCAL)%……
+					;TranslatedMark 犯されながら浅ましくイくさまを嘲笑いながら、野盗達は%ANAME(候補:LOCAL)%を犯し続けた……
+					PRINTFORMW 陵辱持续了整整一天……
+					;TranslatedMark 陵辱は丸一日続いた……
 				CASE 19
-					PRINTFORMW 捕获%ANAME(候補:LOCAL)%被剥离并强行嵌入
-					PRINTFORML 虽然是闹腾的%ANAME(候補:LOCAL)%,但是被打了可疑的药,抵抗心完全消失了.
-					PRINTFORMW 取而代之的是，抑制不住的性欲开始沸腾
-					PRINTFORML 虽然知道这样是不行的，%ANAME(候補:LOCAL)%却无法停止自我安慰
-					PRINTFORMW 土匪们聚集起来对那样的她，告诉男人的好处
-					PRINTFORML 肉棒被菊穴拧了好几次
-					PRINTFORML 他们说你终究只是雌性的。
-					PRINTFORMW 教导着%ANAME(候補:LOCAL)%的肉体
-					PRINTFORML 在激烈的快感面前%ANAME(候補:LOCAL)%的肉体，不经意间心渐渐地屈服了
-					PRINTFORMW 他们大体上玩得开心的时候，那里只有一只雌性……
+					PRINTFORMW 被抓住的%ANAME(候補:LOCAL)%，被他们剥下了衣服，强行压在地上
+					;TranslatedMark 捕らえられた%ANAME(候補:LOCAL)%は、服を剥ぎ取られ、無理矢理に組み敷かれた
+					PRINTFORML 虽然%ANAME(候補:LOCAL)%拼尽全力挣扎抵抗，但是在被打了奇怪的药后，抵抗心完全消失了
+					;TranslatedMark 暴れる%ANAME(候補:LOCAL)%だったが、怪しげな薬を打たれと、抵抗心は綺麗さっぱり消え失せてしまった
+					PRINTFORMW 取而代之的是，不断涌现出来的难以压抑的性欲
+					;TranslatedMark そしてその代わりに、抑えきれない性欲がわき上がり始める
+					PRINTFORML 即使心里知道这样不行，%ANAME(候補:LOCAL)%也无法停止自慰
+					;TranslatedMark こんなことはいけないと分かっていても、%ANAME(候補:LOCAL)%は自らを慰めることをやめられない
+					PRINTFORMW 为了让不识情趣的她了解男人的优点，土匪们聚拢了过来
+					;TranslatedMark そんな彼女に、男の良さを教えてやるよと、野盗共は群がっていく
+					PRINTFORML 他们一次一次地插进她的肉穴和菊穴，然后又一次一次地抽出来
+					;TranslatedMark 肉穴に、菊穴にペニスがねじ込まれ、何度も何度も彼女を抉る
+					PRINTFORML 这样做着的他们说，你始终不过是个雌性罢了
+					;TranslatedMark そうやって彼らは、お前はしょせん雌にすぎないのだということを、
+					PRINTFORMW 把这些知识狠狠地烙印在%ANAME(候補:LOCAL)%的肉体中
+					;TranslatedMark %ANAME(候補:LOCAL)%の肉体に教え込んでいるのだ
+					PRINTFORML 在激烈的快感面前，%ANAME(候補:LOCAL)%的肉体和理性，一点一点地屈服了
+					;TranslatedMark 激しい快感の前に%ANAME(候補:LOCAL)%の肉体は、ついで心は、どんどんと屈服してしまう
+					PRINTFORMW 他们愉悦地玩弄了一通之后，她已经完全沦为了一只母猪……
+					;TranslatedMark 彼らが一通り楽しんだころには、そこには一匹の雌がいるばかりだった……
 					CFLAG:(候補:LOCAL):薬物依存 += 100
 				CASE 20
-					PRINTFORMW 被捕获的%ANAME(候補:LOCAL)%被分配给了土匪们的性欲处理员
-					PRINTFORMW 来自土匪们的待遇厉害。他们只把女人当做裸体工具。
-					PRINTFORML %ANAME(候補:LOCAL)%は肉棒をしゃぶらされ、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%膣内に種を付けられ、あげくは尻穴を舐めさせられる
-					PRINTFORMW 但是%ANAME(候補:LOCAL)%并不讨厌PRINTFORML 。可疑的药品的力量，使她前后不觉醒。
-					PRINTFORMW 不，不但不让人讨厌，反而会自己张开大腿，接受男人的样子
-					PRINTFORML 而现在，正是一个土匪被要求处理性欲的时候。
-					PRINTFORML %ANAME(候補:LOCAL)%迅速回应，将手贴在墙壁上%STR_BODY("臀部", 候補:LOCAL)%突出，亲自打开秘裂探索肉棒
-					PRINTFORMW 兴奋了的土匪猛然摇动腰。一时之间，两个人互相强烈要求着……
+					PRINTFORMW 被抓住的%ANAME(候補:LOCAL)%被分配给了土匪们的性欲处理系
+					;TranslatedMark 捕らえられた%ANAME(候補:LOCAL)%は、野盗達の性欲処理係に割り当てられたようだ
+					PRINTFORMW 土匪们对她的处置非常过分。他们认为女人只是用来发泄的道具
+					;TranslatedMark 野盗どもからの扱いはひどいものだった。彼らは女を、ヌくための道具くらいにしか思っていない
+					PRINTFORML %ANAME(候補:LOCAL)%被迫吮吸着肉棒，%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%阴道内被注入了精液，之后，还被舔着尻穴
+					;TranslatedMark %ANAME(候補:LOCAL)%は肉棒をしゃぶらされ、%STR_BODY("陰唇：処女確認：修飾", 候補:LOCAL)%膣内に種を付けられ、あげくは尻穴を舐めさせられる
+					PRINTFORML 但是，%ANAME(候補:LOCAL)%并没有抗拒。奇怪药物的作用让她丧失了理智
+					;TranslatedMark しかし、%ANAME(候補:LOCAL)%は嫌がらなかった。怪しげな薬品の力が、彼女を前後不覚にさせていた
+					PRINTFORMW 不仅不抗拒，而且自己岔开腿接受男人，一幅荡妇的样子
+					;TranslatedMark いや、嫌がらないどころか、自ら股を開き、男を受け入れる有り様だった
+					PRINTFORML 而现在，正是被一个强盗要求处理性欲的时候
+					;TranslatedMark そして今、まさに、一人の野盗に、性欲処理を求められたところだった
+					PRINTFORML %ANAME(候補:LOCAL)%很快答应了，把手贴在墙上，把%STR_BODY("尻", 候補:LOCAL)%撅起来，自己用手撑开蜜穴，索求着肉棒
+					;TranslatedMark %ANAME(候補:LOCAL)%は快く応じ、壁に手をついて%STR_BODY("尻", 候補:LOCAL)%を突き出すと、自ら秘裂を開いて肉棒をおねだりする
+					PRINTFORMW 兴奋的强盗猛地动起腰来。片刻之后，两人激烈地互相交合着……
+					;TranslatedMark 興奮した野盗は猛然と腰を振る。しばしの間、二人は激しく求め合った……
 				CASE 21
-					PRINTFORML 化身为街头艺人的%ANAME(候補:LOCAL)%潜入了他们的宴会
-					PRINTFORMW 可是，安眠药被装入了安眠药，%ANAME(候補:LOCAL)%沉睡不醒
-					PRINTFORML 土匪们，聚集到完全没有醒来的%ANAME(候補:LOCAL)%开始责弄那个%STR_BODY("身体：修飾", 候補:LOCAL)%的肉体
-					PRINTFORML 物言わぬ人偶のような%ANAME(候補:LOCAL)%の%STR_BODY("胸：修飾", 候補:LOCAL)%乳房が、陰核が、乱暴に弄くり回される
-					PRINTFORMW 然后，肉棒被插入了十分湿润的秘裂中
-					PRINTFORML 没等顺序的男人们，到她的口和屁股孔为止拧东西
-					PRINTFORMW %ANAME(候補:LOCAL)%在没有意识的情况下，其肉体被内外多次污染……
+					PRINTFORML 化妆成街头艺人的%ANAME(候補:LOCAL)%潜入了他们的宴会
+					;TranslatedMark 大道芸人に化けた%ANAME(候補:LOCAL)%は、彼らの宴会に潜入した
+					PRINTFORMW 但是，她喝下的酒里有安眠药，%ANAME(候補:LOCAL)%因此睡着了
+					;TranslatedMark しかし、口を付けた酒に睡眠薬が盛られており、%ANAME(候補:LOCAL)%は眠りこけてしまう
+					PRINTFORML 强盗们聚集在完全醒不过来的%ANAME(候補:LOCAL)%身边，开始玩弄%STR_BODY("身体：修飾", 候補:LOCAL)%的肉体
+					;TranslatedMark 野盗どもは、いっこうに目を覚まさない%ANAME(候補:LOCAL)%に群がり、その%STR_BODY("身体：修飾", 候補:LOCAL)%肉体を弄び始めた
+					PRINTFORML %ANAME(候補:LOCAL)%的%STR_BODY("胸：修飾", 候補:LOCAL)%像不会说话的人偶一样，乳房和阴核被粗暴地玩弄着
+					;TranslatedMark 物言わぬ人形のような%ANAME(候補:LOCAL)%の%STR_BODY("胸：修飾", 候補:LOCAL)%乳房が、陰核が、乱暴に弄くり回される
+					PRINTFORMW 然后，肉棒插进了完全湿润的秘裂里
+					;TranslatedMark そして、十分に濡れた秘裂に、肉棒が差し込まれた
+					PRINTFORML 迫不及待的男人们，甚至把肉棒塞进了她的嘴和尻穴里
+					;TranslatedMark 順番を待てない男達は、彼女の口や尻穴にまで、モノをねじ込んでいく
+					PRINTFORMW %ANAME(候補:LOCAL)%在没有意识的情况下，身体从里到外都被玷污了好几次……
+					;TranslatedMark %ANAME(候補:LOCAL)%は意識のないまま、その肉体を内から外から何度も汚されてしまった……
 			ENDSELECT
 		ELSE
-			PRINTFORML 被捕获的%ANAME(候補:LOCAL)%，裸体被拖到土匪首领面前
-			PRINTFORMW 令人吃惊的是，首领是女人。那也可以说是绝世的美女
-			PRINTFORML 不顾禁不住屏住呼吸的%ANAME(候補:LOCAL)%，首领自己也开始脱衣服
-			PRINTFORMW 隐藏在衣服下面的肉体也更加美丽，%ANAME(候補:LOCAL)%禁不住使之勃起了一物
+			PRINTFORML 被抓住的%ANAME(候補:LOCAL)%，光着身子被拖到了强盗首领的面前
+			;TranslatedMark 捕らえられた%ANAME(候補:LOCAL)%は、裸のまま野盗の首領の前に引きずり出された
+			PRINTFORMW 令人吃惊的是，首领是个女人。而且可以说是绝世的美女
+			;TranslatedMark 驚くべきことに、首領は女だった。それも絶世の美女といっていい
+			PRINTFORML 无视了不由得屏住呼吸的%ANAME(候補:LOCAL)%，首领自己开始脱下衣服
+			;TranslatedMark 思わず息を呑む%ANAME(候補:LOCAL)%をよそに、首領は自らも服を脱ぎ始める
+			PRINTFORMW 隐藏在衣服下，她美妙的身躯难以言喻，%ANAME(候補:LOCAL)%不由得勃起了
+			;TranslatedMark 衣服の下に隠された肉体もまたたとえようもなく美しく、%ANAME(候補:LOCAL)%は思わず一物を勃たせてしまう
 			SELECTCASE RAND:3
 				CASE 0
-					PRINTFORMW ……首领浮起嗜虐性的笑容的话，使之看不起他的一物手持的鞭子！
-					PRINTFORML 对于强烈的一击，就连%ANAME(候補:LOCAL)%也只能呻吟着蹲下身来
-					PRINTFORML 那样的她%ANAME(候補:LOCAL)%毫不留情地踏上，象舔脚一样地命令
-					PRINTFORML 现在的立场是无可否认的。%ANAME(候補:LOCAL)%伸长舌头，开始舔脚趾
-					PRINTFORMW 明明应该是屈辱，心里却隐隐作痛
-					PRINTFORML 不久首领离开脚步，开始说因为不是什么坏事，所以要给予奖赏
-					PRINTFORMW 然后用沾满%ANAME(候補:LOCAL)%唾液的脚开始处理自己的肉棒
-					PRINTFORML 柔软的脚掌的触感，并且比什么都，在那样的地方被对待东西这样的事实，使他高涨
-					PRINTFORMW %ANAME(候補:LOCAL)%我不会抱太多，一转眼地放出了精力
-					PRINTFORML 首领再一次向他吐露沾满白浊的自己的脚趾
-					PRINTFORMW 如果手指变得漂亮，那个间再次硬了的东西，再次用脚处理
-					PRINTFORMW 的行为，他的东西枯萎了，即使完全没有勃起也持续着……
+					PRINTFORMW ……首领脸上浮现出施虐的笑容，用手里拿着的鞭子朝着他的肉棒狠狠地挥去
+					;TranslatedMark ……首領は嗜虐的な笑みを浮かべると、手に持っていた鞭を彼の一物めがけしならせる！
+					PRINTFORML 强烈的一击，即使是%ANAME(候補:LOCAL)%也只能一边呻吟一边蹲下去了
+					;TranslatedMark 強烈な一撃に、流石の%ANAME(候補:LOCAL)%も呻きながらうずくまるしかなかった
+					PRINTFORML 然后她毫不留情地踩着%ANAME(候補:LOCAL)%，命令他舔她的脚
+					;TranslatedMark そんな彼を%ANAME(候補:LOCAL)%は容赦なく踏みつけ、足を舐めるように命ずる
+					PRINTFORML 以现在的立场是不能反抗的。%ANAME(候補:LOCAL)%伸出舌头，开始吮吸脚趾
+					;TranslatedMark 今の立場では否応なしだ。%ANAME(候補:LOCAL)%は舌を伸ばし、足趾をしゃぶりはじめる
+					PRINTFORMW 因为屈辱，他的心里隐隐作痛
+					;TranslatedMark 屈辱であるはずだというのに、心のどこかが疼いていた
+					PRINTFORML 不久，首领便把脚从他身上挪开，说要给他奖赏，因为做得不错
+					;TranslatedMark やがて首領は足を離し、中々悪くなかったから褒美をくれてやると言い始めた
+					PRINTFORMW 然后，用沾满了%ANAME(候補:LOCAL)%唾液的脚，开始踩弄%ANAME(候補:LOCAL)%自己的阴茎
+					;TranslatedMark そして、%ANAME(候補:LOCAL)%の唾液にまみれた足で、他ならぬ%ANAME(候補:LOCAL)%自身のペニスを扱き始めた
+					PRINTFORML 柔软的脚掌的触感，以及最重要的是，那个地方被操纵的事情，让他兴奋不已
+					;TranslatedMark 柔らかな足裏の感触が、そしてなにより、そんなところでモノを扱かれているという事実が、彼を昂ぶらせる
+					PRINTFORMW %ANAME(候補:LOCAL)%并没有坚持多久，一眨眼就把精液射出来了
+					;TranslatedMark %ANAME(候補:LOCAL)%は大してもちもせず、あっというまに精を放ってしまう
+					PRINTFORML 首领于是把沾满白浊的脚趾给他嗦
+					;TranslatedMark 首領は白濁にまみれた己の足指をまたしても彼にしゃぶらせる
+					PRINTFORMW 脚趾被舔干净之后，再次用脚来踩弄变硬的肉棒
+					;TranslatedMark 指が綺麗になれば、その間に再び硬くなったモノを、再び足で扱いていく
+					PRINTFORMW 最后，他的肉棒已经萎靡不振，即使完全没有勃起也被继续着……
+					;TranslatedMark 行為は、彼のモノが萎びきり、全く勃たなくなっても続けられた……
 				CASE 1
-					PRINTFORMW 首领看了之后舌头一舔，%ANAME(候補:LOCAL)%前跪下，开始舔东西
-					PRINTFORML 其技术高于其他任何女人，%ANAME(候補:LOCAL)%只能被责弄
-					PRINTFORMW 不到一分钟，他在女首领的嘴里吐出了粘糊糊的种子
-					PRINTFORML 但是当然不会结束
-					PRINTFORML 首领将%ANAME(候補:LOCAL)%仰面推倒，并跨越了领地
-					PRINTFORMW 然后，把他迎入已经湿透的肉穴
-					PRINTFORML 虽然已经射精过一次，但是那种事无所谓，从睾丸中涌出精液
-					PRINTFORML 虽然已经射精过一次，但是那种事无所谓，从睾丸中涌出精液
-					PRINTFORMW 在淫乱的腰扭曲前无法忍受，%ANAME(候補:LOCAL)%一转眼在她的阴道内吐出了种子
-					PRINTFORML 但是，但对方似乎还不满意
-					PRINTFORML 她不管射精，还是毫不客气地继续摇着腰。不拔三发、四发、五发……这样，那样
-					PRINTFORMW 结果，性交一直持续到他迎来体力极限昏倒为止……
+					PRINTFORMW 首领看到后舔着嘴唇，跪在%ANAME(候補:LOCAL)%面前，开始舔他的肉棒
+					;TranslatedMark 首領はそれを見て舌なめずりすると、%ANAME(候補:LOCAL)%の前に跪き、モノを舐めしゃぶりはじめる
+					PRINTFORML 她的技术比其他女人还要熟练，%ANAME(候補:LOCAL)%只能不停地被她翻弄着
+					;TranslatedMark その技術は他のどの女よりも巧みで、%ANAME(候補:LOCAL)%はただ翻弄されるしかない
+					PRINTFORMW 不到一分钟，他就把粘糊糊的精液射在了女首领的嘴里
+					;TranslatedMark 一分ともたず、彼は女首領の口内に、ねっとりとした種を吐き出してしまった
+					PRINTFORML 然而，这并不是结束
+					;TranslatedMark しかし、もちろんそれで終わりではない
+					PRINTFORML 首领将%ANAME(候補:LOCAL)%仰面推倒，跨在他的肉棒上方
+					;TranslatedMark 首領は%ANAME(候補:LOCAL)%を仰向けに押し倒すと、その上に跨がった
+					PRINTFORMW 然后，把肉棒迎入已经湿透的肉穴
+					;TranslatedMark そして、既に濡れそぼっていた肉穴に、彼を迎え入れた
+					PRINTFORML 那个阴道，而且腰的使用方法，只能称之为魔性
+					;TranslatedMark その膣は、そして腰遣いは、魔性と呼ぶほかにないものだった
+					PRINTFORML 明明已经射精过一次了，却完全没有影响，从睾丸再次涌出精液
+					;TranslatedMark 既に一度射精しているというのに、そんなことはお構いなしに、睾丸から精液がこみ上げてくる
+					PRINTFORMW 完全受不住这淫荡的腰技，%ANAME(候補:LOCAL)%一下子就把精液射进了她的阴道里
+					;TranslatedMark 淫らな腰のくねりの前には我慢できず、%ANAME(候補:LOCAL)%はあっというまに彼女の膣内に種を吐き出した
+					PRINTFORML 但是，对方似乎还是不满意
+					;TranslatedMark けれども、向こうはそれでなお満足していないようだった
+					PRINTFORML 女人不管他有没有射精，毫不在乎地继续摇动着腰躯。三发、四发、五发……一直压着他没把肉棒拔出来
+					;TranslatedMark 女は彼が射精しようが、おかまいなしに腰を振り続ける。抜かずの三発、四発、五発……というふうに
+					PRINTFORMW 结果，性交一直持续到他体力达到极限，昏厥为止……
+					;TranslatedMark 結局、性交は、彼が体力の限界を迎え気絶するまで続けられた……
 				CASE 2
-					PRINTFORML ,不过，首领的身体有的「可笑点」。那胯下长着的肉棒
-					PRINTFORML 她是扶她。而且，那根棒子和%ANAME(候補:LOCAL)%的东西无法相比，
-					PRINTFORMW 称呼业物以外没有的那样极好，确实是「魔罗」。
-					PRINTFORML 有讨厌的预感……%ANAME(候補:LOCAL)%比准备好姿势更早，首领在他嘴里拧了一把
-					PRINTFORML 首领抓住%ANAME(候補:LOCAL)%的头，就那样使之前后，处理自己的一人
-					PRINTFORML 象东西一样地被对待，更加东西被涮着，%ANAME(候補:LOCAL)%感到不可思议和疼痛
-					PRINTFORML 在比自己更长的雄性面前，雄性屈服，雌性正露出脸来
-					PRINTFORMW 首领射精后，将比%ANAME(候補:LOCAL)%还要浓厚的白浊，向嘴里吐露后，%ANAME(候補:LOCAL)%的表情荡然无存
-					PRINTFORML 首领使%ANAME(候補:LOCAL)%四肢爬行，从后面蒙上，决定那个菊穴瞄准
-					PRINTFORMW 然后用自己的凶器将他的排泄口贯穿
-					PRINTFORML 奔跑的强烈的快乐，%ANAME(候補:LOCAL)%翘背，简直象女人一样的喘息声音
-					PRINTFORMW 从他的东西上滴下来的白浊，是证明他曾经是雄性，现在已经变成了雌性……
+					PRINTFORML 但是，首领的身体里有一个"奇怪的地方"。在她的股间有一根肉棒长出来
+					;TranslatedMark だが、首領の身体にはある「おかしな点」があった。その股間に生えた肉棒だ
+					PRINTFORML 她是双性人。而且%ANAME(候補:LOCAL)%的肉棒和那根肉棒无法相提并论
+					;TranslatedMark 彼女はふたなりだったのだ。そしてその棒は、%ANAME(候補:LOCAL)%のモノなどとは比べものにならない、
+					PRINTFORMW 除了被称作怪物之外，无法用其他词语形容它的雄伟，简直就是"魔罗"。
+					;TranslatedMark 業物と呼ぶ以外にないほど立派な、まさに「魔羅」だった。
+					PRINTFORML 有讨厌的预感……在%ANAME(候補:LOCAL)%准备好之前，首领就向他嘴里塞进了她的肉棒
+					;TranslatedMark 嫌な予感がする……%ANAME(候補:LOCAL)%が身構えるよりも先に、首領は彼の口に一物をねじ込んでいた
+					PRINTFORML 首领抓住了%ANAME(候補:LOCAL)%的头，就这样一个劲儿地前后抽送着自己的肉棒
+					;TranslatedMark 首領は%ANAME(候補:LOCAL)%の頭を掴み、そのままがしがしと前後させ、己の一物を扱いていく
+					PRINTFORML 像东西一样被对待，甚至被迫去嗦别人的肉棒，%ANAME(候補:LOCAL)%却感到不可思议的难受
+					;TranslatedMark モノのように扱われ、さらにはモノをしゃぶらされているというのに、%ANAME(候補:LOCAL)%は不思議と疼きを感じていた
+					PRINTFORML 在比自己还要雄伟的男性面前，他的雄性正在屈服，浮现出雌性的表情
+					;TranslatedMark 己より長大なる雄の前に、彼の雄は屈服し、雌が顔を覗かせつつあるのだ
+					PRINTFORMW 首领射精的时候，把比%ANAME(候補:LOCAL)%更浓的白浊往嘴里和脸上一撒，%ANAME(候補:LOCAL)%露出了荡漾的神情
+					;TranslatedMark 首領が射精し、%ANAME(候補:LOCAL)%よりもはるかに濃い白濁をその口内に、顔面にぶちまけると、%ANAME(候補:LOCAL)%は表情を蕩かした
+					PRINTFORML 首领让%ANAME(候補:LOCAL)%四肢趴在地上，她从后方覆住了他，瞄准了他的菊穴
+					;TranslatedMark 首領は%ANAME(候補:LOCAL)%を四つん這いにさせ、後ろから覆い被さり、その菊穴に狙いを定める
+					PRINTFORMW 然后就那样，用自己的肉棒贯穿了他的排泄口
+					;TranslatedMark そしてそのまま、己の凶器でもって、彼の排泄口を貫いた
+					PRINTFORML 对于在体内游动的强烈快感，%ANAME(候補:LOCAL)%背向后仰着，发出像女人一样的喘息声
+					;TranslatedMark 走る強烈な快楽に、%ANAME(候補:LOCAL)%は背を反らし、まるで女のような喘ぎ声をあげる
+					PRINTFORMW 从他的肉棒上流下来的白浊是证明着，曾经作为男性的他，现在已经变成了雌性...
+					;TranslatedMark 彼のモノからとろりと垂れた白濁は、かつて彼が雄だったこと、今や雌になり果てたことの、何よりの証明だった……
 			ENDSELECT
 		ENDIF
 		FOR LOCAL:1, 0, 3
-			CALL FUCK_GANGBANG(候補:LOCAL, GET_SPERM_ID("土匪"), @"土匪の\@ RAND:2 ? 肉棒 # 唇\@", "土匪")
+			CALL FUCK_GANGBANG(候補:LOCAL, GET_SPERM_ID("野盗"), @"野盗の\@ RAND:2 ? ペニス # 唇\@", "野盗")
 		NEXT
 
 	NEXT

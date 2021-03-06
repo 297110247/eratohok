@@ -8,11 +8,11 @@ RETURN 15
 ;確率以外の発生判定
 ;---------------------
 @EVENT_DAILY_BANDIT_EXECUTION_DECISION()
-#DIM 土匪
-土匪 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
-SIF 土匪 == -1
+#DIM 野盗
+野盗 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
+SIF 野盗 == -1
 	RETURN 0
-SIF CFLAG:MASTER:所属 == 土匪
+SIF CFLAG:MASTER:所属 == 野盗
 	RETURN 0
 SIF DAY < 12
 	RETURN 0
@@ -31,140 +31,230 @@ RETURN デイリー_ジャンル_特殊勢力
 @EVENT_DAILY_BANDIT_EXECUTION
 #DIM 対象
 
-PRINTFORMW 貌似部下在领土内发现了土匪集团
-PRINTFORML 怎麼辦？
-CALL ASK_YN("加强警备", "前去捉拿")
+PRINTFORMW 好像部下在领地里发现了土匪团
+;TranslatedMark 部下が領内で野盗の集団を発見した様だ
+PRINTFORML 怎么办？
+;TranslatedMark どうしよう？
+CALL ASK_YN("警備を強化する", "捕らえに向かう")
 IF RESULT == 0
 	PRINTFORMW 加强周边警备防备袭击
-	PRINTFORMW 多亏了，土匪的受害没有发生
+	;TranslatedMark 周辺の警備を強化して襲撃に備えた
+	PRINTFORMW 因此，没有发生被土匪袭击的事件
+	;TranslatedMark そのおかげか、野盗の被害は発生しなかった
 ELSE
-	PRINTFORML 是至今为止大闹一场的家伙
-	PRINTFORMW 只是踢散还不够满足，决定捕捉
-	PRINTFORML 让谁去面对呢？
+	PRINTFORML 这些横行霸道到今天的家伙
+	;TranslatedMark 今まで散々暴れてくれた連中だ
+	PRINTFORMW 只是赶走还不够，决定捉拿他们
+	;TranslatedMark ただ蹴散らすだけでは飽き足らない、捕らえる事にした
+	PRINTFORML 让谁去呢？
+	;TranslatedMark 誰を向かわせようか？
 	CALL SELECT_CHARA_LIST_SLG()
 	対象 = RESULT 
 	IF RESULT < 0
 		PRINTFORMW 还是算了吧
+		;TranslatedMark やはりやめておこう
 		PRINTFORMW 加强周边警备防备袭击
-		PRINTFORMW 多亏了，土匪的受害没有发生
+		;TranslatedMark 周辺の警備を強化して襲撃に備えた
+		PRINTFORMW 因此，没有发生被土匪袭击的事件
+		;TranslatedMark そのおかげか、野盗の被害は発生しなかった
 		RETURN
 	ELSEIF 対象 == MASTER
-		PRINTFORMW %ANAME(対象)%决定亲自前往
+		PRINTFORMW 决定自己去
+		;TranslatedMark %ANAME(対象)%自ら向かう事にした
 	ELSE
-		PRINTFORMW 面向%ANAME(対象)%
+		PRINTFORMW 让%ANAME(対象)%去
+		;TranslatedMark %ANAME(対象)%を向かわせた
 	ENDIF
 	PRINTFORML ・
 	PRINTFORML ・
 	PRINTFORMW ・
 	IF ((ABL:対象:武闘 + ABL:対象:防衛) / 2) * (RAND:8 + 1) < (40 + (DAY / 2)) * (RAND:7 + 1)
-		PRINTFORML 可是被埋伏！
-		PRINTFORMW 部队被反击了……
-		PRINTFORMW %ANAME(対象)%虽然变得破烂不堪但总算逃走了
+		PRINTFORML 但是他们有埋伏！
+		;TranslatedMark しかし待ち伏せされていた！
+		PRINTFORMW 部队反被击溃了…
+		;TranslatedMark 部隊は返り討ちにされてしまった…
+		PRINTFORMW %ANAME(対象)%虽然灰头土面但总算逃了回来
+		;TranslatedMark %ANAME(対象)%はボロボロになりながらも何とか逃げ帰った
 		CALL ADD_COOLTIME(対象, 3)
 	ELSE
-		PRINTFORMW 成功了!
-		PRINTFORML %ANAME(対象)%成功击破了土匪集团
-		PRINTFORML 捕捉到了近半数的土匪
-		PRINTFORMW 让见识处刑吧
-		PRINTFORMW 可是，里面也混杂着土匪少女
-		PRINTFORML 怎麼辦？
-		CALL ASK_MULTI_JUDGE("归并处刑", 1,"授予士兵", 1,"侵犯", HAS_PENIS(対象))
+		PRINTFORMW 成功了！
+		;TranslatedMark 成功した！
+		PRINTFORML %ANAME(対象)%漂亮地打败了土匪团
+		;TranslatedMark %ANAME(対象)%は見事野盗の集団を撃破した
+		PRINTFORML 捕获了近半数的强盗
+		;TranslatedMark 半数近くの野盗を捕らえる事が出来た
+		PRINTFORMW 作为惩戒，处决他们吧
+		;TranslatedMark 見せしめとして処刑することにしよう
+		PRINTFORMW 但是，其中也有一些土匪是少女
+		;TranslatedMark しかし、中には少女の野盗も混ざっていた
+		PRINTFORML 怎么办？
+		;TranslatedMark どうしよう？
+		CALL ASK_MULTI_JUDGE("纏めて処刑する", 1,"兵士に与える", 1,"犯す", HAS_PENIS(対象))
 		IF RESULT == 0
-			PRINTFORML 可是土匪是土匪，没有慈悲
-			PRINTFORMW 将总结处刑，晒脖子
-			CALL COLOR_PRINT("那个严厉的处分多少产生了赞成和反对,不过、大体上是好意地接住了", カラー_注意)
+			PRINTFORML 但是，强盗就是强盗，不能怜悯
+			;TranslatedMark しかし野盗は野盗だ、慈悲はない
+			PRINTFORMW 一起处刑，枭首示众
+			;TranslatedMark まとめて処刑して首を晒した
+			CALL COLOR_PRINT("その苛烈な処分は多少の賛否を生んだが、おおむね好意的に受け止められた", カラー_注意)
 			PRINTFORMW 
 			FOR LOCAL, 1, MAX_COUNTRY
 				CALL CHANGE_RELATION_C_TO_C(LOCAL, CFLAG:MASTER:所属, 40, 20)
 			NEXT
 		ELSEIF RESULT == 1
-			PRINTFORML 反正要比处刑更有效地利用
-			PRINTFORMW 土匪少女为了安慰士兵们
-			CALL COLOR_PRINT(@"她们在兵间大受好评、风闻志愿兵增加了", カラー_注意)
+			PRINTFORML 既然这样，那就不处刑了，更有效地使用她们吧
+			;TranslatedMark どうせなら処刑よりも有効活用しよう
+			PRINTFORMW 把土匪少女交给士兵们作为慰安妇使用
+			;TranslatedMark 少女の野盗は慰安の為に兵士たちに与える事にした
+			CALL COLOR_PRINT("彼女たちは兵の間で大好評となり、噂を聞いて志願兵が増加した", カラー_注意)
 			PRINTFORMW 
 			COUNTRY_SOLDIER:(CFLAG:MASTER:所属) += (50 + RAND:50) * DAY
 		ELSE
-			PRINTFORML 因为是折角请让我使用
-			PRINTFORMW %ANAME(対象)%决定让土匪少女带回家去享受
+			PRINTFORML 因为挺难得的，所以留给自己用吧
+			;TranslatedMark 折角なので使わせてもらおう
+			PRINTFORMW %ANAME(対象)%把一个土匪少女带回家，打算做点开心的事
+			;TranslatedMark %ANAME(対象)%は野盗の少女を持ち帰り楽しませてもらう事にした
 			PRINTFORML 
 			SELECTCASE RAND:10
 				CASE 0
-					PRINTFORML 剥下服饰，肉体比想象中更加丰满，不由得露出了笑容
-					PRINTFORML 拼命抵抗的她粗暴地趴在性器上，敏感地颤动着身体
-					PRINTFORMW 她一边发出娇声夹杂的悲鸣，一边将身体向后仰
-					PRINTFORML 一边享受紧紧地紧紧地缠上的蜜罐和她看起来不甘心的表情一边激烈地打到腰
-					PRINTFORML 不久，忍不住向阴道内射精，她发出极大的娇声让全身痉挛
-					PRINTFORMW 对于意想不到的上等球%ANAME(対象)%心情愉快地度过了一整晚
+					PRINTFORML 剥去了她的衣服，露出比想象中还要丰满的肉体，%ANAME(対象)%禁不住露出笑容
+					;TranslatedMark 服をはぎ取ると想像以上に豊満な肉体が露になり思わず笑みがこぼれる
+					PRINTFORML %ANAME(対象)%将拼命抵抗的她粗暴地推倒了，用手指爱抚着她的性器，让她敏感的身体不住震颤
+					;TranslatedMark 必死で抵抗する彼女を乱暴に組み伏せ性器に指を這わせると、敏感に身体を震わせた
+					PRINTFORMW 把阴茎缓缓插入之后，她的悲鸣声与呻吟交错着，身体因为快感用力地往后仰起
+					;TranslatedMark ペニスをねじ込むと彼女は嬌声交じりの悲鳴を上げながら大きく身体を弓ぞりに反らした
+					PRINTFORML %ANAME(対象)%享受着紧紧的蜜穴和她悔恨的表情，激烈地撞击着她的身体
+					;TranslatedMark きつく締め付けてくる蜜壺と彼女の悔しそうな表情を堪能しながら激しく腰を打ち付ける
+					PRINTFORML 不久，%ANAME(対象)%忍不住在阴道内射精，她发出很大的娇声，全身抽搐起来
+					;TranslatedMark やがて我慢できずに膣内射精すると、彼女は大きな嬌声を上げて全身を痙攣させた
+					PRINTFORMW 意想不到的上等货让%ANAME(対象)%高兴了玩了一整晚
+					;TranslatedMark 思わぬ上玉に%ANAME(対象)%はご機嫌となって一晩中たっぷりと楽しませてもらった
 				CASE 1
-					PRINTFORML 让她把手贴在墙上，把屁股伸出，从背后用力猛刺着
-					PRINTFORML 每当腰碰到柔软的屁股时！巴恩！她的呻吟声此起彼伏
-					PRINTFORMW 阴道肉超出想象的绝品，每扎一次使之溢出爱液，增加对肉棒的勒紧
-					PRINTFORML 忍无可忍地放开了一枪，她大大地弯下身子露出了近乎悲鸣的娇声
-					PRINTFORML 媚肉咕嘟咕嘟地蠢动着收紧杆子，贪欲地一滴不剩地榨取
-					PRINTFORMW 在那个极好的蜜罐里%ANAME(対象)%变得入迷，忘记时间好多次使之满足了
+					PRINTFORML 她的手按到墙壁上，撅起屁股，%ANAME(対象)%从背后激烈地撞击着她
+					;TranslatedMark 彼女を壁に手を突かせ尻を突き出させ、背後から激しくガン突きしている
+					PRINTFORML %ANAME(対象)%撞在她柔软的屁股上时响起的啪啪声与她的呻吟声此起彼伏
+					;TranslatedMark 柔らかなお尻に腰を打ち付ける度にぱぁん！ぱぁん！と鳴り響き、彼女の呻き声が上がる
+					PRINTFORMW 小穴是超出想象的绝品，每挺入一次都会有爱液溢出，同时阴茎的缠绕也更强了
+					;TranslatedMark 膣肉は想像以上に絶品で、一突き毎に愛液を溢れさせ、ペニスへの締め付けを増してくる
+					PRINTFORML %ANAME(対象)%忍不住在里面射了一发，她用力地向后仰起身子，发出近乎悲鸣的娇声
+					;TranslatedMark 我慢できずに一発目を放つと、彼女は大きく身を反らして悲鳴に近い嬌声を漏らした
+					PRINTFORML 小穴紧缩着，缠绕着肉棒，贪婪地一滴一滴地榨取
+					;TranslatedMark 媚肉はぎゅうぎゅうと蠢いて竿を締め付け、貪欲に一滴残らず搾り取ろうとしてくる
+					PRINTFORMW 那极品的小穴让%ANAME(対象)%如痴如醉，忘却了时间，享用了不知道多少次
+					;TranslatedMark その極上の蜜壺に%ANAME(対象)%は夢中となって、時間を忘れて何度も堪能させてもらった
 				CASE 2
-					PRINTFORML 本想粗暴地撕下衣服，到处都露出了伤痕累累的皮肤
-					PRINTFORML 看到她流着的眼泪在颤抖的脸，我突然产生了同情心，%ANAME(対象)%)，她温柔地抚摸着自己的皮肤。
-					PRINTFORMW 直到她冷静做好准备为止，花时间反复细心地爱抚她
-					PRINTFORML 渐渐地将身体交给%ANAME(対象)%的爱抚，从颤抖的喉咙中露出甜蜜的呼吸
-					PRINTFORML 温柔地让她睡着，将肉棒推到秘所后，紧紧地抓住她的手抬头仰望
-					PRINTFORMW 预想外的形式一边也和善地爱她，以二人汗流浃背一边互相缠绕了
+					PRINTFORML 粗暴地强行把她衣服扒下来，她露出了满是伤痕的皮肤
+					;TranslatedMark 乱暴にするつもりで服をはぎ取るとあちこち傷だらけの肌が露になった
+					PRINTFORML 看到她流着泪颤抖的脸，%ANAME(対象)%顿时产生了同情心，温柔地用手抚摸着她的肌肤
+					;TranslatedMark 涙を流しながら震える彼女の顔を見ると急に同情心がわき、%ANAME(対象)%は優しく肌に手を這わせた
+					PRINTFORMW 用了一段时间细心爱抚她直到她冷静下来做好准备
+					;TranslatedMark 彼女が落ち着き準備が整うまで、時間をかけて丁寧に愛撫を繰り返してやる
+					PRINTFORML 渐渐地她开始将身体放松，接受%ANAME(対象)%的爱抚，颤抖着从嘴里开始发出甜美的喘息
+					;TranslatedMark 次第に彼女は%ANAME(対象)%の愛撫に身を委ねはじめ、震える喉からは甘い吐息が漏れ出してきた
+					PRINTFORML %ANAME(対象)%温柔地让她躺下，把阴茎压在她的蜜穴上时，她紧紧地抓着%ANAME(対象)%的手抬头看着
+					;TranslatedMark 彼女を優しく寝かせてペニスを秘所に押し当てると、ぎゅっと手を掴みながら見上げてきた
+					PRINTFORMW 变成了温柔的性爱这样意料之外的形式，两个人流着汗激烈地交合着
+					;TranslatedMark 想定外の形になりながらも彼女を優しく愛してやり、二人で汗だくになりながら絡み合った
 				CASE 3
-					PRINTFORML 在佩戴着眼罩的基础上，束缚着无法动弹的她
-					PRINTFORML 粗暴地推上dosudosu和子宫，她hihihi和瑜伽利全身痉挛
-					PRINTFORMW 她为了逃跑而扭动着身体，但反而%ANAME(対象)%舒适地刺激了肉棒
-					PRINTFORML 大大地举起一个，她吓了一跳！身体向后仰，发出了难看的喘息声
-					PRINTFORML 即使询问是否已经绝顶了，她也拼命地否定。
-					PRINTFORMW %ANAME(対象)%花费一晚充分调教了预想以上的极品手淫
+					PRINTFORML 蒙着眼睛绑起来之后，把不能动弹的她当作飞机杯一样使用
+					;TranslatedMark 目隠しをした上で縛り上げ、身動きできなくした彼女をオナホの様に扱う
+					PRINTFORML 粗暴地用阴茎向子宫上顶，她发出着呻吟，全身抽搐着
+					;TranslatedMark 乱暴にドスドスと子宮を突き上げると、彼女はヒィヒィとヨガリ全身を痙攣させる
+					PRINTFORMW 她挣扎着逃脱而用力的身体，却反而舒服地刺激着%ANAME(対象)%的阴茎
+					;TranslatedMark 彼女は逃れようと身もだえするが、それがかえって%ANAME(対象)%のペニスを心地よく刺激してきた
+					PRINTFORML %ANAME(対象)%进行了一次剧烈挺入，让她猛地颤抖，身体向后仰，发出了凄惨的喘息声
+					;TranslatedMark 一つ大きく突き上げると、彼女はビクン！と身体を反らして無様な喘ぎ声を漏らした
+					PRINTFORML 问她是否达到高潮，她拼命地否认。不过当%ANAME(対象)%再次抽插的时候，她的身体比刚才更敏感地扭动着。
+					;TranslatedMark 絶頂したかを尋ねても必死で否定する彼女を攻め立てると先程より敏感に身体を跳ねさせた
+					PRINTFORMW %ANAME(対象)%花了一个晚上充分调教了超出预想的极品肉穴
+					;TranslatedMark %ANAME(対象)%は想定以上の極上肉オナホを一晩かけてたっぷりと調教してやった
 				CASE 4
-					PRINTFORML 把她绑在床上，强迫她吃献媚药，反复犯下
-					PRINTFORML 开始抵抗的她也几度迎来绝顶的时候已经只是快乐地让身体颤抖了
-					PRINTFORMW 媚肉不断变好，像生物一样缠着肉棒，腰都快要浮起来了
-					PRINTFORML 痉挛着给瑜伽女朋友接吻，突然手被脖子转动，舌头被缠住了
-					PRINTFORML 吃惊地窥视眼的话完全成为快乐的俘虏的那样的表情浮现着♥
-					PRINTFORMW 与可爱的喘息的她一起享受种种的游戏，被嫉妒好多次放出了精力
+					PRINTFORML 把她绑在床上，强制把媚药给她喂下去，反复地侵犯她
+					;TranslatedMark 彼女をベッドに縛り付けて無理矢理媚薬を飲ませて繰り返し犯し続けた
+					PRINTFORML 最初抵抗的她在迎来不知道是第几次绝顶之后，身体已经无力得只会因一时的快感而不时颤动了
+					;TranslatedMark 始めは抵抗してた彼女も何度目かの絶頂を迎える頃にはもはや快楽に身体を震わせるだけになった
+					PRINTFORMW 小穴渐渐地适应了，像有意识一样缠在阴茎上，她的腰也因为感受刺激而浮起来了
+					;TranslatedMark 媚肉はどんどんと良くなっていき、生き物のようにペニスに絡みついてきて腰が浮きそうになる
+					PRINTFORML 发现她又一次抽搐之后，%ANAME(対象)%亲吻了上去的时候，她突然把手绕到%ANAME(対象)%的脖子上，缠住了%ANAME(対象)%的舌头
+					;TranslatedMark 痙攣してヨガル彼女にキスをしてやると、いきなり首に手を回され舌を絡まされた
+					PRINTFORML %ANAME(対象)%惊讶地看着她的眼睛，发现她露出了完全成为快乐俘虏的发情表情，♥浮现在眼神中
+					;TranslatedMark 驚いて瞳を覗くとすっかり快楽の虜になっている様な発情した表情で♥が浮かんでいた
+					PRINTFORMW 和可爱地喘息着的她一起享受了各种各样的游戏，在她不断的索求下射了很多次精
+					;TranslatedMark 可愛く喘ぐ彼女と一緒にいろいろなプレイを楽しみ、ねだられるままに何度も精を放った
 				CASE 5
-					PRINTFORML 强暴的她推倒在床上，以四肢爬行的姿势强奸
-					PRINTFORML 那个阴道孔确实是名器，与肉棒全体缠绕，不能停止更激烈地深深地扭进腰
-					PRINTFORMW 被侵犯的她四肢颤抖着，紧紧抓住床单咬紧牙关
-					PRINTFORML 但是%ANAME(対象)%将天花板摩擦上去，就像电流流过似的，身体被震动了
-					PRINTFORML 无视辩解的她，挖出弱点之后每次痉挛逐渐露出了甜蜜的哮喘
-					PRINTFORMW 在的里面她打出合腰，预告射精也不抵抗变得接受
+					PRINTFORML 把挣扎的她推倒在床上，让她摆出四肢着地的姿势，粗暴地强奸着她
+					;TranslatedMark 暴れる彼女をベッドに押し倒し、四つん這いの姿勢で乱暴にレイプする
+					PRINTFORML 那个小穴真是名器，紧紧缠绕着阴茎，%ANAME(対象)%不自禁地激烈的动腰，把阴茎深深地插了进去
+					;TranslatedMark その膣穴は正に名器で、ペニス全体に絡みつき、腰をより激しく深くねじ込むのを止められない
+					PRINTFORMW 被侵犯的她四肢颤抖着，紧紧抓住床单，咬紧牙关
+					;TranslatedMark 犯されている彼女は四肢をガクガク震わせながらもシーツをギュッと掴んで歯を喰いしばっている
+					PRINTFORML 但是，当%ANAME(対象)%开始不停摩擦最深处的时候，她的身体就像触电一样一颤一颤
+					;TranslatedMark しかし%ANAME(対象)%が天井を擦り上げてやると、電流が流れた様にビクンと身体を跳ねさせた
+					PRINTFORML 无视求饶的她，继续抽插她的敏感点，伴随着她的身体一次次的颤抖，甜美的呻吟也不断的响起
+					;TranslatedMark 言い訳する彼女を無視し、弱点を抉ってやるとその度に痙攣して次第に甘い喘ぎを漏らしだした
+					PRINTFORMW 在这时，她忽然缩紧身子，撅起屁股，%ANAME(対象)%说要射精了，她也毫不抵抗地接受了
+					;TranslatedMark その内彼女は合い腰を打ち出し、射精を予告しても抵抗せずに受け入れる様になっていった
 				CASE 6
-					PRINTFORML 从%ANAME(対象)%的房间中传来少女无可救药的喘息声
-					PRINTFORML 她不怎么抵抗，刚开始犯就练起瑜伽，自己一拍腰打得乱七八糟
-					PRINTFORMW 无法忍受而放开第一发，她紧紧地抱住%ANAME(対象)%共同达到了顶峰
-					PRINTFORML 一口气抱住她一边进行着pirotalk，一边流着泪诉说着自己的身世
-					PRINTFORML 曰，被土匪抢走后一直被当做性奴隶对待，现在被侵犯的人更安定。
-					PRINTFORMW 现在只其他什么都没考虑的那样，沉溺在%ANAME(対象)%与她一起灼热的那样的肉欲
+					PRINTFORML %ANAME(対象)%的房间里回响着少女那毫不掩饰的呻吟声
+					;TranslatedMark %ANAME(対象)%の部屋の中から少女のあられもない喘ぎ声が響いている
+					PRINTFORML 她不怎么反抗，刚开始侵犯她就像是受到强烈刺激一样激烈地缩紧肌肉，打乱了自己动腰的节奏
+					;TranslatedMark 彼女はあまり抵抗もせず、犯し始めてすぐにヨガリだして自分から合い腰を打って乱れている
+					PRINTFORMW 忍不住射了一发，她紧紧抱住%ANAME(対象)%，一起达到了高潮
+					;TranslatedMark 我慢できずに一発目を放つと、彼女はぎゅうっと%ANAME(対象)%にしがみつきながら共に絶頂に達した
+					PRINTFORML 休息的时候抱着她，和她在枕边一起聊天，她一边流着泪一边诉说着自己的故事
+					;TranslatedMark 一息ついて彼女を抱きしめながらピロートークをしていると、涙ながらに身の上を語りだした
+					PRINTFORML 她说，现在的侵犯相对于被土匪掳走当性奴隶使用，会更让她安心
+					;TranslatedMark 曰く、野盗に攫われてからずっと性奴隷扱いだった、今や犯されている方が落ち着く、と
+					PRINTFORMW 只有现在什么都不用想，%ANAME(対象)%和她一起沉溺在灼烧般的肉欲中
+					;TranslatedMark 今だけは他に何も考えずにすむ様に、%ANAME(対象)%は彼女と共に灼ける様な肉欲に溺れていった
 				CASE 7
-					PRINTFORML %ANAME(対象)%为了让她理解立场，裸体剥下项圈出去散步了
-					PRINTFORML 每次在宫殿内遇到士兵们都会在他们面前粗暴地侵犯她，毫不留情地重复阴道出入
-					PRINTFORMW 开始注视的她也几次恳求，一边流泪一边也停止
-					PRINTFORML 作为替代停止忠诚的证据拿出肉棒的话，她一边踌躇一边也亲吻了龟头
-					PRINTFORML 满足于的%ANAME(対象)%把她带回房间让她躺在床上，温柔地抚摸着她抱着她
-					PRINTFORMW 她已经接受了%ANAME(対象)%的全部
+					PRINTFORML %ANAME(対象)%为了让她理解自己的地位，把她脱光衣服带着项圈出去散步
+					;TranslatedMark %ANAME(対象)%は彼女に立場を理解させる為、裸に剥いて首輪をつけて散歩に出かけた
+					PRINTFORML 每次在宫殿里遇到士兵们的时候，%ANAME(対象)%都会在他们面前粗暴地侵犯她，毫不留情地反复在她的里面射精
+					;TranslatedMark 宮殿内で兵士たちに出会う度に彼らの目の前で乱暴に彼女を犯し、容赦なく膣出しを繰り返す
+					PRINTFORMW 一开始她也露出好几次愤怒的神情，但后来却流着泪恳求%ANAME(対象)%不要再干了
+					;TranslatedMark 始めは睨み付けていた彼女も何度目かには、涙ながらにもうやめてくれと懇願するようになった
+					PRINTFORML 作为同意的条件，她要对阴茎交出忠诚的证明，她踌躇了一下，然后亲吻了龟头
+					;TranslatedMark やめる代わりに忠誠の証としてペニスを差し出すと、彼女は躊躇いながらも亀頭にキスをした
+					PRINTFORML 满足了的%ANAME(対象)%把她带回房间后让她躺在床上，温柔地爱抚她，与她进行性交
+					;TranslatedMark 満足した%ANAME(対象)%は彼女を部屋に連れ戻すとベッドに寝かせ、優しく愛撫しながら抱いてやった
+					PRINTFORMW 她不再反抗，扭动着身子完全接受了%ANAME(対象)%的进入
+					;TranslatedMark 彼女はもはや抵抗せずにされるがままに身をくねらせ%ANAME(対象)%のすべてを受け入れた
 				CASE 8
-					PRINTFORML %ANAME(対象)%在狠狠地犯了她之后，滚到床上喘了一口气
-					PRINTFORML 大概是因为平时习惯了土匪们的对手吧，那个身体虽然很小，但却很开心。
-					PRINTFORMW 少女一边喘着粗气一边从秘所滴出精液，再次耸立起胯股间的一物
-					PRINTFORML %ANAME(対象)%命令下面的话，她一边踌躇一边也恳求希望打开身体和善地做
-					PRINTFORML 同情了那个态度的%ANAME(対象)%和善地抱的话，她这次露出了撒娇的那样的喘息声
-					PRINTFORMW 对年一边使之颤抖身体一边可爱的喘息的她，忘记当初的目的入迷了
+					PRINTFORML %ANAME(対象)%对她侵犯了很多次之后，就躺在床上喘了一口气
+					;TranslatedMark %ANAME(対象)%は彼女を散々犯した後、ベッドに転がしたまま一息をついている
+					PRINTFORML 也许是她经常和土匪们交合的缘故吧，虽然她的身体还很年幼，但却让%ANAME(対象)%十分享受
+					;TranslatedMark 日頃から野盗たちの相手で慣らされていたのか、その身体は幼いながらも充分楽しませてくれた
+					PRINTFORMW 看着躺在床上喘着粗气，蜜穴上不断滴下精液的少女，%ANAME(対象)%再次撩起胯股之间的肉棒
+					;TranslatedMark 息を荒げながら横たわって秘所から精液を垂らす少女の姿は、再び股間の一物をそそり立たせる
+					PRINTFORML %ANAME(対象)%命令她继续配合下一轮，她踌躇着岔开了双腿，恳求%ANAME(対象)%温柔一点
+					;TranslatedMark %ANAME(対象)%が次を命じると、彼女は躊躇いながらも自ら身体を開き優しくしてほしいと懇願してきた
+					PRINTFORML 她的态度让%ANAME(対象)%心生同情，于是温柔地抱着她，她这次发出了甜美的呻吟声
+					;TranslatedMark その態度に同情した%ANAME(対象)%が優しく抱いてやると、彼女は今度は甘える様な喘ぎ声を漏らした
+					PRINTFORMW 看着一边颤抖着幼小身体一边可爱地呻吟着的她，%ANAME(対象)%忘记了当初的目的而沉迷其中
+					;TranslatedMark 年相応に身体を震わせながら可愛く喘ぐ彼女に、当初の目的を忘れて夢中になった
 				CASE 9
-					PRINTFORML %ANAME(対象)%一边被她遮住，一边深深地向肉棒里头扭动腰
-					PRINTFORML 她意外地是处女，痛苦地使之歪曲脸一边呻吟一边握住%ANAME(対象)%的的双臂
-					PRINTFORMW 一边享受那个表情和闭合的蜜罐，一边蹂躏还谁都没进入过的她的深奥
-					PRINTFORML 在最里面止住了腰之后，一边宽敞地爱抚一边低声私语爱的言词，她颤抖着背脊
-					PRINTFORML 暂且持续的话她的紧张也解除，撒娇的那样的喘息声音从喉咙微微地听见了
-					PRINTFORMW 中意她的%ANAME(対象)%，花费一夜时间慢慢地对身心和自己爱好进行调教
+					PRINTFORML %ANAME(対象)%把阴茎向她的深处狠狠地挺进，整个身体都把她盖住，并开始动起腰来抽插着
+					;TranslatedMark %ANAME(対象)%は彼女に覆い被さりながら深々とペニスの奥へとねじ込み腰を振っている
+					PRINTFORML 出人意料的是，她还是个处女，因此露出了因为痛苦而扭曲的表情，一边呻吟一边紧握着%ANAME(対象)%的双臂
+					;TranslatedMark 彼女は意外にも処女であり、苦痛に顔を歪ませて呻きながら%ANAME(対象)%の両腕を握りしめている
+					PRINTFORMW %ANAME(対象)%享受着那副还未经人事的表情和紧紧的小穴，蹂躏着她还没有被开发过的最深处
+					;TranslatedMark その表情ときつきつの蜜壺を楽しみながら、まだ誰も入った事のない彼女の奥深くを蹂躙していく
+					PRINTFORML 插到她的最深处停下来后，%ANAME(対象)%慢慢地对她爱抚着，低声说着爱语，让她的后背不时颤抖
+					;TranslatedMark 最奥で腰を止めた後、ゆったりと愛撫しながら愛の言葉を囁くと、彼女はゾクゾクと背筋を震わせた
+					PRINTFORML 持续一段时间后，她的紧张感也渐渐消除，甜美的呻吟从她的喉咙里隐约传出
+					;TranslatedMark しばし続けると彼女の緊張も解れていき、甘える様な喘ぎ声が微かに喉から漏れ聞こえてきた
+					PRINTFORMW 喜欢上她的%ANAME(対象)%，用了一晚上按照自己的喜好对她的身心进行了调教
+					;TranslatedMark 彼女を気に入った%ANAME(対象)%は、一晩かけてじっくり心身ともに自分好みに調教していった
 			ENDSELECT
-			CALL FUCK(対象, "性技, 性交, Ｃ, 射精", "童貞喪失, 接吻喪失", 0, "野盗の少女の唇", "", @"野盗の少女の膣", "強姦")
+			CALL FUCK(対象, "性技, 性交, Ｃ, 射精", "童貞喪失, キス喪失", 0, "野盗の少女の唇", "", @"野盗の少女の膣", "強姦")
 			PRINTFORML 
-			PRINTFORMW 尽情享受之后，解放了她
+			PRINTFORMW 尽情享受之后，把她解放了
+			;TranslatedMark 存分に楽しんだ後、彼女を解放してやった
 			IF ABL:対象:性技 + RAND:4 >= 7
-				PRINTFORML 可是她好象变得糟糕透顶了，恳求着让我侍奉
-				PRINTFORMW 对这个样子满足的%ANAME(対象)%决定让她成为部下
+				PRINTFORML 但是她好像沉迷于此似的，恳求让她来侍奉%ANAME(対象)%
+				;TranslatedMark しかし彼女はメロメロになった様で、仕えさせてほしいと懇願してきた
+				PRINTFORMW 对她很满意的%ANAME(対象)%决定让她成为部下
+				;TranslatedMark その様子に満足した%ANAME(対象)%は彼女を部下にしてやることにした
 				IF DVAR:野盗処刑_少女部下フラグ == 0
 					CALL CREATE_RANDOM_CHARA(0,0,1)
 					LOCAL = RESULT
@@ -182,14 +272,16 @@ ELSE
 					DVAR:野盗処刑_少女部下フラグ = 1
 				ELSE
 					$CREATE_MISS
-					PRINTFORMW 多亏了她热心工作，才有了%ANAME(対象)%的力量
+					PRINTFORMW 在她的热心工作下，%ANAME(対象)%得到很多帮助
+					;TranslatedMark 彼女が熱心に働いてくれたおかげで、%ANAME(対象)%の力になった
 					CALL PRINT_ADD_EXP(対象, "武闘経験値", RAND:10 + 6, 1)
 					CALL PRINT_ADD_EXP(対象, "防衛経験値", RAND:10 + 6, 1)
 					CALL TRAIN_AUTO_ABLUP(対象)
 					PRINTFORMW 
 				ENDIF
 			ELSE
-				PRINTFORMW 彼女は一度%ANAME(対象)%を振り返ったが、何も言わずにそのまま逃げ去って行った
+				PRINTFORMW 她回过头看了一眼%ANAME(対象)%之后，什么也没说就逃走了
+				;TranslatedMark 彼女は一度%ANAME(対象)%を振り返ったが、何も言わずにそのまま逃げ去って行った
 			ENDIF
 		ENDIF
 	ENDIF

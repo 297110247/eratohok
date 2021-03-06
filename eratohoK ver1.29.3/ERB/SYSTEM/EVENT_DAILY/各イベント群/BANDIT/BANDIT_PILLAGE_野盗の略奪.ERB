@@ -11,12 +11,12 @@ RETURN 40
 ;〇期以降になると発生するとか、デイリー側で利用している変数が-1だったら起こさない　みたいなはじき方をするときに使う
 ;---------------------
 @EVENT_DAILY_BANDIT_PILLAGE_DECISION()
-#DIM 土匪
-土匪 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
-SIF 土匪 == -1
+#DIM 野盗
+野盗 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
+SIF 野盗 == -1
 	RETURN 0
 
-SIF CFLAG:MASTER:所属 != 土匪
+SIF CFLAG:MASTER:所属 != 野盗
 	RETURN 0
 
 SIF !HAS_PENIS(MASTER)
@@ -37,42 +37,57 @@ RETURN デイリー_ジャンル_特殊勢力
 ;旧仕様で作ったことある人向けにいうと「旧仕様のデイリー本体冒頭で-1を返すような状況」
 ;---------------------
 @EVENT_DAILY_BANDIT_PILLAGE
-#DIM 土匪
+#DIM 野盗
 #DIM お金
 #DIM 兵数
 #DIM 対象
-土匪 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
+野盗 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
 
-PRINTFORMW 最近物资不足
-PRINTFORMW 一般是从商人那里收购的，但%ANAME(MASTER)%是土匪
-PRINTFORMW 与其买，还不如抢夺……以那样的理由，到附近的村也来了
-PRINTFORML 那麼、怎麼辦……
-CALL ASK_MULTI("瞄准上等", "狙击无力的村民", "瞄准钱财", "现在就老实一点吧")
+PRINTFORMW 最近，物资有点缺乏
+;TranslatedMark このごろ、物資が不足ぎみだ
+PRINTFORMW 正常来说应该要去找商人购买物资的，但%ANAME(MASTER)%可是土匪啊
+;TranslatedMark 普通なら商人から買い付けるところだが、%ANAME(MASTER)%は野盗である
+PRINTFORMW 与其买不如抢……在这样的思想指导下，来到了附近的村子
+;TranslatedMark 買うぐらいなら奪えばいい……そんな理屈で、付近の村にまでやって来た
+PRINTFORML 那么，怎么办呢……
+;TranslatedMark さて、どうしようか……
+CALL ASK_MULTI("上玉を狙う", "無力な村人を狙う", "金品を狙う", "今は大人しくしておこう")
 IF RESULT == 3
 	$CANCEL
-	PRINTFORMW ……不，仔细想想，如果从村子里进行掠夺当然会留下祸根。
-	PRINTFORMW 自己增加敌人不能说是明智的行为
-	PRINTFORMW %ANAME(MASTER)%带着手下共回到了基地……
+	PRINTFORMW ……不，想想看，从村子里进行掠夺肯定会留下祸根，以后会有很多麻烦
+	;TranslatedMark ……いや、考えてみれば、村から略奪を行えば当然禍根が残る
+	PRINTFORMW 给自己增加敌人不能说是明智的行为
+	;TranslatedMark 自ら敵を増やすのは賢い行いとはいえまい
+	PRINTFORMW %ANAME(MASTER)%带着手下一起回到了据点……
+	;TranslatedMark %ANAME(MASTER)%は手下共を連れ、アジトへと戻った……
 ELSEIF RESULT == 2
-	PRINTFORMW 这里是盗贼般的金钱目标
-	PRINTFORMW %ANAME(MASTER)%率领部下袭击村庄……
+	PRINTFORMW 要学盗贼那样，目标是要钱
+	;TranslatedMark ここは盗賊らしく金品を狙うとしよう
+	PRINTFORMW %ANAME(MASTER)%带着部下袭击了村庄……
+	;TranslatedMark %ANAME(MASTER)%は部下を引き連れ、村を襲った……
 	PRINTFORML ・
 	PRINTFORML ・
 	PRINTFORMW ・
 	IF !RAND:10
-		PRINTFORML 村民们的反抗比%ANAME(MASTER)%的想象中激烈
-		PRINTFORMW 部队全军落马，%ANAME(MASTER)%则因以下几点被逮捕
-		PRINTFORMW 作为土匪的%ANAME(MASTER)%不可能得到救济
-		PRINTFORMW %ANAME(MASTER)%被解雇……
+		PRINTFORML 村里人的反抗比%ANAME(MASTER)%想象中的还要激烈
+		;TranslatedMark 村の連中の反抗は、%ANAME(MASTER)%の想像以上に激しかった
+		PRINTFORMW 部队全灭，%ANAME(MASTER)%因战败而被捕了
+		;TranslatedMark 部隊は全滅、%ANAME(MASTER)%は下手をうって捕まってしまった
+		PRINTFORMW 作为土匪的%ANAME(MASTER)%，不可能得到他们的原谅
+		;TranslatedMark 野盗である%ANAME(MASTER)%に、救済など与えられるはずもない
+		PRINTFORMW %ANAME(MASTER)%被斩首了……
+		;TranslatedMark %ANAME(MASTER)%はさらし首にされた……
 		FLAG:強制エンドフラグ = 1
 		DAILY_CANCEL = 1
 		RETURN 1
 	ELSE
 		お金 = ((ABL:MASTER:武闘 + ABL:MASTER:知略) * 5 * (RAND:5 + 1))
 		PRINTFORMW 进行了掠夺！
-		PRINTFORMW 抢走了{お金}的财物！
+		;TranslatedMark 略奪を行った！
+		PRINTFORMW 夺走了{お金}块钱！
+		;TranslatedMark {お金}の金品を奪った！
 		MONEY += お金
-		CALL COLOR_PRINT(@"引起了各国的反感", カラー_注意)
+		CALL COLOR_PRINT("諸国の反感を買ったようです", カラー_注意)
 		PRINTFORMW
 		FOR LOCAL, 1, MAX_COUNTRY
 			SIF IS_COUNTRY(LOCAL)
@@ -80,113 +95,189 @@ ELSEIF RESULT == 2
 		NEXT
 	ENDIF
 ELSEIF RESULT == 1
-	PRINTFORMW %ANAME(MASTER)%的部队是男性家庭
-	PRINTFORMW 为了做“慰安”的年轻女性……奴隶是不可缺少的
-	PRINTFORMW 不用命令去取那样的女人，部下们开始争先恐后地追赶女人们……
+	PRINTFORMW %ANAME(MASTER)%的部队里都是男性
+	;TranslatedMark %ANAME(MASTER)%の部隊は男所帯だ
+	PRINTFORMW 用来慰安士兵的年轻女性……这样的奴隶是不可缺少的
+	;TranslatedMark 「慰安」をするための若い女……ようは奴隷は欠かせない
+	PRINTFORMW 还没等他下命令去抓女人，部下们已经自发地，争先恐后地开始追逐这里的女人们了……
+	;TranslatedMark そういう女を取ってこいと命令するまでもなく、部下達は我先にと女達を追いかけ回し始めた……
 	PRINTFORML ・
 	PRINTFORML ・
 	PRINTFORMW ・
 	IF !RAND:10
-		PRINTFORML 村民们的反抗比%ANAME(MASTER)%的想象中激烈
-		PRINTFORMW 部队全军落马，%ANAME(MASTER)%则因以下几点被逮捕
-		PRINTFORMW 作为土匪的%ANAME(MASTER)%不可能得到救济
-		PRINTFORMW %ANAME(MASTER)%被解雇……
+		PRINTFORML 村里人的反抗比%ANAME(MASTER)%想象的还要激烈
+		;TranslatedMark 村の連中の反抗は、%ANAME(MASTER)%の想像以上に激しかった
+		PRINTFORMW 部队全灭，%ANAME(MASTER)%因战败而被捕了
+		;TranslatedMark 部隊は全滅、%ANAME(MASTER)%は下手をうって捕まってしまった
+		PRINTFORMW 作为土匪的%ANAME(MASTER)%，不可能得到他们的原谅
+		;TranslatedMark 野盗である%ANAME(MASTER)%に、救済など与えられるはずもない
+		PRINTFORMW %ANAME(MASTER)%被斩首了……
+		;TranslatedMark %ANAME(MASTER)%はさらし首にされた……
 		FLAG:強制エンドフラグ = 1
 		DAILY_CANCEL = 1
 		RETURN 1
 	ELSE
-		PRINTFORMW 袭击了附近的村落，抓住了几个合适的村姑
-		PRINTFORMW 拿着战利品回到基地后，手下们立刻聚集到她们的身边
-		PRINTFORMW %ANAME(MASTER)%也找到了喜欢的一个女儿，强行带进了被窝
+		PRINTFORMW 袭击完附近的村落之后，抓到了几个合适的少女
+		;TranslatedMark 近くの集落を襲い、適当な村娘を何人か捕まえた
+		PRINTFORMW 拿着战利品回到基地后，手下们立刻聚拢到她们身边
+		;TranslatedMark 戦利品を持ってアジトへと帰還すると、手下たちは早速彼女達に群がった
+		PRINTFORMW %ANAME(MASTER)%也找到了自己喜欢的一个女孩子，强行把她带到自己的床上
+		;TranslatedMark %ANAME(MASTER)%も好みの娘を一人見つけると、無理矢理寝床に連れ込んだ
 		PRINTFORML 
 		SELECTCASE RAND:10
 			CASE 0 
-				PRINTFORMW 将女儿束缚起来，用嚼子嚼着口子，从背后激烈地侵犯着。
-				PRINTFORMW 每次取出肉棒，从结合部与生女证明的纯血和精液混在一起垂下
-				PRINTFORMW 受到紧绷的刺激，再次射精后，女儿发出呻吟声，扑通一声跳了起来
-				PRINTFORMW 对一边流着眼泪一边请求原谅的她的表情兴奋，继续新的凌辱
+				PRINTFORMW 把少女绑起来套上猿轡之后，从背后激烈地侵犯着
+				;TranslatedMark 娘を縛り上げ猿轡をはめながら、背後から激しく犯している
+				PRINTFORMW 抽出阴茎的时候，处女证明的血液与精液的混合液体就会在结合部流出
+				;TranslatedMark ペニスを出し入れするたびに、結合部から生娘の証だった純血と精液が混ざり垂れてくる
+				PRINTFORMW 因为小穴紧缩的刺激，让他再次射精，少女呻吟着，身体也抽搐起来
+				;TranslatedMark キツイ締め付けに刺激され、再び射精すると、娘はうめき声を上げながらビクンと身体を跳ねさせた
+				PRINTFORMW 她流着泪求饶的表情让他更兴奋，继续着凌辱
+				;TranslatedMark 涙を流しながら許しを請う彼女の表情に興奮し、更なる凌辱を続けた
 			CASE 1 
-				PRINTFORMW 推倒闹腾的女儿撕下衣服的话，前戏也马马虎虎地在那里扭进肉棒
-				PRINTFORMW 忽视了她发出一阵呻吟，激烈地抽出腰
-				PRINTFORMW 想办法逃跑用全身压住闹腾的她，享受紧贴的阴道的刺激
-				PRINTFORMW 不久，走近极限，在女儿最深处释放出精力，她违背了初次品尝的热度，大声疾呼
+				PRINTFORMW 把挣扎的少女推倒，剥掉了她的衣服，草草做完前戏之后就把阴茎塞进小穴里
+				;TranslatedMark 暴れる娘を押し倒し服をはぎ取ると、前戯もそこそこにペニスをねじ込む
+				PRINTFORMW 无视了发出尖叫声抽搐着的她，激烈地用腰前后动着，在她体内反复抽插
+				;TranslatedMark あぐっとうめき声をあげ痙攣する彼女を無視し、激しく腰を前後し抽送を繰り返す
+				PRINTFORMW 用全身压着总想挣扎逃跑的她，享受着她紧绷的小穴
+				;TranslatedMark 何とか逃げようと暴れる彼女を全身で押さえつけ、締め付けてくる膣の刺激を愉しんだ
+				PRINTFORMW 终于接近极限，在少女的最深处射出了精液，她重重地仰起身体，因为这第一次感受的热量而尖叫起来
+				;TranslatedMark やがて限界が近づき、娘の最奥で精を解き放つと、彼女は初めて味わう熱に背を反らして絶叫した
 			CASE 2 
-				PRINTFORMW 一边骑着女儿一边激烈地拍着腰
-				PRINTFORMW 她不抵抗，嘿嘿浮起空虚的笑容%ANAME(MASTER)%抱住
-				PRINTFORMW 好歹是对药中意的那样，口交使之喝下面的一粒的话更加勒紧了阴道
-				PRINTFORMW 向她的子宫放出精液的话，提高了成为漂亮地雌的证的喘息声
+				PRINTFORMW 他压着少女，用力地动着腰，不停冲撞着她的身体
+				;TranslatedMark 娘にのしかかりながら激しく腰を打ち付けている
+				PRINTFORMW 她没有抵抗，脸上露出了空洞的笑容，抱住了%ANAME(MASTER)%
+				;TranslatedMark 彼女は抵抗もせず、えへえへと虚ろな笑みを浮かべて%ANAME(MASTER)%に抱きついている
+				PRINTFORMW 看来是药效发作了，他接着又给她喂下了另一片药，然后她的阴道变得更紧了
+				;TranslatedMark どうやら薬が気に入った様だ、次の一錠を口移しで飲ませてやると更に膣を締め付けてきた
+				PRINTFORMW 向她的子宫射出精液后，她发出了像是完全成为雌性动物一样的喘息声
+				;TranslatedMark 彼女の子宮へとザーメンを放つと、立派に雌となった証の喘ぎ声を上げた
 			CASE 3 
-				PRINTFORMW 把女儿摔倒在床上，一边流着泪一边咯噔咯噔地颤抖着
-				PRINTFORMW 一边慢慢地爱抚害怕的她的全身，一边低声私语不伤害如果老实做着
-				PRINTFORMW 虽然她还很兴奋，但是慢慢地花了点时间慢慢地露出了悲伤的叹息
-				PRINTFORMW 一边握着颤抖的她的手，一边慢慢地将腰沉入湿漉漉的雌洞里
-				PRINTFORMW 一边窥视疼痛的她的情况，一边一夜之间踏踏实实地开发了
+				PRINTFORMW 少女躺在床上，流着泪瑟瑟发抖
+				;TranslatedMark 娘をベッドに転がすと、涙を流しながらガタガタと震えている
+				PRINTFORMW 他慢慢地爱抚着恐惧的她的身躯，轻声温柔地说如果老实的话就不会受伤
+				;TranslatedMark 怖がる彼女の全身をゆっくりと愛撫しながら、大人しくしていれば傷つけはしないと囁き懐柔する
+				PRINTFORMW 她还在颤抖，但在爱抚了她一段时间之后，她也渐渐地发出了兴奋的呻吟
+				;TranslatedMark 彼女は未だしゃくりあげているが、じっくりと時間をかけてやると次第に切なげな吐息を漏らしだした
+				PRINTFORMW 握着她颤抖的手，慢慢地将腰往下沉，把阴茎缓缓插入浸湿的雌穴中
+				;TranslatedMark 震える彼女の手を握りながら、じんわりと濡れている雌穴にゆっくりと腰を沈めていく
+				PRINTFORMW 观察着她疼痛的样子，对她的身体用了一晚来慢慢开发
+				;TranslatedMark 痛がる彼女の様子を窺いながら一晩中じっくりと開発してやった
 			CASE 4 
-				PRINTFORMW 女儿一边邋遢地垂下舌头一边在%ANAME(MASTER)%上摇着腰
-				PRINTFORMW 由于给她喝了媚药的效果，她的头脑中似乎已经充满了快感
-				PRINTFORMW %ANAME(MASTER)%在不经意间从下往上顶的话，会发出娇声愉悦
-				PRINTFORMW 不久，将%ANAME(MASTER)%射精至她的顶峰，一边大大地弯腰一边发出娇声响
+				PRINTFORMW 少女吐着舌头坐在%ANAME(MASTER)%身上摇动着腰
+				;TranslatedMark 娘はだらしなく舌を垂らしながら%ANAME(MASTER)%の上で腰を振っている
+				PRINTFORMW 在给她喝的媚药效果下，她的脑子里已经满是获得快感的想法了
+				;TranslatedMark 飲ませた媚薬の効果で、もはや彼女の頭の中は快感を得ることで埋め尽くされているようだ
+				PRINTFORMW %ANAME(MASTER)%突然在下面往上顶，她愉悦地发出了娇声
+				;TranslatedMark %ANAME(MASTER)%が不意に下から突き上げてやると、嬌声を上げて悦ぶ
+				PRINTFORMW 不久，配合她的绝顶，%ANAME(MASTER)%也一起射精了，她用力地仰着身体，发出了娇声
+				;TranslatedMark やがて彼女の絶頂に合わせて%ANAME(MASTER)%も射精すると、大きく背中を反らしながら嬌声を響かせた
 			CASE 5 
-				PRINTFORMW 在她中放出第几次射精，大大地喘息，无力地突然倒下了
-				PRINTFORMW 在床上一边痉挛一边喘气，从雌孔%ANAME(MASTER)%放出的精液溢出
-				PRINTFORMW 看着她颤抖的脸，一边流着泪一边瞪着我
-				PRINTFORMW 好像还很健康，%ANAME(MASTER)%无法很好地抵抗的她埋伏在一起再次开始侵犯
+				PRINTFORMW 在她的里面射了不知道多少次精后，她大口大口地喘着气，无力地倒下了
+				;TranslatedMark 彼女の中に何度目かの射精を放つと、大きく喘ぎ、力なくばったりと倒れ込んだ
+				PRINTFORMW 在床上一边抽搐一边喘息，%ANAME(MASTER)%的精液从她的雌穴里滴答滴答地溢出来
+				;TranslatedMark ベッドの上で痙攣しながら息を荒げ、雌穴からは%ANAME(MASTER)%が放った精液がごぽっと溢れている
+				PRINTFORMW %ANAME(MASTER)%看向颤抖着的她的脸的时候，发现她流着泪怒视着%ANAME(MASTER)%
+				;TranslatedMark 震える彼女の顔を覗き込むと、涙を流しながらこちらを睨みつけてきた
+				PRINTFORMW 看来她还很有精神的样子，%ANAME(MASTER)%把无法进行有力抵抗的她按在了地上，再次开始侵犯起来
+				;TranslatedMark まだまだ元気の様だ、%ANAME(MASTER)%はろくに抵抗も出来ない彼女を組み伏せると再び犯し始めた
 			CASE 6 
-				PRINTFORMW 虽然女儿快要被侵犯了，但她却没有哭也没有闹，是下定决心了吗？
-				PRINTFORMW 虽然是乐，但是没有反应也很无聊。%ANAME(MASTER)%想在她的身体上涂抹带媚药的润滑液
-				PRINTFORMW 并且踏踏实实地持续爱抚的话，逐渐无表情的脸带红，露出了甜的呼吸
-				PRINTFORMW 把包在她身上的肉棒在裂缝中擦了几次，她害羞地微微点了点头
+				PRINTFORMW 少女眼看就要被侵犯了，却不哭也不挣扎，也许是已经做好了精神准备，她闭上了眼睛
+				;TranslatedMark 娘は犯される寸前だというのに泣きもせず暴れもせず、覚悟を決めているのか瞳を閉じてされるがままだ
+				PRINTFORMW 虽然这样就会很轻松，但是她没有反应也很无聊。%ANAME(MASTER)%于是就把媚药溶液涂在她的身上
+				;TranslatedMark 楽ではあるが反応が無いのもつまらない。%ANAME(MASTER)%は媚薬入りのローションを彼女の身体に塗りたくる
+				PRINTFORMW 然后慢慢地爱抚她，她的脸上逐渐泛出红色，发出甜美的喘息声
+				;TranslatedMark そしてじっくりと愛撫を続けてやると、次第に無表情の顔に赤みを帯び、甘い吐息を漏らしだした
+				PRINTFORMW %ANAME(MASTER)%压在她身上，用阴茎在她的蜜裂上摩擦了几下之后，她害羞地微微点了点头
+				;TranslatedMark 彼女に覆いかぶさりペニスを割れ目に何度か擦り付けてやると、彼女は恥ずかしそうに小さく頷いた
 			CASE 7 
-				PRINTFORMW 使散乱地闹腾的她用力量老实
-				PRINTFORMW 被遮盖的样子硬插入的话，她流眼泪呼喊，挣扎逃跑
-				PRINTFORMW 把腰狠狠地砸到她深处，吓得直哆嗦，直眨巴着眼睛呻吟
-				PRINTFORMW 不久，一边抽泣一边恳求温柔的她，一边亲吻一边温柔地侵犯了
+				PRINTFORMW 用暴力把挣扎的她压制住了
+				;TranslatedMark 散々に暴れる彼女を力づくで大人しくさせる
+				PRINTFORMW 当她被压在身下强行插入时，她流着泪呼喊着，挣扎着想要逃走
+				;TranslatedMark 覆い被さる格好で無理矢理挿入すると、彼女は涙を流して叫び、逃れようともがく
+				PRINTFORMW 动起腰不停地用阴茎狠狠撞击着她，让她直翻白眼，不断地呻吟
+				;TranslatedMark 腰を彼女の深くまで乱暴に何度も何度も打ち付けると、ビクンビクンと身を震わせて目を白黒させて呻いた
+				PRINTFORMW 她最终哭了出来，乞求%ANAME(MASTER)%温柔点，于是%ANAME(MASTER)%吻了她一下之后才温柔地侵犯她
+				;TranslatedMark やがて泣きじゃくりながら、優しくしてと懇願してきた彼女を、キスをしながら優しく犯してやった
 			CASE 8 
-				PRINTFORMW 将肉棒扭进她的深处，由于过度疼痛而使嘴巴一张一合的
-				PRINTFORMW 看着流着泪的她停止了腰部的动作，在熟悉之前给予她轻轻的亲吻和爱抚
-				PRINTFORMW 一边安慰一边哭一边批评的她，与爱抚持续缓慢的抽送的话，一点点喘息声音开始露出
-				PRINTFORMW 是不是原本就有天赋，在你走向极限的时候，她也亲自摆动着腰
+				PRINTFORMW 把阴茎插到她深处，痛得让她张大了嘴
+				;TranslatedMark 彼女の奥深くまでペニスを捻じりこむと、あまりの痛みで口をパクパクとさせている
+				PRINTFORMW 看见流着泪的她，%ANAME(MASTER)%停止了动作，在她适应之前轻轻的亲吻和爱抚着她
+				;TranslatedMark 涙を流す彼女を見て腰の動きを止め、馴染むまで軽いキスと愛撫をしてやる
+				PRINTFORMW 安慰着一边哭诉一边指责着的她，爱抚她的同时把抽插速度放缓之后，逐渐发出了一点喘息声
+				;TranslatedMark 泣きながら批難してくる彼女をなだめつつ、愛撫とゆるい抽送を続けていると、少しずつ喘ぎ声が漏れ出す
+				PRINTFORMW 也许有这方面的天赋吧，在你快到极限的时候她就会扭着腰迎合着你
+				;TranslatedMark 元々素質があったのか、あなたが限界が向かえる頃には彼女も自ら腰を振りだしていた
 			CASE 9 
-				PRINTFORMW 狠狠地侵犯她疲劳了的%ANAME(MASTER)%，突然倒在床上
-				PRINTFORMW 她被你抱在怀里，一边大声呼吸一边有时痉挛
-				PRINTFORMW 偶然与她目光相对，忽然转移了视线,不过，也不打算逃跑
-				PRINTFORMW 再次为她那可爱的举止而兴奋不已，她不再反抗
+				PRINTFORMW 进行了各种各样侵犯之后疲惫的%ANAME(MASTER)%，直接躺在了床上
+				;TranslatedMark 散々彼女を犯し疲れた%ANAME(MASTER)%は、ばったりとベッドに倒れ込んだ
+				PRINTFORMW 她被你的手臂抱在怀里，不断地喘着粗气，偶尔颤抖着
+				;TranslatedMark 彼女はあなたの腕の中に抱かれたまま、大きく呼吸を繰り返しながら時折痙攣している
+				PRINTFORMW 突然和她交错的瞬间，她移开了视线，但是她却没有逃脱%ANAME(MASTER)%的控制
+				;TranslatedMark ふと彼女と目が合うと、ふいと目を逸らしてされてしまったが、しかし逃げようともしない
+				PRINTFORMW 她那可爱的反应让%ANAME(MASTER)%再次兴奋兴奋，直接压在她身上，让她再也无法抵抗
+				;TranslatedMark その愛らしい仕草に再び興奮し、彼女に覆いかぶさると、もはや彼女も抵抗しなかった
 			CASE 10 
-				PRINTFORMW 当问她为什么不抵抗她时，她回答说，她和以前一样不会改变。好象有什么原因似的
-				PRINTFORMW 停止更多的探索，在那里的爱抚后，把肉棒插入她的雌穴
-				PRINTFORMW 象擦上蠢动的阴道肉一样地持续活塞的话，不久从她抱紧了
-				PRINTFORMW 毫不隐瞒地一边发出喘息声，一边接受你的她中，放出了决心高涨
+				PRINTFORMW %ANAME(MASTER)%问她为什么不作抵抗，她说她只是和以前而已一样。似乎背后有什么故事
+				;TranslatedMark 何故か抵抗しない彼女に抵抗しないのかと聞くと、今までと変わらないと告げる。何やらわけありの様だ
+				PRINTFORMW 不再继续追问，在爱抚完之后，%ANAME(MASTER)%用阴茎插入了她的雌穴
+				;TranslatedMark それ以上の詮索は止め、そこそこの愛撫の後、ペニスを彼女の雌穴に挿入していく
+				PRINTFORMW 阴茎的抽插不断地摩擦着她那一缩一缩的小穴，之后她就反抱过来
+				;TranslatedMark 蠢く膣肉に擦り付ける様にピストンを続けていくと、やがて彼女の方から抱きついてきた
+				PRINTFORMW 她毫不遮羞地发出呻吟的声音，%ANAME(MASTER)%很快就在她那纳入了阴茎的小穴中不假思索地射了出来
+				;TranslatedMark 隠すことも無く喘ぎ声を上げながら、あなたをを受け入れる彼女の中に、思い切り昂ぶりを放った
 			CASE 11
-				PRINTFORMW 对恳求拜托返回家的她，告诉如果使之满足自己返回
-				PRINTFORMW 她用恐怖的表情凝视着%ANAME(MASTER)%的肉棒，但不久就胆怯地伸出手
-				PRINTFORMW 虽然是笨拙的动作，但与生女特有的害羞动作相结合反而促使%ANAME(MASTER)%的兴奋
-				PRINTFORMW 不久%ANAME(MASTER)%射精了,不过，女儿还看肉棒硬的现实一边哭一边请求原谅
-				PRINTFORMW 可是%ANAME(MASTER)%哭喊着压制讨厌的她，强行扭进了肉棒
+				PRINTFORMW 她乞求%ANAME(MASTER)%放她回家，%ANAME(MASTER)%告诉她如果自己满足了就让她回去
+				;TranslatedMark お願いお家に返してと懇願する彼女に、自分を満足させられたら帰してやると告げる
+				PRINTFORMW 她用害怕的表情盯着%ANAME(MASTER)%的阴茎，然后提心吊胆地用手开始握着肉棒上下撸动
+				;TranslatedMark 彼女は%ANAME(MASTER)%のペニスを恐怖の表情で見つめていたが、やがておずおずと手を伸ばし扱き出した
+				PRINTFORMW 虽然动作笨拙，但她作为处女特有的羞涩动作相结合反而促使%ANAME(MASTER)%变得更兴奋
+				;TranslatedMark 拙い動きだったが、生娘特有の恥じらいの仕草と相まって却って%ANAME(MASTER)%の興奮を促す
+				PRINTFORMW 不久%ANAME(MASTER)%射精了，但是少女看到阴茎还很硬，哭着求饶
+				;TranslatedMark やがて%ANAME(MASTER)%は射精したが、娘はまだペニスが硬いままなのを見て泣きながら許しを請う
+				PRINTFORMW %ANAME(MASTER)%压住了哭喊着的抗拒着的她，强行将阴茎塞进她的小穴里
+				;TranslatedMark しかし%ANAME(MASTER)%は泣き喚いて嫌がる彼女を押さえ込み、無理矢理にペニスをねじ込んだ
 			CASE 12
-				PRINTFORMW 给女儿加上项圈，用后背狠狠地钉着腰
-				PRINTFORMW 最初是讨厌的女儿,不过，明白现在拼命咬下唇打算压住娇声的
-				PRINTFORMW 用手掌啪啪地拍打屁股，那个每次紧紧地勒紧阴道发出难过的喘息声
-				PRINTFORMW 不久，屈服于%ANAME(MASTER)%攻势的她，不再抵抗，坦率地开始娇声笑语
+				PRINTFORMW 少女的脖子被戴上了项圈，被%ANAME(MASTER)%从后面不停地猛烈撞击着
+				;TranslatedMark 娘に首輪をつけてバックで腰をガンガンと打ち付けている
+				PRINTFORMW 一开始拒绝的少女，现在拼命咬住嘴唇，想要抑制住她娇媚的呻吟
+				;TranslatedMark 最初は嫌がっていた娘だが、今は必死で下唇を噛んで嬌声を押さえ込もうとしているのが分かる
+				PRINTFORMW %ANAME(MASTER)%用手掌拍打她屁股的时候，她紧紧地缩紧小穴，同时发出喘息声
+				;TranslatedMark 尻を掌でぱぁんとはたくと、その度に膣をキュッと締めつけ切なげな喘ぎ声を上がる
+				PRINTFORMW 终于屈服于%ANAME(MASTER)%进攻的她，停止了抵抗，开始直接地发出了娇声
+				;TranslatedMark やがて%ANAME(MASTER)%の攻めに屈服した彼女は、抵抗もやめ、素直に嬌声を上げはじめた
 			CASE 13
-				PRINTFORMW 精心地责弄着超乎想象的肥胖女儿的身体
-				PRINTFORMW 她因为恐惧而不能很好地抵抗，一直被她欺负着
-				PRINTFORMW 虽然露出了厌恶的表情，但是那脸颊却一点一点的上气
-				PRINTFORMW 不久%ANAME(MASTER)%小声嘟囔道，肉棒被割破，再三次擦拭，请温柔一点
-				PRINTFORMW 我轻轻地吻了她一口，为了缓解疼痛而花时间慢慢地插入了肉棒
+				PRINTFORMW 精心玩弄着比想象中更丰满的少女的身体
+				;TranslatedMark 想像以上に肉付きの良い娘の身体を、丹念に弄っていく
+				PRINTFORMW 她因为恐惧而不能好好进行抵抗，一直被玩弄着
+				;TranslatedMark 彼女は恐怖でろくに抵抗も出来ず、されるがままになっている
+				PRINTFORMW 虽然脸上露出厌恶的表情，但脸颊却能看出来她一点一点地进入了状态
+				;TranslatedMark 嫌がる表情を見せるが、しかしその頬は少しずつ上気していく
+				PRINTFORMW 不久%ANAME(MASTER)%把阴茎放在蜜裂上摩擦了两次三次，她于是小声地说着"请温柔点"
+				;TranslatedMark やがて%ANAME(MASTER)%がペニスを割れ目に二度三度擦り付けると、優しくしてくださいと小さく呟いた
+				PRINTFORMW 轻轻地吻了她一下，为了缓和她的疼痛，用很长时间慢慢来才把阴茎插进去
+				;TranslatedMark 彼女に軽く口付けをしてやり、痛みを和らげるように時間をかけてゆっくりとペニスを挿れていった
 			CASE 14
-				PRINTFORMW %ANAME(MASTER)%将女儿抱到肉棒上强行横跨
-				PRINTFORMW 由于深深地刺入了的肉棒的疼痛女儿%ANAME(MASTER)%一边抱住一边哭
-				PRINTFORMW 象安慰孩子一样地一边摇动腰，脖子和胸一边使之爬舌头和手指的话，时常使之颤动身体
-				PRINTFORMW 在其内混入哭声变得能听见喘息声，一点点加快腰的运动以二人高处登上了
+				PRINTFORMW %ANAME(MASTER)%把少女抱到阴茎上，强迫她跨坐下去
+				;TranslatedMark %ANAME(MASTER)%は娘を抱き寄せペニスの上に無理矢理跨らせている
+				PRINTFORMW 阴茎深深刺进小穴的疼痛让少女抱着%ANAME(MASTER)%哭泣
+				;TranslatedMark 深々と突き刺さったペニスの痛みで娘は%ANAME(MASTER)%に抱きつきながら泣いている
+				PRINTFORMW 一边像哄孩子一样安慰着她，一边摇晃着腰，然后让舌头和手指在她的脖子和胸脯上舔弄，让她的身体不时颤抖
+				;TranslatedMark 子供をあやすように腰を揺すりながら、首筋や胸に舌や指を這わせると、時折身を震わせる
+				PRINTFORMW 听到了其中混杂着哭声的喘息声之后，%ANAME(MASTER)%一点点地加快了腰的动作，最后两个人一起达到了高潮
+				;TranslatedMark その内泣き声に混じり喘ぎ声が聞こえるようになり、少しずつ腰の動きを早めて二人で高みに登っていった
 		ENDSELECT
-		CALL FUCK(MASTER, "Ｃ, 性交, 射精, 奉仕", "接吻喪失, 童貞喪失", 0, @"%ANAME(対象)%の\@ RAND:2 ? 秘貝 # 唇\@", "", @"%ANAME(対象)%の膣")
+		CALL FUCK(MASTER, "Ｃ, 性交, 射精, 奉仕", "キス喪失, 童貞喪失", 0, @"%ANAME(対象)%の\@ RAND:2 ? 秘貝 # 唇\@", "", @"%ANAME(対象)%の膣")
 		PRINTFORML 
-		PRINTFORMW 成功地掠夺了！
-		PRINTFORMW 听说了这个传闻之后、要被流放的流氓们来入伙了
+		PRINTFORMW 掠夺成功了！
+		;TranslatedMark 略奪を成功させた！
+		PRINTFORMW 听到掠夺的传言后，原本打算流浪的流氓也加入了我们
+		;TranslatedMark 噂を聞きつけ、おこぼれに預かろうとするならず者共が仲間になりに来た
 		兵数 = ((RAND:9 * 500) + 500)
 		COUNTRY_SOLDIER:(CFLAG:MASTER:所属) += 兵数
-		PRINTFORML 兵数が{兵数}増えた！
-		CALL COLOR_PRINT("引起了其他国家的反感", カラー_注意)
+		PRINTFORML 兵力增加了{兵数}！
+		;TranslatedMark 兵数が{兵数}増えた！
+		CALL COLOR_PRINT("諸国の反感を買ったようです", カラー_注意)
 		PRINTFORMW
 		FOR LOCAL, 1, MAX_COUNTRY
 			SIF IS_COUNTRY(LOCAL)
@@ -194,8 +285,10 @@ ELSEIF RESULT == 1
 		NEXT
 	ENDIF
 ELSE
-	PRINTFORMW 虽然有危险，但还是想瞄准上半球
-	PRINTFORMW 那么，瞄准谁呢……
+	PRINTFORMW 虽然危险，不过还是瞄准上等货吧
+	;TranslatedMark 危険だが上玉を狙うとしよう
+	PRINTFORMW 那么，目标是谁呢……
+	;TranslatedMark さて、誰を狙うとするか……
 	CALL SINGLE_DRAWLINE
 	CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("BANDIT_PILLAGE", "BANDIT_PILLAGE")
 	対象 = RESULT
@@ -203,111 +296,181 @@ ELSE
 		GOTO CANCEL
 	ELSE
 		PRINTFORMW 瞄准%ANAME(対象)%吧……
-		PRINTFORMW 听说村子被袭击而赶过来的%ANAME(対象)%，被%ANAME(MASTER)%连同部下一起袭击了
+		;TranslatedMark %ANAME(対象)%を狙うこととしよう……
+		PRINTFORMW %ANAME(MASTER)%和部下一起袭击了因为听说村子被袭击而赶来的%ANAME(対象)%
+		;TranslatedMark 村が襲われていると聞いて駆け付けた%ANAME(対象)%へ、%ANAME(MASTER)%は部下共々襲いかかった
 		PRINTFORML ・
 		PRINTFORML ・
 		PRINTFORMW ・
 		;対象と主人公それぞれの武闘と知略の合計値で判定、対象は2倍から6倍、主人公は1倍から5倍の補正がつく、負けた場合処刑
 		IF ((ABL:対象:武闘 + ABL:対象:知略) * (RAND:5 + 2)) >= ((ABL:MASTER:武闘 + ABL:MASTER:知略) * (RAND:5 + 1))
-			PRINTFORMW %ANAME(対象)%的实力超出想象
-			PRINTFORMW 败北了……
-			PRINTFORML %ANAME(対象)%的人问我是否还有剩下的话语。
-			CALL ASK_MULTI("祈求活命", "声称是被手下威胁才做的", "杀一个手下，冒充自己")
+			PRINTFORMW %ANAME(対象)%的实力超出了想象
+			;TranslatedMark %ANAME(対象)%の実力は想像以上だった
+			PRINTFORMW 失败了……
+			;TranslatedMark 敗北してしまった……
+			PRINTFORML %ANAME(対象)%问："没有什么要说的了吗？"
+			;TranslatedMark 言い残すことはないかと、%ANAME(対象)%は訊いてきた
+			CALL ASK_MULTI("命乞いをする", "手下に脅されてやったと主張する", "殺せ、と伝える")
 			IF RESULT == 0
-				PRINTFORMW %ANAME(MASTER)%是擦头、乞求生命
-				PRINTFORMW 虽然，但是不干脆的态度，反而损害了%ANAME(対象)%的心理
-				PRINTFORMW 恳求也没用，%ANAME(MASTER)%被斩首了……
+				PRINTFORMW %ANAME(MASTER)%把头贴在地上，求%ANAME(対象)%放他一条生路
+				;TranslatedMark %ANAME(MASTER)%は地に頭を擦りつけ、命乞いをした
+				PRINTFORMW 但是，他那没有节操的态度反而降低了他在%ANAME(対象)%中的心里印象
+				;TranslatedMark だが潔くない態度は、%ANAME(対象)%の心証をかえって損ねてしまったようだ
+				PRINTFORMW 恳求也白费了，%ANAME(MASTER)%被斩首了……
+				;TranslatedMark 懇願もむなしく、%ANAME(MASTER)%はさらし首にされた……
 			ELSEIF RESULT == 1
-				PRINTFORMW 只要自己得救就好
-				PRINTFORMW 这样考虑的%ANAME(MASTER)%决定出售部下
-				PRINTFORMW ……但是，部下是部下，好象卖了%ANAME(MASTER)%
-				PRINTFORMW 结果，%ANAME(MASTER)%的部下都被处刑了……
+				PRINTFORMW 只要自己得救就好了
+				;TranslatedMark 自分が助かればそれでいい
+				PRINTFORMW 这样想着的%ANAME(MASTER)%决定出卖部下
+				;TranslatedMark そう考えた%ANAME(MASTER)%は、部下を売ることにした
+				PRINTFORMW ……但是，部下也有同样的想法，似乎出卖了%ANAME(MASTER)%
+				;TranslatedMark ……だが、部下は部下で、%ANAME(MASTER)%を売ったらしい
+				PRINTFORMW 结果，%ANAME(MASTER)%和部下一起被处刑了……
+				;TranslatedMark 結局、%ANAME(MASTER)%は部下共々処刑されてしまった……
 			ELSE
-				PRINTFORMW 已经
-				PRINTFORMW 这样领悟了的%ANAME(MASTER)%，悄悄地使之砍自己的头的那样传达
-				PRINTFORMW 对于那种干脆的态度%ANAME(対象)%似乎很佩服，但是没有免除处刑……
+				PRINTFORMW 事情已经到这一步了
+				;TranslatedMark もはやこれまで
+				PRINTFORMW 明白了这一点的%ANAME(MASTER)%，立刻请%ANAME(対象)%把自己砍首
+				;TranslatedMark そう悟った%ANAME(MASTER)%は、とっとと自分の首を刎ねるよう伝える
+				PRINTFORMW %ANAME(対象)%似乎很佩服他那耿直的态度，但并没有因此而免除他的处刑……
+				;TranslatedMark その潔い態度に%ANAME(対象)%は感心したようだが、処刑が免除されることはなかった……
 			ENDIF
 			FLAG:強制エンドフラグ = 1
 			DAILY_CANCEL = 1
 			RETURN 1
 		ELSE
 			IF RAND:2 == 0
-				PRINTFORMW 被目标逃走了……
+				PRINTFORMW 目标逃跑了……
+				;TranslatedMark ターゲットに逃げられてしまった……
 			ELSE
-				PRINTFORMW 抓住了目标！
-				PRINTFORMW 回到的巢穴后，立刻将%ANAME(対象)%带入睡床
+				PRINTFORMW 抓住目标了！
+				;TranslatedMark ターゲットを捕まえた！
+				PRINTFORMW 回到基地后%ANAME(MASTER)%立刻把%ANAME(対象)%带到了床上
+				;TranslatedMark アジトに帰ると早速%ANAME(対象)%を寝床へと連れ込んだ
 				PRINTFORML 
 				SELECTCASE RAND:12
 					CASE 0 
-						PRINTFORMW 将%ANAME(対象)%束缚起来塞上嚼子口，从背后激烈地侵犯着。
-						PRINTFORMW 每次取出肉棒，从结合部溢出无法收纳的精液
-						PRINTFORMW 被紧绷刺激，再次射精的话，%ANAME(対象)%一边发出呻吟声一边使之跳跃了身体
-						PRINTFORMW 对一边流眼泪一边请求宽恕的%ANAME(対象)%的表情兴奋，持续了新的凌辱
+						PRINTFORMW %ANAME(対象)%被绑起来，戴上了猿轡，%ANAME(MASTER)%从背后激烈地侵犯着她
+						;TranslatedMark %ANAME(対象)%を縛り上げ猿轡をはめながら、背後から激しく犯している
+						PRINTFORMW 每次抽出阴茎，过多而无法收纳的精液就会从结合部溢出来
+						;TranslatedMark ペニスを出し入れするたびに、結合部から収まりきらない精液が溢れ出てくる
+						PRINTFORMW 紧缩的小穴刺激着，让他再次射精，%ANAME(対象)%发出呻吟声，身体抽搐起来
+						;TranslatedMark キツイ締め付けに刺激され、再び射精すると、%ANAME(対象)%はうめき声を上げながらビクンと身体を跳ねさせた
+						PRINTFORMW %ANAME(対象)%流泪求饶的表情让他更加兴奋，继续着凌辱
+						;TranslatedMark 涙を流しながら許しを請う%ANAME(対象)%の表情に興奮し、更なる凌辱を続けた
 					CASE 1 
-						PRINTFORMW 推倒闹腾的%ANAME(対象)%撕下衣服的话，前戏也草草地在那里扭进肉棒
-						PRINTFORMW 忽视了她发出一阵呻吟，激烈地抽出腰
-						PRINTFORMW 想办法逃跑用全身压住%ANAME(対象)%，享受紧固起来的阴道的刺激
-						PRINTFORMW 不久临近极限，当在%ANAME(対象)%的最深处释放出精力时，%ANAME(対象)%对下腹部的热度大声疾呼
+						PRINTFORMW 推倒挣扎的%ANAME(対象)%，把衣服剥掉，前戏草草做完之后把阴茎插了进去
+						;TranslatedMark 暴れる%ANAME(対象)%を押し倒し服をはぎ取ると、前戯もそこそこにペニスをねじ込む
+						PRINTFORMW 无视了发出尖叫声抽搐着的她，激烈地用腰前后动着，在她体内反复抽插
+						;TranslatedMark あぐっとうめき声をあげ痙攣する彼女を無視し、激しく腰を前後し抽送を繰り返す
+						PRINTFORMW 用全身压着总想挣扎逃跑的她，享受着她紧绷的小穴
+						;TranslatedMark 何とか逃げようと暴れる%ANAME(対象)%を全身で押さえつけ、締め付けてくる膣の刺激を愉しんだ
+						PRINTFORMW 终于接近极限，在少女的最深处射出了精液，她重重地仰起身体，因为这第一次感受的热量而尖叫起来
+						;TranslatedMark やがて限界が近づき、%ANAME(対象)%の最奥で精を解き放つと、%ANAME(対象)%は下腹部に感じる熱に絶叫した
 					CASE 2 
-						PRINTFORMW 一边乘着%ANAME(対象)%一边激烈地打着腰
-						PRINTFORMW 她不抵抗，嘿嘿浮起空虚的笑容%ANAME(MASTER)%抱住
-						PRINTFORMW 好歹是对药中意的那样，口交使之喝下面的一粒的话更加勒紧了阴道
-						PRINTFORMW 向%ANAME(対象)%的子宫放出精液的话，提高了成为漂亮地雌的证的喘息声
+						PRINTFORMW 他压着%ANAME(対象)%，用力地动着腰，不停冲撞着她的身体
+						;TranslatedMark %ANAME(対象)%にのしかかりながら激しく腰を打ち付けている
+						PRINTFORMW 她没有抵抗，脸上露出了空洞的笑容，抱住了%ANAME(MASTER)%
+						;TranslatedMark 彼女は抵抗もせず、えへえへと虚ろな笑みを浮かべて%ANAME(MASTER)%に抱きついている
+						PRINTFORMW 看来是药效发作了，他接着又给她喂下了另一片药，然后她的阴道变得更紧了
+						;TranslatedMark どうやら薬が気に入った様だ、次の一錠を口移しで飲ませてやると更に膣を締め付けてきた
+						PRINTFORMW 向%ANAME(対象)%的子宫射出精液后，她发出了像是完全成为雌性动物一样的喘息声
+						;TranslatedMark %ANAME(対象)%の子宮へとザーメンを放つと、立派に雌となった証の喘ぎ声を上げた
 					CASE 3 
-						PRINTFORMW 将%ANAME(対象)%摔倒在床上，微微颤抖着，全身僵硬
-						PRINTFORMW 一边慢慢地爱抚害怕的她的全身，一边低声私语不伤害如果老实做着
-						PRINTFORMW %ANAME(対象)%一开始是闭着嘴,不过，踏踏实实地花时间做的话逐渐露出难过的叹息
-						PRINTFORMW 一边握着颤抖的%ANAME(対象)%的手，一边慢慢地将腰沉入湿润的雌洞里
-						PRINTFORMW 一边窥视气喘吁吁的她的情况，一边一夜之间踏踏实实地开发了
+						PRINTFORMW 把%ANAME(対象)%放在床上，她微微颤抖着，绷紧了身体
+						;TranslatedMark %ANAME(対象)%をベッドに転がすと、微かに震えながら身をこわばらせている
+						PRINTFORMW 他慢慢地爱抚着恐惧的她的身躯，轻声温柔地说如果老实的话就不会受伤
+						;TranslatedMark 怖がる彼女の全身をゆっくりと愛撫しながら、大人しくしていれば傷つけはしないと囁き懐柔する
+						PRINTFORMW %ANAME(対象)%一开始闭着嘴一句话也没说，但在爱抚了她一段时间之后，她也渐渐地发出了兴奋的呻吟
+						;TranslatedMark %ANAME(対象)%は初め口を一文字に閉じていたが、じっくりと時間をかけてやると次第に切なげな吐息を漏らしだした
+						PRINTFORMW 握着%ANAME(対象)%颤抖的手，慢慢地将腰往下沉，把阴茎缓缓插入浸湿的雌穴中
+						;TranslatedMark 震える%ANAME(対象)%の手を握りながら、じんわりと濡れている雌穴にゆっくりと腰を沈めていく
+						PRINTFORMW 观察着她喘不过气来的样子，对她的身体用了一晚来慢慢开发
+						;TranslatedMark 息を荒げる彼女の様子を窺いながら一晩中じっくりと開発してやった
 					CASE 4 
-						PRINTFORMW %ANAME(対象)%一边散漫地垂下舌头一边在%ANAME(MASTER)%上摇着腰
-						PRINTFORMW 由于给她喝了媚药的效果，她的头脑中似乎已经充满了快感
-						PRINTFORMW %ANAME(MASTER)%在不经意间从下往上顶的话，会发出娇声愉悦
-						PRINTFORMW 不久%ANAME(対象)%的顶峰合起%ANAME(MASTER)%也射精的话，很大地一边弯腰一边使之响起了娇声
+						PRINTFORMW %ANAME(対象)%吐着舌头坐在%ANAME(MASTER)%身上摇动着腰
+						;TranslatedMark %ANAME(対象)%はだらしなく舌を垂らしながら%ANAME(MASTER)%の上で腰を振っている
+						PRINTFORMW 在给她喝的媚药效果下，她的脑子里已经满是获得快感的想法了
+						;TranslatedMark 飲ませた媚薬の効果で、もはや彼女の頭の中は快感を得ることで埋め尽くされているようだ
+						PRINTFORMW %ANAME(MASTER)%突然在下面往上顶，她愉悦地发出了娇声
+						;TranslatedMark %ANAME(MASTER)%が不意に下から突き上げてやると、嬌声を上げて悦ぶ
+						PRINTFORMW 不久，配合%ANAME(対象)%的绝顶，%ANAME(MASTER)%也一起射精了，她用力地仰着身体，发出了娇声
+						;TranslatedMark やがて%ANAME(対象)%の絶頂に合わせて%ANAME(MASTER)%も射精すると、大きく背中を反らしながら嬌声を響かせた
 					CASE 5 
-						PRINTFORMW 好几次在%ANAME(対象)%中放射精的话，很大地喘息，没有力量突然倒下了
-						PRINTFORMW 在床上一边痉挛一边喘气，从雌孔%ANAME(MASTER)%放出的精液溢出
-						PRINTFORMW 看着她颤抖的脸，一边流着泪一边瞪着我
-						PRINTFORMW 看起来好像还很精神，%ANAME(MASTER)%是不能很好地反抗的%ANAME(対象)%的结合再次开始犯
+						PRINTFORMW 在%ANAME(対象)%的里面射了不知道多少次之后，她大口大口地喘着气，无力地倒下了
+						;TranslatedMark %ANAME(対象)%の中に何度目かの射精を放つと、大きく喘ぎ、力なくばったりと倒れ込んだ
+						PRINTFORMW 在床上一边抽搐一边喘息，%ANAME(MASTER)%的精液从她的雌穴里滴答滴答地溢出来
+						;TranslatedMark ベッドの上で痙攣しながら息を荒げ、雌穴からは%ANAME(MASTER)%が放った精液がごぽっと溢れている
+						PRINTFORMW %ANAME(MASTER)%看向颤抖着的她的脸的时候，发现她流着泪怒视着%ANAME(MASTER)%
+						;TranslatedMark 震える彼女の顔を覗き込むと、涙を流しながらこちらを睨みつけてきた
+						PRINTFORMW 看来她还很有精神的样子，%ANAME(MASTER)%把无法进行有力抵抗的%ANAME(対象)%按在了地上，再次开始侵犯起来
+						;TranslatedMark まだまだ元気の様だ、%ANAME(MASTER)%はろくに抵抗も出来ない%ANAME(対象)%を組み伏せると再び犯し始めた
 					CASE 6 
-						PRINTFORMW %ANAME(対象)%的人，眼看就要遭到侵犯，却没有哭泣，也没有发狂，似乎已有心理准备，闭上眼睛还在等待时机。
-						PRINTFORMW 虽然快乐，但是没有反应，所以%ANAME(MASTER)%想在她的身体上涂抹带有媚药的润滑液
-						PRINTFORMW 并且踏踏实实地持续爱抚的话，逐渐无表情的脸带红，露出了甜的呼吸
-						PRINTFORMW 把包在她身上的肉棒在裂缝中擦了几次，她害羞地微微点了点头
+						PRINTFORMW %ANAME(対象)%眼看就要被侵犯了，却不哭也不挣扎，也许是已经做好了精神准备，她闭上了眼睛
+						;TranslatedMark %ANAME(対象)%は犯される寸前だというのに泣きもせず暴れもせず、覚悟を決めているのか瞳を閉じてされるがままだ
+						PRINTFORMW 虽然这样就会很轻松，但是她没有反应也很无聊。%ANAME(MASTER)%于是就把媚药溶液涂在她的身上
+						;TranslatedMark 楽ではあるが反応が無いのも、そこで%ANAME(MASTER)%は媚薬入りのローションを彼女の身体に塗りたくる
+						PRINTFORMW 然后慢慢地爱抚她，她的脸上逐渐泛出红色，发出甜美的喘息声
+						;TranslatedMark そしてじっくりと愛撫を続けてやると、次第に無表情の顔に赤みを帯び、甘い吐息を漏らしだした
+						PRINTFORMW %ANAME(MASTER)%压在她身上，用阴茎在她的蜜裂上摩擦了几下之后，她害羞地微微点了点头
+						;TranslatedMark 彼女に覆いかぶさりペニスを割れ目に何度か擦り付けてやると、彼女は恥ずかしそうに小さく頷いた
 					CASE 7 
-						PRINTFORMW 使散乱地闹腾的%ANAME(対象)%用力量使之老实
-						PRINTFORMW 被覆盖的样子硬插入的话，%ANAME(対象)%流眼泪喊，挣扎逃跑
-						PRINTFORMW 把腰狠狠地砸到她深处，吓得直哆嗦，直眨巴着眼睛呻吟
-						PRINTFORMW 不久，一边抽泣一边恳求温柔的%ANAME(対象)%，一边接吻一边温柔地犯了
+						PRINTFORMW 用暴力把挣扎的%ANAME(対象)%压制住了
+						;TranslatedMark 散々に暴れる%ANAME(対象)%を力づくで大人しくさせる
+						PRINTFORMW 当%ANAME(対象)%被压在身下强行插入时，她流着泪呼喊着，挣扎着想要逃走
+						;TranslatedMark 覆い被さる格好で無理矢理挿入すると、%ANAME(対象)%は涙を流して叫び、逃れようともがく
+						PRINTFORMW 动起腰不停地用阴茎狠狠撞击着她，让她直翻白眼，不断地呻吟
+						;TranslatedMark 腰を彼女の深くまで乱暴に何度も何度も打ち付けると、ビクンビクンと身を震わせて目を白黒させて呻いた
+						PRINTFORMW 她最终哭了出来，乞求%ANAME(MASTER)%温柔点，于是%ANAME(MASTER)%吻了%ANAME(対象)%一下之后才温柔地侵犯她
+						;TranslatedMark やがて泣きじゃくりながら、優しくしてと懇願してきた%ANAME(対象)%を、キスをしながら優しく犯してやった
 					CASE 8 	
-						PRINTFORMW 突然扭进到%ANAME(対象)%深处的肉棒，由于疼痛使之嘴巴啪嗒啪嗒地做
-						PRINTFORMW 看着流着泪的她停止了腰部的动作，在熟悉之前给予她轻轻的亲吻和爱抚
-						PRINTFORMW 一边安慰一边哭一边批评的她，与爱抚持续缓慢的抽送的话，一点点喘息声音开始露出
-						PRINTFORMW 原本是喜欢的东西吗，在你走向极限的时候她也亲自摆动着腰
+						PRINTFORMW 把阴茎插到%ANAME(対象)%深处的时候，剧烈的疼痛让她张大了嘴
+						;TranslatedMark いきなり%ANAME(対象)%の奥深くまでペニスを捻じりこむと、痛みで口をパクパクとさせている
+						PRINTFORMW 看见流着泪的她，%ANAME(MASTER)%停止了动作，在她适应之前轻轻的亲吻和爱抚着她
+						;TranslatedMark 涙を流す彼女を見て腰の動きを止め、馴染むまで軽いキスと愛撫をしてやる
+						PRINTFORMW 安慰着一边哭诉一边指责着的她，爱抚她的同时把抽插速度放缓之后，逐渐发出了一点喘息声
+						;TranslatedMark 泣きながら批難してくる彼女をなだめつつ、愛撫とゆるい抽送を続けていると、少しずつ喘ぎ声が漏れ出す
+						PRINTFORMW 也许本来她就很喜欢这样吧，在你快到极限的时候她也会扭着腰迎合着你
+						;TranslatedMark 元々好き物だったのか、あなたが限界が向かえる頃には彼女も自ら腰を振りだしていた
 					CASE 9
-						PRINTFORMW 对恳求拜托返回家的她，告诉如果使之满足自己返回
-						PRINTFORMW 她用恐怖的表情凝视着%ANAME(MASTER)%的肉棒，但不久就胆怯地伸出手
-						PRINTFORMW 虽然是笨拙的动作，但与生女特有的害羞动作相结合反而促使%ANAME(MASTER)%的兴奋
-						PRINTFORMW 不久%ANAME(MASTER)%射精了,不过，女儿还看肉棒硬的现实一边哭一边请求原谅
-						PRINTFORMW 可是%ANAME(MASTER)%哭喊着压制讨厌的她，强行扭进了肉棒
+						PRINTFORMW 她乞求%ANAME(MASTER)%放她回家，%ANAME(MASTER)%告诉她如果自己满足了就让她回去
+						;TranslatedMark お願いお家に返してと懇願する彼女に、自分を満足させられたら帰してやると告げる
+						PRINTFORMW 她用害怕的表情盯着%ANAME(MASTER)%的阴茎，然后提心吊胆地用手开始握着肉棒上下撸动
+						;TranslatedMark 彼女は%ANAME(MASTER)%のペニスを恐怖の表情で見つめていたが、やがておずおずと手を伸ばし扱き出した
+						PRINTFORMW 虽然动作笨拙，但她作为处女特有的羞涩动作相结合反而促使%ANAME(MASTER)%变得更兴奋
+						;TranslatedMark 拙い動きだったが、生娘特有の恥じらいの仕草と相まって却って%ANAME(MASTER)%の興奮を促す
+						PRINTFORMW 不久%ANAME(MASTER)%射精了，但是少女看到阴茎还很硬，哭着求饶
+						;TranslatedMark やがて%ANAME(MASTER)%は射精したが、娘はまだペニスが硬いままなのを見て泣きながら許しを請う
+						PRINTFORMW %ANAME(MASTER)%压住了哭喊着的抗拒着的她，强行将阴茎塞进她的小穴里
+						;TranslatedMark しかし%ANAME(MASTER)%は泣き喚いて嫌がる彼女を押さえ込み、無理矢理にペニスをねじ込んだ
 					CASE 10
-						PRINTFORMW %ANAME(対象)%加上项圈，背部用力地钉着腰
-						PRINTFORMW 最初讨厌的%ANAME(対象)%，现在知道了拼命咬下唇打算压住娇声的事
-						PRINTFORMW 用手掌啪啪地拍打屁股，那个每次紧紧地勒紧阴道发出难过的喘息声
-						PRINTFORMW 不久，屈服于%ANAME(MASTER)%攻势的她，不再抵抗，坦率地开始娇声笑语
+						PRINTFORMW %ANAME(対象)%的脖子戴上了项圈，被%ANAME(MASTER)%从后面不停地猛烈撞击着
+						;TranslatedMark %ANAME(対象)%に首輪をつけてバックで腰をガンガンと打ち付けている
+						PRINTFORMW 一开始还很抗拒的%ANAME(対象)%，现在拼命咬住嘴唇，想要抑制住她娇媚的呻吟
+						;TranslatedMark 最初は嫌がっていた%ANAME(対象)%だが、今は必死で下唇を噛んで嬌声を押さえ込もうとしているのが分かる
+						PRINTFORMW %ANAME(MASTER)%用手掌拍打她屁股的时候，她紧紧地缩紧小穴，同时发出喘息声
+						;TranslatedMark 尻を掌でぱぁんとはたくと、その度に膣をキュッと締めつけ切なげな喘ぎ声を上がる
+						PRINTFORMW 终于屈服于%ANAME(MASTER)%进攻的她，停止了抵抗，开始直接地发出了娇声
+						;TranslatedMark やがて%ANAME(MASTER)%の攻めに屈服した彼女は、抵抗もやめ、素直に嬌声を上げはじめた
 					CASE 11	
-						PRINTFORMW %ANAME(MASTER)%抱着%ANAME(対象)%强行横跨在肉棒上
-						PRINTFORMW 由于深深地扎了的肉棒的压迫感，%ANAME(対象)%一边抱住%ANAME(MASTER)%一边呻吟着
-						PRINTFORMW 象安慰孩子一样地一边摇动腰，脖子和胸一边使之爬舌头和手指的话，时常使之颤动身体
-						PRINTFORMW 那内混杂着呻吟声变得能听见喘息声，一点点加快腰的运动，二人登上了高处
+						PRINTFORMW %ANAME(MASTER)%把%ANAME(対象)%抱到阴茎上，强迫她跨坐下去
+						;TranslatedMark %ANAME(MASTER)%は%ANAME(対象)%を抱き寄せペニスの上に無理矢理跨らせている
+						PRINTFORMW 由于深深刺入小穴的阴茎所带来的压迫感，%ANAME(対象)%一边抱住%ANAME(MASTER)%一边呻吟着
+						;TranslatedMark 深々と突き刺さったペニスの圧迫感で、%ANAME(対象)%は%ANAME(MASTER)%に抱きつきながら呻いている
+						PRINTFORMW 一边像哄孩子一样安慰着她，一边摇晃着腰，然后让舌头和手指在她的脖子和胸脯上舔弄，让她的身体不时颤抖
+						;TranslatedMark 子供をあやすように腰を揺すりながら、首筋や胸に舌や指を這わせると、時折身を震わせる
+						PRINTFORMW 听到了其中混杂着哭声的喘息声之后，%ANAME(MASTER)%一点点地加快了腰的动作，最后两个人一起达到了高潮
+						;TranslatedMark その内呻き声に混じり喘ぎ声が聞こえるようになり、少しずつ腰の動きを早めて二人で高みに登っていった
 				ENDSELECT
-				CALL FUCK_RAPE(対象, GET_ID(MASTER), @"%ANAME(MASTER)%の\@ RAND:2 ? 肉棒 # 唇\@", @"%ANAME(MASTER)%")
-				CALL FUCK(MASTER, "Ｃ, 性交, 射精, 奉仕", "接吻喪失, 童貞喪失", 0, @"%ANAME(対象)%の\@ RAND:2 ? 秘貝 # 唇\@", "", @"%ANAME(対象)%の膣")
+				CALL FUCK_RAPE(対象, GET_ID(MASTER), @"%ANAME(MASTER)%の\@ RAND:2 ? ペニス # 唇\@", @"%ANAME(MASTER)%")
+				CALL FUCK(MASTER, "Ｃ, 性交, 射精, 奉仕", "キス喪失, 童貞喪失", 0, @"%ANAME(対象)%の\@ RAND:2 ? 秘貝 # 唇\@", "", @"%ANAME(対象)%の膣")
 				PRINTFORML 
 				PRINTFORMW 掠夺成功了！
-				PRINTFORMW %ANAME(対象)%被抓了！
-				CALL CAPTURE(対象, 土匪)
-				CALL COLOR_PRINT("引起了其他国家的反感", カラー_注意)
+				;TranslatedMark 略奪を成功させた！
+				PRINTFORMW 捕捉到了%ANAME(対象)%！
+				;TranslatedMark %ANAME(対象)%を捕えました！
+				CALL CAPTURE(対象, 野盗)
+				CALL COLOR_PRINT("諸国の反感を買ったようです", カラー_注意)
 				PRINTFORMW
 				FOR LOCAL, 1, MAX_COUNTRY
 					SIF IS_COUNTRY(LOCAL)
