@@ -50,26 +50,28 @@ LOCALS:0 = 建立殖民地
 LOCALS:1 = 建立傀儡国
 LOCALS:10 = 自国士官的移籍
 LOCALS:11 = 召喚従属国的士官
-LOCALS:12 = 派遣奴隶到外交部
-LOCALS:13 = 收押奴隶
+;LOCALS:12 = 派遣奴隶到外交部
+;LOCALS:13 = 收押奴隶
 LOCALS:20 = 转让领土
 LOCALS:21 = 接收领土
 LOCALS:22 = 转让资金
 LOCALS:23 = 转让士兵
 LOCALS:24 = 接收士兵
-LOCALS:30 = 让従属国独立
-LOCALS:31 = 合并従属国
-LOCALS:40 = 特殊行動
-LOCALS:50 = 与永久同盟国・従属国交流
+LOCALS:25 = 接收/转让俘虏
+LOCALS:26 = 变更従属形式
+;LOCALS:30 = 让従属国独立
+;LOCALS:31 = 合并従属国
+LOCALS:50 = 特殊行動
+;LOCALS:50 = 与永久同盟国・従属国交流
 LOCALS:51 = 使役奴隷
-LOCALS:52 = 运营学校
+LOCALS:52 = 研究・教育機関
 
 ;未実装部分は選択不可
-LOCAL:112 = 1
-LOCAL:113 = 1
-LOCAL:130 = 1
-LOCAL:131 = 1
-LOCAL:140 = 1
+;LOCAL:112 = 1
+;LOCAL:113 = 1
+;LOCAL:130 = 1
+;LOCAL:131 = 1
+;LOCAL:140 = 1
 LOCAL:150 = 1
 LOCAL:151 = 1
 LOCAL:152 = 1
@@ -119,34 +121,34 @@ FOR LOCAL:0, 20, 30
 NEXT
 PRINTL
 
-PRINT ◇管理従属国◇
-FOR LOCAL:0, 30, 40
-	IF LOCALS:(LOCAL:0) != ""
-		PRINTL 
-		IF LOCAL:(LOCAL:0 + 100)
-			SETCOLOR カラー_選択不可
-			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
-			RESETCOLOR
-		ELSE
-			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
-		ENDIF
-	ENDIF
-NEXT
-PRINTL
+;PRINT ◇管理従属国◇
+;FOR LOCAL:0, 30, 40
+;	IF LOCALS:(LOCAL:0) != ""
+;		PRINTL 
+;		IF LOCAL:(LOCAL:0 + 100)
+;			SETCOLOR カラー_選択不可
+;			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+;			RESETCOLOR
+;		ELSE
+;			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+;		ENDIF
+;	ENDIF
+;NEXT
+;PRINTL
 
 PRINT ◇特殊行動◇
-FOR LOCAL:0, 40, 50
-	IF LOCALS:(LOCAL:0) != ""
-		PRINTL 
-		IF LOCAL:(LOCAL:0 + 100)
-			SETCOLOR カラー_選択不可
-			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
-			RESETCOLOR
-		ELSE
-			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
-		ENDIF
-	ENDIF
-NEXT
+;FOR LOCAL:0, 40, 50
+;	IF LOCALS:(LOCAL:0) != ""
+;		PRINTL 
+;		IF LOCAL:(LOCAL:0 + 100)
+;			SETCOLOR カラー_選択不可
+;			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+;			RESETCOLOR
+;		ELSE
+;			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+;		ENDIF
+;	ENDIF
+;NEXT
 PRINTL
 
 PRINT ◇管理士官◇
@@ -209,24 +211,20 @@ ELSEIF RESULT >= 0 && RESULT < 60 && !LOCAL:(RESULT + 100)
 	;兵士を譲受ける
 	ELSEIF RESULT == 24
 		CALL Colonial_Office_ACQUISITION_soldier
-	;従属国を独立させる
-	
-	;従属国を統合する
-	
-	;連邦を形成する
-	
-	;連邦に加盟させる
-	
-	;連邦から追放する
-	
-	;永久同盟国や従属国と交流する
-	
+	;捕虜を譲受ける
+	ELSEIF RESULT == 25
+		CALL Colonial_Office_ACQUISITION_prisoner
+	;従属国の従属形態を変更する
+	ELSEIF RESULT == 26
+		CALL Colonial_Office_CHANGE_Protectorate
 	;奴隷を使役する
 	
-	;学校を運営する
+	;研究・教育機関を運営する
+	
 	ENDIF
 ELSE
 	CLEARLINE 1
 	GOTO INPUT_LOOP
 ENDIF
+RESTART
 

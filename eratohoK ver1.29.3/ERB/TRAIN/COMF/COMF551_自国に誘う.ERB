@@ -176,6 +176,35 @@ ENDIF
 PRINTFORMW  = {TCVAR:(MTAR:0):24} %TOSTR_COMPARE(TCVAR:(MTAR:0):24, TCVAR:(MTAR:0):25)% 実行値{TCVAR:(MTAR:0):25}
 
 ;判定成功
+
+;(従属国パッチ)相手が君主であるときは辺境伯任命
+FOR LOCAL:1, 0, MAX_COUNTRY
+	IF COUNTRY_BOSS:(LOCAL:1) == GET_ID(MTAR:0)
+		CALL CHECK_COUNTRY_RELATION(CFLAG:MASTER:所属, CFLAG:(MTAR:0):所属)
+		;同盟国・植民地・傀儡国ではないときはじく
+		IF RESULT != 3 && RESULT < 8
+			PRINTFORMW 只有同盟国・殖民地・傀儡国的君主才能被任命为边境伯
+			RETURN 1
+		ENDIF
+		IF TCVAR:(MTAR:0):24 >= TCVAR:(MTAR:0):25 && (TALENT:(MTAR:0):親愛 || TALENT:(MTAR:0):隷属 || ((TALENT:(MTAR:0):恋慕 || TALENT:(MTAR:0):親友) && CFLAG:(MTAR:0):2 >= 5000))
+			PRINTFORMW %ANAME(MTAR:0)%势力成为了我国的边境伯
+			CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
+			RETURN 1
+		ELSE
+			;捕虜会話の場合
+			IF FLAG:調教モード == 6
+				;口上表示
+				CALL KOJO_EVENT(MTAR:0, 55)
+
+			ELSE
+				;口上表示
+				CALL KOJO_EVENT(MTAR:0, 53)
+			ENDIF
+			RETURN 1
+		ENDIF
+	ENDIF
+NEXT
+
 IF TCVAR:(MTAR:0):24 >= TCVAR:(MTAR:0):25
 	;捕虜会話の場合
 	IF FLAG:調教モード == 6
@@ -201,14 +230,14 @@ IF TCVAR:(MTAR:0):24 >= TCVAR:(MTAR:0):25
 			CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
 		ELSE
 			
-			;(従属国パッチ)相手が君主であるときは辺境伯任命
-			FOR LOCAL:1, 0, MAX_COUNTRY
-				IF COUNTRY_BOSS:(LOCAL:1) == GET_ID(MTAR:0)
-					PRINTFORMW %ANAME(MTAR:0)%势力成为了我国的辺境伯
-					CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
-					GOTO PRO_JUMP
-				ENDIF
-			NEXT
+;			;(従属国パッチ)相手が君主であるときは辺境伯任命
+;			FOR LOCAL:1, 0, MAX_COUNTRY
+;				IF COUNTRY_BOSS:(LOCAL:1) == GET_ID(MTAR:0)
+;					PRINTFORMW %ANAME(MTAR:0)%势力成为了我国的辺境伯
+;					CALL CHANGE_COUNTRY(MTAR:0, CFLAG:MASTER:所属, 1)
+;					GOTO PRO_JUMP
+;				ENDIF
+;			NEXT
 			
 			CALL CHECK_COUNTRY_RELATION(CFLAG:MASTER:所属, CFLAG:(MTAR:0):所属)
 

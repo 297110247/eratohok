@@ -7,7 +7,8 @@
 #DIM CONST MAX_CITY = 170
 
 ;勢力の最大数
-#DIM CONST MAX_COUNTRY = 40
+;(従属国パッチ)従属国作成の便宜上上限を増加
+#DIM CONST MAX_COUNTRY = 100
 
 ;各勢力が持つ部隊の最大数
 #DIM CONST MAX_UNIT = 10
@@ -43,7 +44,7 @@
 ;開始からの外交・編成禁止期間
 #DIM CONST SLG_PP = 3, 7, 10
 
-;使用マップ
+;使用するマップ
 #DIMS SAVEDATA MAPID = "DEFAULT"
 
 ;現在のシナリオID

@@ -188,6 +188,9 @@ REDRAW 1
 #DIM REST_COUNTRY
 #DIM 停戦可能数
 #DIM 同盟可能数
+#DIM 連邦ナンバー
+#DIM 連邦構成a
+#DIM 連邦構成b
 VARSET 選択項目
 ;降伏勧告で国が無くなったときの対策
 IF !IS_COUNTRY(ARG:0)
@@ -376,6 +379,7 @@ LOCALS:23 = 要求提供人質
 LOCALS:24 = 要求釋放人質
 LOCALS:25 = 調教
 LOCALS:26 = 調教部下
+LOCALS:27 = 进行従属勧告
 LOCALS:30 = 捕虜返還交渉
 
 
@@ -395,11 +399,42 @@ IF COUNTRY_Protectorate:(CFLAG:MASTER:所属) >= 2
 	LOCAL:103 = 1
 	LOCAL:104 = 1
 	LOCAL:120 = 1
+	LOCAL:127 = 1
 ENDIF
-;(従属国パッチ)宗主国は従属国に対して同盟破棄・降伏勧告できない
-IF TMP_COUNTRY_RELATION:(CFLAG:MASTER:所属):(ARG:0) == 6
-	LOCAL:104 = 1
-	LOCAL:120 = 1
+;(従属国パッチ)宗主国は従属国・永久同盟国に対して同盟破棄・降伏勧告・従属勧告できない
+IF IS_TREATY_UNI:(CFLAG:MASTER:所属) == 1
+	FOR 連邦ナンバー, 0, MAX_COUNTRY
+		FOR 連邦構成a, 0, MAX_COUNTRY
+			IF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成a:1 == CFLAG:MASTER:所属
+				FOR 連邦構成b, 0, MAX_COUNTRY
+					IF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成b:0 == ARG:0
+						LOCAL:104 = 1
+						LOCAL:120 = 1
+						LOCAL:127 = 1
+						BREAK
+					ENDIF
+				NEXT
+			ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成a:0 == CFLAG:MASTER:所属
+				FOR 連邦構成b, 0, MAX_COUNTRY
+					IF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成b:1 == ARG:0
+						LOCAL:104 = 1
+						LOCAL:120 = 1
+						LOCAL:127 = 1
+						BREAK
+					ENDIF
+				NEXT
+			ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成a:0 == CFLAG:MASTER:所属
+				FOR 連邦構成b, 0, MAX_COUNTRY
+					IF TREATY_UNI_COUNTRY:連邦ナンバー:連邦構成b:0 == ARG:0
+						LOCAL:104 = 1
+						LOCAL:120 = 1
+						LOCAL:127 = 1
+						BREAK
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
 ENDIF
 
 LOCAL:124 = 1
@@ -639,6 +674,10 @@ ELSEIF RESULT >= 0 && RESULT < 40 && !LOCAL:(RESULT + 100)
 	;部下を調教
 	ELSEIF RESULT == 26
 		CALL DIPLOMACY_REQUEST_TRAIN_BUKA(ARG:0)
+		DONE_DIPLOMACY_REQUEST:(ARG:0) = RESULT
+	;(従属国パッチ)従属勧告を行う
+	ELSEIF RESULT == 27
+		CALL DIPLOMACY_PUPPET(ARG:0)
 		DONE_DIPLOMACY_REQUEST:(ARG:0) = RESULT
 	;人質交渉
 	ELSEIF RESULT == 30

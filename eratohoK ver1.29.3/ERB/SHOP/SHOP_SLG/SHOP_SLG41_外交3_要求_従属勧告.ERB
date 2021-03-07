@@ -1,0 +1,43 @@
+﻿;-------------------------------------------------
+;従属勧告を行う
+;-------------------------------------------------
+@DIPLOMACY_PUPPET(ARG:0)
+LOCAL:4 = GET_COUNTRY_BOSS(CFLAG:MASTER:所属)
+LOCAL:5 = GET_COUNTRY_BOSS(ARG:0)
+;勢力同士の隣接関係マップを作成
+CALL TMP_CREATE_COUNTRY_NEIBORING_MAP
+CALL TMP_CREATE_SUM_ECONOMY_MAP
+CALL TMP_CREATE_SUM_SOLDIER_MAP
+CALL TMP_CREATE_POLITICS_POWER_MAP
+
+IF IS_SP_COUNTRY(ARG:0)
+	PRINTFORML 拒绝了我们的劝告
+	PRINTFORMW 如果从「外交部」选项取得联系的话，可能会更顺利一点
+	RETURN 0
+ENDIF
+
+PRINTFORMW %ANAME(MASTER)%要求%ANAME(LOCAL:5)%成为従属国
+PRINTFORMW ………………
+PRINTFORMW ……
+
+
+;要求受け入れ判定
+IF DIPLOMACY_REQUEST_CHECK(CFLAG:MASTER:所属, ARG:0, 300)
+	SETCOLOR カラー_注意
+	PRINTFORMW %ANAME(LOCAL:5)%接受了我国的劝告
+	PRINTFORMW 成为了我国的傀儡国
+	RESETCOLOR
+	
+	CALL INIT_Pupet(ARG:0, CFLAG:MASTER:所属)
+	CFLAG:(LOCAL:5):700 = 1
+	
+	;外交補正の加算処理
+	DIPLOMACY_HATE:(CFLAG:MASTER:所属) += 3
+ELSE
+	PRINTFORMW 遗憾的是，%ANAME(LOCAL:5)%没有响应我国的従属勧告…
+	;外交補正の加算処理（他国の警戒が上がったと考えていただければ）
+	DIPLOMACY_HATE:(CFLAG:MASTER:所属) += 1
+ENDIF
+
+RETURN 1
+

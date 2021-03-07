@@ -26,6 +26,13 @@ FOR LOCAL:0, 0, MAX_TREATY_M
 		CALL INIT_Union(ARG:0, ARG:1)
 		;連邦を作成,あるいはARG:1が主導する連邦にARG:0が加盟
 		
+		;対象従属国士官の特殊なフラグを消去
+		FOR LOCAL:1, 0, CHARANUM
+			IF CFLAG:(LOCAL:1):所属 == ARG:0 && CFLAG:(LOCAL:1):700 == 1
+				CFLAG:(LOCAL:1):700 = 0
+			ENDIF
+		NEXT
+		
 		RETURN 1
 	ENDIF
 NEXT
@@ -138,4 +145,289 @@ FOR LOCAL:0, 0, MAX_COUNTRY
 		CALL INIT_ALLIANCE(ARG:0, LOCAL:0, 9999)
 	ENDIF
 NEXT
-		
+
+;-------------------------------------------------
+;辺境伯または植民地であるARG:0をその宗主国ARG:1から独立させ永久同盟とする条約を成立させる関数
+;成功したら1 失敗したら0
+;-------------------------------------------------
+@INIT_Protectorate_Independence(ARG:0, ARG:1)
+#DIM 宗主国君主
+#DIM 従属国君主
+
+宗主国君主 = GET_COUNTRY_BOSS(ARG:1)
+従属国君主 = GET_COUNTRY_BOSS(ARG:0)
+
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+;従属関係を検索
+;辺境伯の場合
+IF COUNTRY_Protectorate:(ARG:0) == 2
+	FOR LOCAL:0, 0, MAX_TREATY_M
+		FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+			IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 == ARG:1
+						COUNTRY_Protectorate:(ARG:0) = 0
+						COUNTRY_Protectorate:(ARG:1) = 0
+						TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:1):0 = 0
+						TREATY_M_COUNTRY:(LOCAL:0):(LOCAL:2):1 = 0
+						IS_TREATY_M:(LOCAL:0) = 0
+						
+						; 関係マップの更新
+						TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) = 4
+						TMP_COUNTRY_RELATION:(ARG:1):(ARG:0) = 4
+						TMP_COUNTRY_RELATION_TERM:(ARG:0):(ARG:1) = 9999
+						TMP_COUNTRY_RELATION_TERM:(ARG:1):(ARG:0) = 9999
+						
+						CALL INIT_ALLIANCE(ARG:0, ARG:1, 9999)
+						
+						;辺境伯君主を辺境伯国の所属とする
+						CFLAG:従属国君主:所属 = ARG:0
+						PRINTFORML %ANAME(従属国君主)%回到了%ANAME(従属国君主)%势力的阵营
+						
+						RETURN 1
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+;植民地の場合
+ELSEIF COUNTRY_Protectorate:(ARG:0) == 3
+	FOR LOCAL:0, 0, MAX_TREATY_CO
+		FOR LOCAL:1, 0, MAX_TREATY_COUNTRY
+			IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 == ARG:0
+				FOR LOCAL:2, 0, MAX_TREATY_COUNTRY
+					IF TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 == ARG:1
+						COUNTRY_Protectorate:(ARG:0) = 0
+						COUNTRY_Protectorate:(ARG:1) = 0
+						TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:1):0 = 0
+						TREATY_CO_COUNTRY:(LOCAL:0):(LOCAL:2):1 = 0
+						IS_TREATY_CO:(LOCAL:0) = 0
+						
+						; 関係マップの更新
+						TMP_COUNTRY_RELATION:(ARG:0):(ARG:1) = 4
+						TMP_COUNTRY_RELATION:(ARG:1):(ARG:0) = 4
+						TMP_COUNTRY_RELATION_TERM:(ARG:0):(ARG:1) = 9999
+						TMP_COUNTRY_RELATION_TERM:(ARG:1):(ARG:0) = 9999
+						
+						CALL INIT_ALLIANCE(ARG:0, ARG:1, 9999)
+						
+						PRINTFORML %ANAME(従属国君主)%势力与%ANAME(宗主国君主)%势力缔结了永久同盟
+						
+						RETURN 1
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+ENDIF
+
+RETURN 0
+
+;-------------------------------------------------
+;傀儡国または植民地であるARG:0をその宗主国ARG:1に統合させる関数
+;成功したら1 失敗したら0
+;-------------------------------------------------
+@INIT_Protectorate_Integrate(ARG:0, ARG:1)
+#DIM 宗主国君主
+#DIM 従属国君主
+
+宗主国君主 = GET_COUNTRY_BOSS(ARG:1)
+従属国君主 = GET_COUNTRY_BOSS(ARG:0)
+
+IF !IS_COUNTRY(ARG:0) || !IS_COUNTRY(ARG:1)
+	THROW 引数0番と1番にはそれぞれ正しい勢力番号を指定してください
+ENDIF
+
+;兵数の移動
+CALL CLEAR_ALL_UNIT(ARG:0)
+COUNTRY_SOLDIER:(ARG:1) += COUNTRY_SOLDIER:(ARG:0)
+COUNTRY_SOLDIER:(ARG:0) = 0
+
+;領地の接収
+PRINTL 
+SETCOLOR カラー_注意
+PRINTFORML %ANAME(従属国君主)%的城市变成了%ANAME(宗主国君主)%的领地
+RESETCOLOR
+FOR LOCAL:0, 0, MAX_CITY
+	IF CITY_OWNER:(LOCAL:0) == ARG:0
+		CITY_OWNER:(LOCAL:0) = ARG:1
+		PRINTFORML %GET_CITYNAME(LOCAL:0)%被%ANAME(宗主国君主)%所支配了
+	ENDIF
+NEXT
+WAIT
+
+PRINTL 
+PRINTFORMW %ANAME(従属国君主)%军的士兵加入了我们的军队
+
+;まずCFLAG:700が立っている士官から処理
+;傀儡士官を自動で登用
+IF CONFIG:303 == 0
+	;傀儡士官の組み込み
+	PRINTL 
+	FOR LOCAL:0, 0, CHARANUM
+		IF CFLAG:(LOCAL:0):所属 == ARG:0 && CFLAG:(LOCAL:0):700 == 1
+			IF !CFLAG:(LOCAL:0):捕虜先 || CFLAG:(LOCAL:0):捕虜先 == ARG:1
+				CALL CHANGE_COUNTRY(LOCAL:0, ARG:1, 1)
+				CFLAG:(LOCAL:0):700 = 0
+				PRINTFORML 登用了%ANAME(LOCAL:0)%
+			ELSE
+				CALL CHANGE_COUNTRY(LOCAL:0, ARG:1)
+				CFLAG:(LOCAL:0):700 = 0
+				SETCOLOR カラー_シアン
+				PRINTFORML %ANAME(LOCAL:0)%被%ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):捕虜先))%囚禁了
+				RESETCOLOR
+			ENDIF
+		ENDIF
+	NEXT
+	WAIT
+
+;傀儡士官を自動で投獄
+ELSEIF CONFIG:303 == 1
+	;傀儡士官の組み込み
+	PRINTL 
+	FOR LOCAL:0, 0, CHARANUM
+		IF CFLAG:(LOCAL:0):所属 == ARG:0 && CFLAG:(LOCAL:0):700 == 1
+			IF !CFLAG:(LOCAL:0):捕虜先 || CFLAG:(LOCAL:0):捕虜先 == ARG:1
+				CALL CHANGE_COUNTRY(LOCAL:0, 0, 1)
+				CALL CAPTURE(LOCAL:0, ARG:1)
+				CFLAG:(LOCAL:0):700 = 0
+				PRINTFORML %ANAME(LOCAL:0)%被投入了监狱
+			ELSE
+				CALL CHANGE_COUNTRY(LOCAL:0, ARG:1)
+				CFLAG:(LOCAL:0):700 = 0
+				SETCOLOR カラー_シアン
+				PRINTFORML %ANAME(LOCAL:0)%被%ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):捕虜先))%囚禁了
+				RESETCOLOR
+			ENDIF
+		ENDIF
+	NEXT
+	WAIT
+
+;手動で選択
+ELSE
+	FOR LOCAL:0, 0, CHARANUM
+		IF CFLAG:(LOCAL:0):所属 == ARG:0 && CFLAG:(LOCAL:0):700 == 1
+			CALL INIT_Protectorate_Integrate_SET_TREATMENT(ARG:0, ARG:1)
+			BREAK
+		ENDIF
+	NEXT
+ENDIF
+IF CFLAG:従属国君主:700 == 1
+	CALL CHANGE_COUNTRY(従属国君主, 0, 1)
+	CALL CAPTURE(従属国君主, ARG:1)
+	CFLAG:従属国君主:700 = 0
+	PRINTFORML %ANAME(従属国君主)%被投入了监狱
+ENDIF
+
+;士官の組み込み
+PRINTL 
+SETCOLOR カラー_注意
+PRINTFORML 侍奉%ANAME(従属国君主)%的士官被编入了%ANAME(宗主国君主)%势力的阵营
+RESETCOLOR
+FOR LOCAL:0, 0, CHARANUM
+	IF CFLAG:(LOCAL:0):所属 == ARG:0
+		IF !CFLAG:(LOCAL:0):捕虜先 || CFLAG:(LOCAL:0):捕虜先 == ARG:1
+			CALL CHANGE_COUNTRY(LOCAL:0, ARG:1, 1)
+			PRINTFORML %ANAME(LOCAL:0)%被登用了
+		ELSE
+			CALL CHANGE_COUNTRY(LOCAL:0, ARG:1)
+			SETCOLOR カラー_シアン
+			PRINTFORML %ANAME(LOCAL:0)%被%ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):捕虜先))%囚禁了
+			RESETCOLOR
+		ENDIF
+	ENDIF
+NEXT
+WAIT
+
+;ARG:0勢力の捕虜となっていたキャラの処理
+;ARG:0勢力が捕虜持ってるか
+IF CMATCH(CFLAG:捕虜先, ARG:0)
+	PRINTL
+	LOCAL:2 = 0
+	FOR LOCAL:0, 0, CHARANUM
+		IF CFLAG:(LOCAL:0):捕虜先 == ARG:0
+			;自陣営の士官なら、そのまま元に戻る
+			IF CFLAG:(LOCAL:0):所属 == ARG:1
+				CALL CAPTURE(LOCAL:0, 0)
+				SETCOLOR カラー_注意
+				PRINTFORML 被%ANAME(従属国君主)%势力所囚禁的%ANAME(LOCAL:0)%回到了%ANAME(宗主国君主)%势力
+				RESETCOLOR
+				LOCAL:2 = 1
+			ENDIF
+		ENDIF
+	NEXT
+	IF LOCAL:2
+		WAIT
+	ENDIF
+	PRINTL
+	PRINTFORMW %ANAME(従属国君主)%的俘虏，今后由%ANAME(宗主国君主)%进行管理
+	FOR LOCAL:0, 0, CHARANUM
+		IF CFLAG:(LOCAL:0):捕虜先 == ARG:0
+			;第三勢力の士官なら、投獄
+			CALL CAPTURE(LOCAL:0, ARG:1)
+			CFLAG:(LOCAL:0):700 = 0
+			PRINTFORML %ANAME(LOCAL:0)%被投入了监狱
+		ENDIF
+	NEXT
+ENDIF
+
+;旧勢力の後始末
+CALL DESTROY_COUNTRY(ARG:0)
+
+RETURN 1
+
+;-------------------------------------------------
+;統合された勢力のCFLAG:700が立っている士官の処遇を個別に設定 ARG:0=統合された勢力 ARG:1=統合した勢力
+;-------------------------------------------------
+@INIT_Protectorate_Integrate_SET_TREATMENT(ARG:0, ARG:1)
+;キャラの扱い設定用変数
+#DIM COMMANDER_NUM
+Integrate_Suzerainty = ARG:1
+Integrate_Protectorate = ARG:0
+
+;●士官の人数+捕虜の人数をカウント
+COMMANDER_NUM = GET_COMMANDER_NUM(ARG:0)
+
+;士官が一人もいなければ戻る
+IF COMMANDER_NUM == 0
+	;DEBUGPRINTFORML {ARG:0}番号の%ANAME(GET_COUNTRY_BOSS(ARG:0))%勢力に士官が誰もいませんでした
+	RETURN
+ENDIF
+
+CALL SINGLE_DRAWLINE
+PRINTFORML 侍奉%ANAME(GET_COUNTRY_BOSS(ARG:0))%的傀儡士官中，请选择要登用的士官
+CALL SINGLE_DRAWLINE
+
+CALL SELECT_CHARA_LIST_MULTI_ONLY_LOGIC_SLG(-1, "Integrate_SET_TREATMENT", "Integrate_SET_TREATMENT")
+
+FOR LOCAL, 0, SELECTED_CHARA_NUM
+	LOCAL:1 = SELECTED_CHARA:(LOCAL)
+	CALL CHANGE_COUNTRY(LOCAL:1, ARG:1)
+	CFLAG:(LOCAL:0):700 = 0
+	PRINTFORML %ANAME(LOCAL:1)%被登用了
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTFORML 侍奉%ANAME(GET_COUNTRY_BOSS(ARG:0))%的傀儡士官中，请选择要投狱的士官
+CALL SINGLE_DRAWLINE
+
+CALL SELECT_CHARA_LIST_MULTI_ONLY_LOGIC_SLG(-1, "Integrate_SET_TREATMENT", "Integrate_SET_TREATMENT")
+
+FOR LOCAL, 0, SELECTED_CHARA_NUM
+	LOCAL:1 = SELECTED_CHARA:(LOCAL)
+	CALL CAPTURE(LOCAL:1, ARG:1)
+	CFLAG:(LOCAL:0):700 = 0
+	PRINTFORML %ANAME(LOCAL:1)%被投入了监狱
+NEXT
+
+@SELECT_CHARA_LIST_SHOW_LOGIC_Integrate_SET_TREATMENT(対象)
+#DIM 対象
+RETURN CFLAG:対象:所属 == Integrate_Protectorate && !IS_SP_CHARA(対象) && CFLAG:(LOCAL:0):700 == 1
+
+@SELECT_CHARA_LIST_SELECT_LOGIC_Integrate_SET_TREATMENT(対象)
+#DIM 対象
+RETURN CFLAG:対象:捕虜先 == 0 || CFLAG:対象:捕虜先 == Integrate_Suzerainty
+

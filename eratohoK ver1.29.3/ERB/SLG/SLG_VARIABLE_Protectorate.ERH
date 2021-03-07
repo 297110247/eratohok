@@ -54,3 +54,10 @@
 ;■勢力に関する変数 ※0番の勢力は無所属で固定
 ;-------------------------------------------------
 #DIM SUMMON_SUMMON
+
+#DIM Colonial_prisoner
+
+#DIM Integrate_Suzerainty
+
+#DIM Integrate_Protectorate
+

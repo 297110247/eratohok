@@ -1,0 +1,75 @@
+﻿;-------------------------------------------------
+;従属国の従属形態を変更する
+;-------------------------------------------------
+@Colonial_Office_CHANGE_Protectorate
+#DIM FIRST_LINE
+#DIM 対象勢力
+#DIM 対象勢力名
+#DIM 自国勢力
+#DIM 自国勢力名
+#DIM 傀儡国判定
+#DIM 辺境伯判定
+
+PRINTFORML 请选择作为对象的従属国
+CALL Colonial_Office_indicate_1
+
+IF RESULT == 0
+	RETURN 0
+ENDIF
+
+対象勢力 = RESULT
+対象勢力名 = GET_COUNTRY_BOSS(対象勢力)
+自国勢力 = CFLAG:MASTER:所属
+自国勢力名 = GET_COUNTRY_BOSS(自国勢力)
+
+傀儡国判定 = 0
+辺境伯判定 = 0
+
+;傀儡国は独立させられない,虐げられてた国が永久同盟を結んでくれるとは思い難い
+IF COUNTRY_Protectorate:対象勢力 == 2 || COUNTRY_Protectorate:対象勢力 == 3
+	傀儡国判定 = 1
+ENDIF
+
+;辺境伯は統合できない,EU4に準拠
+IF COUNTRY_Protectorate:対象勢力 == 4 || COUNTRY_Protectorate:対象勢力 == 3
+	辺境伯判定 = 1
+ENDIF
+
+FIRST_LINE = LINECOUNT
+
+$INPUT_LOOP1
+$INPUT_LOOP2
+
+PRINTFORML %ANAME(対象勢力名)%势力的从属形态要如何变更？
+
+CALL ASK_MULTI_JUDGE("独立", 傀儡国判定, "合并", 辺境伯判定, "取消变更", 1)
+IF RESULT == 2
+	RETURN 0
+ELSEIF RESULT == 0
+	PRINTFORML 要让%ANAME(対象勢力名)%势力独立吗？
+	
+	;はい／いいえ入力処理
+	CALL ASK_YN()
+	IF RESULT == 1
+		CLEARLINE LINECOUNT - FIRST_LINE
+		GOTO INPUT_LOOP1
+	ENDIF
+	
+	PRINTFORML %ANAME(対象勢力名)%势力从%ANAME(自国勢力名)%势力独立了
+	CALL INIT_Protectorate_Independence(対象勢力, 自国勢力)
+	RETURN 1
+ELSEIF RESULT == 1
+	PRINTFORML 要合并%ANAME(対象勢力名)%势力吗？
+	
+	;はい／いいえ入力処理
+	CALL ASK_YN()
+	IF RESULT == 1
+		CLEARLINE LINECOUNT - FIRST_LINE
+		GOTO INPUT_LOOP2
+	ENDIF
+	
+	PRINTFORML %ANAME(対象勢力名)%势力与%ANAME(自国勢力名)%势力合并了
+	CALL INIT_Protectorate_Integrate(対象勢力, 自国勢力)
+	RETURN 1
+ENDIF
+RETURN 0
