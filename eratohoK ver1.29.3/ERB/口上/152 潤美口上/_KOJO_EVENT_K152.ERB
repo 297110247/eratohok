@@ -14,7 +14,7 @@
 ;告白成功
 ;-------------------------------------------------
 IF ARG == 2
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL 
 	;恋慕 or 服従
 	IF TALENT:恋慕 || TALENT:服従
@@ -301,7 +301,7 @@ ENDIF
 ;-------------------------------------------------
 IF ARG == 21
 	PRINTL
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTFORMW 「嗯，那个…%ANAME(MASTER)%啊。可以借用点时间吗……」
 	;TranslatedMark 「えーっと、その…%ANAME(MASTER)%よ。ちょっと聞きたいんだが……」
 	PRINTFORML 
@@ -718,7 +718,7 @@ ENDIF
 ;拠点フェイズ終了(所属国家が同じなら常に呼ばれる)
 ;-------------------------------------------------
 IF ARG == 30
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	;捕虜の時1/2の確率で表示
 	IF CFLAG:捕虜先 && !RAND:2
 		SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
@@ -790,7 +790,7 @@ ENDIF
 ;戦略フェイズ終了(所属国家が同じなら常に呼ばれる)
 ;-------------------------------------------------
 IF ARG == 31
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	;捕虜の時1/2の確率で表示
 	IF CFLAG:捕虜先 && !RAND:2
 		SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
@@ -1055,7 +1055,7 @@ ENDIF
 ;恋慕を取得
 ;-------------------------------------------------
 IF ARG == 60
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL
 	PRINTFORML （…我会有这样的心情，到底是从什么时候开始的呢…）
 	;TranslatedMark （…私がこんな気持ちになるなんて、一体いつ以来だろうか…）
@@ -1078,7 +1078,7 @@ ENDIF
 ;親愛を取得
 ;-------------------------------------------------
 IF ARG == 62
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL
 	PRINTFORML %ANAME(TARGET)%向%ANAME(MASTER)%投来充满慈爱的目光
 	;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に対し、慈しみに満ちたまなざしを送っている
@@ -1113,7 +1113,7 @@ ENDIF
 ;淫乱を取得
 ;-------------------------------------------------
 IF ARG == 65
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL
 	PRINTFORML 「啊哈哈♥想要更多更多的小鸡鸡♥♥」
 	;TranslatedMark 「あはあっ♥　もっとっ、もっとチンポ欲しいっ♥♥」
@@ -1141,7 +1141,7 @@ ENDIF
 ;-------------------------------------------------
 IF ARG == 67
 	PRINTL
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTFORML 「啊，对♥♥更多♥更深处♥♥侵犯到更深处♥♥」
 	;TranslatedMark 「あっ、はあっ♥♥　もっとっ♥もっと奥っ♥♥　奥まで犯してぇっ♥♥」
 	PRINTFORML 经过无数的快感而开发出来的%ANAME(TARGET)%的膣穴
@@ -1169,7 +1169,7 @@ ENDIF
 ;淫乳を取得
 ;-------------------------------------------------
 IF ARG == 69
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL
 	PRINTFORML 「啊啊啊啊啊♥乳房不行♥太敏感了♥♥」
 	;TranslatedMark 「はあああっ♥　おっぱいだめぇっ♥　感じすぎるぅぅッ♥♥」
@@ -1308,7 +1308,7 @@ ENDIF
 ;生ハメ依存取得
 ;-------------------------------------------------
 IF ARG == 87
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL
 	PRINTFORML 「啊哈哈♥再磨蹭磨蹭♥戳到小穴的深处吧♥♥」
 	;TranslatedMark 「あはあっ♥　もっとぐりぐりしてぇ♥　おまんこの奥まで突いてぇっ♥♥」
@@ -1391,7 +1391,7 @@ ENDIF
 ;雌牛取得
 ;-------------------------------------------------
 IF ARG == 98
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL 
 	PRINTFORMW 「哇啊啊♥♥被挤牛奶了，好，好棒啊♥♥♥」
 	;TranslatedMark 「はひぃいいぃぃぃッ♥♥　ミルク搾られるのぉッ、いいのぉッ♥♥♥」
@@ -1410,7 +1410,7 @@ ENDIF
 ;婚姻の儀(選択時)
 ;--------------------------------------------------------------------------------------------------
 IF ARG == 90
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL 
 	PRINTFORMW 「诶，呃…结婚！？我、和我…真的吗？」
 	;TranslatedMark 「えっ、け…結婚っ！？　わ、私と、って…本気か？」
@@ -1456,7 +1456,7 @@ ENDIF
 ;婚姻の儀(イベント時)※正妻のみ表示されるイベント
 ;--------------------------------------------------------------------------------------------------
 IF ARG == 91
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTL 
 	PRINTFORMW 「呵呵呵♥怎么样？合适吗？」
 	;TranslatedMark 「ふふっ♥　どうだい？　似合ってるかい？」
@@ -1686,7 +1686,7 @@ ENDIF
 ;-------------------------------------------------
 ;野戦
 IF ARG == 300
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:6
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「刚刚好。让它成为古代鱼类的食物」
@@ -1711,7 +1711,7 @@ IF ARG == 300
 	RETURN 0
 ;防衛戦(侵攻側)
 ELSEIF ARG == 301
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:10
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「我要把你们当作古代鱼的饵食！」
@@ -1750,7 +1750,7 @@ ELSEIF ARG == 301
 	RETURN 0
 ;防衛戦(防衛側)
 ELSEIF ARG == 302
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:10
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「哎呀，能成为古代鱼的饵食吗？」
@@ -1792,7 +1792,7 @@ ENDIF
 ;-------------------------------------------------
 ;計略発動
 IF ARG == 310
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「让我们看看渔夫的技术吧！」
@@ -1812,7 +1812,7 @@ ELSEIF ARG == 311
 	RETURN 0
 ;貫計(武力)
 ELSEIF ARG == 312
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「别小看牛鬼的力量！」
@@ -1836,7 +1836,7 @@ ENDIF
 ;主人公勢力に捕縛される(部隊壊滅時)
 ;-------------------------------------------------
 IF ARG == 330
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:4
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「啊，多么强大」
@@ -1859,7 +1859,7 @@ ENDIF
 ;主人公勢力に捕縛される(滅亡時)
 ;-------------------------------------------------
 IF ARG == 331
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	PRINTFORML %ANAME(TARGET)%「不习惯的事情是不应该做的……」
 	;TranslatedMark %ANAME(TARGET)%「慣れないことはするものじゃないな……」
 	RESETCOLOR
@@ -1871,7 +1871,7 @@ ENDIF
 ;-------------------------------------------------
 ;登用に応じる
 IF ARG == 332
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「嗯，没办法。今后请多关照」
@@ -1887,7 +1887,7 @@ IF ARG == 332
 	RETURN 0
 ;登用を拒否する
 ELSEIF ARG == 333
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「对不起，不能那样做」
@@ -1903,7 +1903,7 @@ ELSEIF ARG == 333
 	RETURN 0
 ;解放される
 ELSEIF ARG == 334
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「啊，多么大的器量」
@@ -1919,7 +1919,7 @@ ELSEIF ARG == 334
 	RETURN 0
 ;投獄される
 ELSEIF ARG == 335
-	SETCOLOR 0x4d3d3d
+	SETCOLOR 0xFFF0F5
 	SELECTCASE RAND:3
 		CASE 0
 			PRINTFORML %ANAME(TARGET)%「嗯，总比被砍头好。…因为那个很痛啊」
