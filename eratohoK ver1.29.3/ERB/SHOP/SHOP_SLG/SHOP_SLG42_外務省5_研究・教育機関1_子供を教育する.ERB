@@ -1,0 +1,228 @@
+﻿;-------------------------------------------------
+;「子供を教育する」本体
+;-------------------------------------------------
+@Colonial_Office_university_EDUCATION
+#DIM 連邦ナンバー
+#DIM 教育対象
+#DIM 連邦構成国, MAX_COUNTRY
+#DIM 連邦構成士官, 999
+#DIM 対象存在, 999
+VARSET 連邦構成国
+FOR LOCAL:0, 0, 999
+	VARSET 対象存在:(LOCAL:0)
+	VARSET 連邦構成士官:(LOCAL:0)
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
+
+;連邦構成国の全士官・捕虜を検索
+FOR LOCAL:0, 0, CHARANUM
+	IF CFLAG:(LOCAL:0):所属 == CFLAG:MASTER:所属 || CFLAG:(LOCAL:0):捕虜先 == CFLAG:MASTER:所属 || 連邦構成国:(CFLAG:(LOCAL:0):所属) == 1 || 連邦構成国:(CFLAG:(LOCAL:0):捕虜先) == 1
+		連邦構成士官:(LOCAL:0) = 1
+	ENDIF
+NEXT
+
+PRINTFORML 战略回合结束时对子女进行教育
+CALL SINGLE_DRAWLINE
+FOR 教育対象, 0, CHARANUM
+	IF 連邦構成士官:教育対象 == 1 && CFLAG:教育対象:子の成長度 < 15 && IS_CHILD(教育対象)
+		対象存在:教育対象 = 1
+		PRINTL 
+		PRINTBUTTON @"{教育対象, 2}[%ANAME(教育対象), 10%]", 教育対象
+		
+		IF CFLAG:教育対象:701 == 0
+			PRINTFORM  現在[　　无　　]
+		ELSEIF CFLAG:教育対象:701 == 1
+			PRINTFORM  現在[　学校教育]
+		ELSEIF CFLAG:教育対象:701 == 2
+			PRINTFORM  現在[　触手调教]
+		ELSEIF CFLAG:教育対象:701 == 3
+			PRINTFORM  現在[　　調教　]
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+CALL SINGLE_DRAWLINE
+
+PRINTBUTTON " 0[取消]", 0
+PRINTL 
+
+$INPUT_LOOP
+INPUT
+
+SIF RESULT == 0
+	RETURN
+
+IF 対象存在:RESULT != 1
+	GOTO INPUT_LOOP
+ENDIF
+
+CALL Colonial_Office_university_EDUCATION_CHANGE(RESULT)
+
+RESTART
+
+;-------------------------------------------------
+;「子供を教育する」教育内容変更
+;-------------------------------------------------
+@Colonial_Office_university_EDUCATION_CHANGE(変更対象)
+#DIM 変更対象
+#DIM 変更可能, 4
+VARSET 変更可能
+
+PRINTFORM 改变[%ANAME(変更対象)%]的教育内容　
+IF CFLAG:変更対象:701 == 0
+	PRINTFORML  現在[　　无　　]
+ELSEIF CFLAG:変更対象:701 == 1
+	PRINTFORML  現在[　学校教育]
+ELSEIF CFLAG:変更対象:701 == 2
+	PRINTFORML  現在[　触手调教]
+ELSEIF CFLAG:変更対象:701 == 3
+	PRINTFORML  現在[　　調教　]
+ENDIF
+CALL SINGLE_DRAWLINE
+
+PRINTBUTTON "[1] 在学校中教育", 1
+PRINTL
+IF ID_TO_CHARA(FLAG:触手部屋管理者) != -1
+	変更可能:2 = 1
+	PRINTBUTTON "[2] 泡在触手群中锻炼妖术", 2
+ENDIF
+PRINTL
+IF CFLAG:変更対象:捕虜先 > 0 || CFLAG:変更対象:700 == 1
+	変更可能:3 = 1
+	PRINTBUTTON "[3] 「教育」(調教)", 3
+ENDIF
+PRINTL
+CALL SINGLE_DRAWLINE
+
+PRINTBUTTON " 0[取消]", 0
+PRINTL 
+
+$INPUT_LOOP
+INPUT
+
+SIF RESULT == 0
+	RETURN
+
+IF RESULT > 3 || (RESULT == 2 && 変更可能:2 != 1) || (RESULT == 3 && 変更可能:3 != 1)
+	GOTO INPUT_LOOP
+ENDIF
+
+CFLAG:変更対象:701 = RESULT
+
+IF RESULT == 1
+	PRINTFORML [%ANAME(変更対象)%]在学校中进行教育
+	PRINTFORMW 战略回合结束时增加各种经验值
+ELSEIF RESULT == 2
+	PRINTFORML [%ANAME(変更対象)%]被泡在触手群中锻炼妖术
+	PRINTFORMW 战略回合结束时增加妖术经验值
+ELSEIF RESULT == 3
+	PRINTFORML [%ANAME(変更対象)%]进行名为「教育」的调教
+	PRINTFORMW 战略回合结束时增加各种经验值
+ENDIF
+
+RETURN
+
+;-------------------------------------------------
+;「子供を教育する」戦略フェイズ終了時教育
+;-------------------------------------------------
+@Colonial_Office_university_EDUCATION_PROGRESS
+#DIM 連邦ナンバー
+#DIM 教育対象
+#DIM 連邦構成国, MAX_COUNTRY
+#DIM 取得経験値
+#DIM 対象項目
+VARSET 連邦構成国
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
+
+FOR 教育対象, 0, CHARANUM
+	IF (CFLAG:教育対象:所属 == CFLAG:MASTER:所属 || CFLAG:教育対象:捕虜先 == CFLAG:MASTER:所属 || 連邦構成国:(CFLAG:教育対象:所属) == 1 || 連邦構成国:(CFLAG:教育対象:捕虜先) == 1) && CFLAG:教育対象:子の成長度 < 15
+		IF CFLAG:教育対象:701 == 1
+			PRINTFORML %ANAME(教育対象)%在学校进行了学习
+			対象項目 = GETNUM(ABL, "武闘")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			対象項目 = GETNUM(ABL, "防衛")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			対象項目 = GETNUM(ABL, "知略")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			対象項目 = GETNUM(ABL, "政治")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			対象項目 = GETNUM(ABL, "歌唱")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			対象項目 = GETNUM(ABL, "料理")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			CALL TRAIN_AUTO_ABLUP(教育対象)
+		ELSEIF CFLAG:教育対象:701 == 2
+			PRINTFORML %ANAME(教育対象)%被泡在触手中
+			IF CFLAG:教育対象:子の成長度 < 6
+				PRINTFORML 蠕动的触手在%ANAME(教育対象)%幼小的身体上爬行着…
+				CALL FUCK(教育対象, "Ｃ, Ｂ, 苦痛快楽, 苦痛快楽, 緊縛, 被虐, 被虐, 触手")
+			ELSE
+				PRINTFORML 蠕动的触手在%ANAME(教育対象)%还在成长中的身体上爬行着…
+				CALL FUCK(教育対象, "欲望, 精愛, 射精, Ｃ, Ｂ, 苦痛快楽, 緊縛, 被虐, 触手")
+			ENDIF
+			IF !TALENT:(教育対象):妖術知識
+				TALENT:(教育対象):妖術知識 = 1
+				PRINTFORML 在与触手的接触中%ANAME(教育対象)%习得了妖術知識
+			ENDIF
+			対象項目 = GETNUM(ABL, "妖術")
+			取得経験値 = SPECIAL_TRAIN_CALC_EFFECT(教育対象, 対象項目)
+			取得経験値 /= 15
+			CALL PRINT_ADD_EXP(教育対象, EXPNAME:GET_EXP(対象項目), 取得経験値, 0)
+			CALL TRAIN_AUTO_ABLUP(教育対象)
+		ELSEIF CFLAG:教育対象:701 == 3
+			PRINTFORML %ANAME(教育対象)%被带去进行了名为「教育」的调教…
+			IF CFLAG:教育対象:子の成長度 < 6
+				PRINTFORML 对于年幼的%ANAME(教育対象)%来说，痛苦似乎大于快乐
+				CALL FUCK(教育対象, "Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 苦痛快楽, 被虐, 被虐")
+			ELSE
+				PRINTFORML 对于还在成长中的%ANAME(教育対象)%来说，似乎渐渐从痛苦中感受到了快乐
+				CALL FUCK(教育対象, "欲望, 精愛, 射精, 射精, Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 被虐")
+			ENDIF
+		ENDIF
+	ENDIF
+NEXT
+

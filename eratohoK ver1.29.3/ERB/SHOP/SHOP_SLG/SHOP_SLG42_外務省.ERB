@@ -44,14 +44,13 @@ CALL TMP_CREATE_SUM_SOLDIER_MAP
 
 CALL SINGLE_DRAWLINE
 PRINTL ★外交部
+PRINTL 　存在従属国・永久同盟国的情况下，可以使用研究・教育機関
 CALL SINGLE_DRAWLINE
 
 LOCALS:0 = 建立殖民地
 LOCALS:1 = 建立傀儡国
 LOCALS:10 = 自国士官的移籍
 LOCALS:11 = 召喚従属国的士官
-;LOCALS:12 = 派遣奴隶到外交部
-;LOCALS:13 = 收押奴隶
 LOCALS:20 = 转让领土
 LOCALS:21 = 接收领土
 LOCALS:22 = 转让资金
@@ -59,22 +58,28 @@ LOCALS:23 = 转让士兵
 LOCALS:24 = 接收士兵
 LOCALS:25 = 接收/转让俘虏
 LOCALS:26 = 变更従属形式
-;LOCALS:30 = 让従属国独立
-;LOCALS:31 = 合并従属国
-LOCALS:50 = 特殊行動
-;LOCALS:50 = 与永久同盟国・従属国交流
+LOCALS:50 = 与特殊勢力的外交
 LOCALS:51 = 使役奴隷
 LOCALS:52 = 研究・教育機関
 
 ;未実装部分は選択不可
-;LOCAL:112 = 1
-;LOCAL:113 = 1
-;LOCAL:130 = 1
-;LOCAL:131 = 1
-;LOCAL:140 = 1
-LOCAL:150 = 1
 LOCAL:151 = 1
-LOCAL:152 = 1
+
+;従属国・永久同盟国がいないと「研究・教育機関」は選択不可
+IF !IS_TREATY_UNI:(CFLAG:MASTER:所属)
+	LOCAL:152 = 1
+ELSE
+	LOCAL:152 = 0
+ENDIF
+
+;特殊勢力が存在しないと「特殊勢力と外交する」は選択不可
+LOCAL:150 = 1
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY(LOCAL:0)
+		LOCAL:150 = 0
+		BREAK
+	ENDIF
+NEXT
 
 PRINT ◇建立従属国◇
 FOR LOCAL:0, 0, 10
@@ -149,9 +154,9 @@ PRINT ◇特殊行動◇
 ;		ENDIF
 ;	ENDIF
 ;NEXT
-PRINTL
+;PRINTL
 
-PRINT ◇管理士官◇
+PRINT ◇其他◇
 FOR LOCAL:0, 50, 60
 	IF LOCALS:(LOCAL:0) != ""
 		PRINTL 
@@ -192,10 +197,6 @@ ELSEIF RESULT >= 0 && RESULT < 60 && !LOCAL:(RESULT + 100)
 	;従属国の士官を召喚する
 	ELSEIF RESULT == 11
 		CALL Colonial_Office_SUMMON_CHARA
-	;奴隷を外務省に派遣する
-	
-	;奴隷を収監する
-	
 	;領土を譲渡する
 	ELSEIF RESULT == 20
 		CALL Colonial_Office_TRANSFER_state
@@ -217,10 +218,14 @@ ELSEIF RESULT >= 0 && RESULT < 60 && !LOCAL:(RESULT + 100)
 	;従属国の従属形態を変更する
 	ELSEIF RESULT == 26
 		CALL Colonial_Office_CHANGE_Protectorate
+	;特殊勢力と外交
+	ELSEIF RESULT == 50
+		CALL Colonial_Office_COMMUNICATE_SP_COUNTRY
 	;奴隷を使役する
 	
 	;研究・教育機関を運営する
-	
+	ELSEIF RESULT == 52
+		CALL Colonial_Office_university
 	ENDIF
 ELSE
 	CLEARLINE 1

@@ -381,11 +381,11 @@ LOCALS:25 = 調教
 LOCALS:26 = 調教部下
 LOCALS:27 = 进行従属勧告
 LOCALS:30 = 捕虜返還交渉
-
+;(従属国パッチ)従属勧告を追加
 
 VARSET LOCAL, 0, 100, 130
 ;(従属国パッチ)(TMP_COUNTRY_RELATION:宗主国=6 辺境伯=7 植民地=8 傀儡国=9 COUNTRY_Protectorate:辺境伯=2 植民地=3 傀儡国=4)
-;(従属国パッチ)辺境伯か植民地,傀儡国であるときは停戦・同盟・永久同盟・外交併合・同盟破棄・降伏勧告ができない
+;(従属国パッチ)辺境伯か植民地,傀儡国であるときは停戦・同盟・永久同盟・外交併合・同盟破棄・降伏勧告・従属勧告ができない
 IF TMP_COUNTRY_RELATION:(CFLAG:MASTER:所属):(ARG:0) >= 1 || COUNTRY_TREATY_NO:(CFLAG:MASTER:所属):1 >= 停戦可能数 || COUNTRY_Protectorate:(CFLAG:MASTER:所属) >= 2
 	LOCAL:100 = 1
 ENDIF

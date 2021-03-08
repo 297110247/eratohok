@@ -44,10 +44,10 @@
 ;傀儡国参加国(最後の要素:0=傀儡国 1=宗主国)
 #DIM SAVEDATA TREATY_P_COUNTRY, MAX_TREATY_P, MAX_TREATY_COUNTRY, 2
 
-;連邦関係が存在する
+;その国には連邦関係が存在する
 #DIM SAVEDATA IS_TREATY_UNI, MAX_COUNTRY
 
-;連邦参加国(最後の要素:0=連邦参加国 1=連邦主導国)
+;連邦参加国(2番目の要素:連邦ナンバー 最後の要素:0=連邦参加国 1=連邦主導国)
 #DIM SAVEDATA TREATY_UNI_COUNTRY, MAX_COUNTRY, MAX_COUNTRY, 2
 
 ;-------------------------------------------------
@@ -61,3 +61,28 @@
 
 #DIM Integrate_Protectorate
 
+#DIM INDEPENDENCE_university
+
+;研究・教育機関の担当者
+#DIM SAVEDATA RESEARCHER_UNION
+
+;研究・教育機関の研究ポイント
+#DIM SAVEDATA RESEARCH_UNIVERSITY_POINT, MAX_COUNTRY
+
+;研究・教育機関による研究ブースト
+#DIM SAVEDATA RESEARCH_UNIVERSITY_BOOST, MAX_COUNTRY
+
+;特殊勢力と交流可能
+;(最後の要素:0=ダミー 1=野盗 2=ホフゴブリン 3=外来人 4=触手 5=自警団 6=サキュバス 7=狂信者)
+#DIM SAVEDATA RESEARCH_UNIVERSITY_CAN_COMMUNICATE_SP, MAX_COUNTRY, 10
+
+;特殊勢力が連邦にいる(2番目の要素:連邦ナンバー)
+;(最後の要素:0=ダミー 1=野盗 2=ホフゴブリン 3=外来人 4=触手 5=自警団 6=サキュバス 7=狂信者)
+#DIM SAVEDATA IS_SP_COUNTRY_IN_UNION, MAX_COUNTRY, 10
+
+;その勢力は外来人と研究協定を締結している
+#DIM SAVEDATA IS_RESEARCH_AGREEMENT_WITH_SP, MAX_COUNTRY
+
+;活用可能な特殊知識・特殊建造物
+;(最後の要素:0=ダミー 1= 2=人体実験 3=生体発電 4=精子力発電 5=テンタクル・ビーコン 6=テンタクル・ダイソン砲 7=テンタクル・オブリテーター 8=マトリョーシ姦・ブレイン)
+#DIM SAVEDATA RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP, MAX_COUNTRY, 10

@@ -103,6 +103,10 @@ IF DVAR:金貸し_返済期限 == 0 && DVAR:金貸し_残り融資額 == 0 && DV
 		CALL EVENT_DAILY_DERIVATION_LENDER_REPAYMENT_SETTARGET()
 		IF DAILY_TARGET_NUM > 0
 			担保 = DAILY_TARGET:(RAND:DAILY_TARGET_NUM)
+			;(従属国パッチ)担保が辺境伯だったときは無担保
+			IF CFLAG:担保:702 != 1
+				担保 = -1
+			ENDIF
 		ELSE
 			担保 = -1
 		ENDIF

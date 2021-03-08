@@ -62,6 +62,9 @@ SIF IS_SP_CHARA(対象)
 ;特殊勢力所属なら駄目
 SIF IS_SP_COUNTRY(CFLAG:対象:所属)
 	RETURNF 0
+;(従属国パッチ)辺境伯は駄目
+SIF CFLAG:対象:702 == 1
+	RETURNF 0
 ;野心が皆無なやつも謀反を起こさない
 SIF ABL:対象:野心 <= 0
 	RETURNF 0

@@ -139,6 +139,7 @@ RETURN IS_FREE(対象) && CFLAG:対象:捕虜先 == 0
 #DIM 都市
 #DIM 都市所持勢力
 #DIM 新傀儡国
+VARSET 傀儡国君主予定
 
 ;従属国は傀儡国作成不可
 IF COUNTRY_Protectorate:(CFLAG:MASTER:所属) >= 2

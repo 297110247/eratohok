@@ -138,6 +138,7 @@ SIF 対象 == MASTER
 ;(従属国パッチ)対象が滅亡勢力の君主であって滅亡勢力に属していないとき(=対象が辺境伯であるとき)必ず逃亡成功
 IF  対象 == GET_COUNTRY_BOSS(滅亡勢力) && CFLAG:対象:所属 != 滅亡勢力
 	PRINTFORML %ANAME(GET_COUNTRY_BOSS(CFLAG:対象:所属))%的辺境伯%ANAME(対象)%直接成为了%ANAME(GET_COUNTRY_BOSS(CFLAG:対象:所属))%的士官
+	CFLAG:対象:702 = 0
 	RETURN 0
 ENDIF
 

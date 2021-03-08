@@ -33,11 +33,30 @@ RETURN デイリー_ジャンル_特殊勢力
 ;---------------------
 @EVENT_DAILY_GOBLIN_PRISONER_ABD_SETTARGET()
 #DIM ゴブリン
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+VARSET 連邦構成国
+連邦ナンバー = 0
 ゴブリン = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_ホフゴブリン))
 
+;(従属国パッチ)ゴブリンのいる連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY_IN_UNION:(LOCAL:0):2 == 1
+		連邦ナンバー = LOCAL:0
+		BREAK
+	ENDIF
+NEXT
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
+
 FOR LOCAL, 0, CHARANUM
-	;ゴブリン勢力に所属しておらず、ゴブリン勢力の捕虜でもなく、君主でもなく、妊娠している動物以外の女性キャラから選択
-	IF CFLAG:(LOCAL):所属 != ゴブリン && !GROUPMATCH(CFLAG:(LOCAL):捕虜先, 0, ゴブリン) && IS_FEMALE(LOCAL) && !IS_ANIMAL(LOCAL) && !IS_SP_CHARA(LOCAL) && !TALENT:LOCAL:特殊勢力素質 && !IS_SP_COUNTRY(CFLAG:LOCAL:捕虜先)
+	;ゴブリン勢力に所属しておらず、ゴブリン勢力の捕虜でもなく、君主でもなく、妊娠している動物以外の女性キャラから選択(従属国パッチ)ゴブリンが加入している連邦構成国の所属又は捕虜先はダメ
+	IF CFLAG:(LOCAL):所属 != ゴブリン && !GROUPMATCH(CFLAG:(LOCAL):捕虜先, 0, ゴブリン) && IS_FEMALE(LOCAL) && !IS_ANIMAL(LOCAL) && !IS_SP_CHARA(LOCAL) && !TALENT:LOCAL:特殊勢力素質 && !IS_SP_COUNTRY(CFLAG:LOCAL:捕虜先) && 連邦構成国:(CFLAG:LOCAL:所属) != 1 && 連邦構成国:(CFLAG:LOCAL:捕虜先) != 1
 		DAILY_TARGET:DAILY_TARGET_NUM = LOCAL
 		DAILY_TARGET_NUM ++
 	ENDIF

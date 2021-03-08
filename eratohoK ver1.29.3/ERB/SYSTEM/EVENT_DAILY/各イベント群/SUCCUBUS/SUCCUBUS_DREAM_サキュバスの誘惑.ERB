@@ -29,15 +29,34 @@ RETURN デイリー_ジャンル_特殊勢力
 ;---------------------
 @EVENT_DAILY_SUCCUBUS_DREAM_SETTARGET()
 #DIM 夢魔
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+VARSET 連邦構成国
+連邦ナンバー = 0
 夢魔 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_サキュバス)
+
+;(従属国パッチ)サキュバスが加入している連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY_IN_UNION:(LOCAL:0):6 == 1
+		連邦ナンバー = LOCAL:0
+		BREAK
+	ENDIF
+NEXT
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
 
 FOR LOCAL, 0, CHARANUM
 	;所属がサキュバスでなく、捕虜でなく、女。
-	;MASTERでなく、君主でなく、動物でなく、特殊キャラでなく、特殊勢力キャラでなく、死んでおらず、未登場でもない
+	;MASTERでなく、君主でなく、動物でなく、特殊キャラでなく、特殊勢力キャラでなく、死んでおらず、未登場でもない(従属国パッチ)辺境伯はだめ,サキュバスが加入している連邦構成国所属はダメ
 	{
 		IF CFLAG:(LOCAL):所属 != 夢魔 && !CFLAG:(LOCAL):捕虜先 && IS_FEMALE(LOCAL) 
 			&& LOCAL != MASTER && LOCAL != GET_COUNTRY_BOSS(CFLAG:LOCAL:所属) && !IS_ANIMAL(LOCAL) && !IS_SP_CHARA(LOCAL) && !TALENT:LOCAL:特殊勢力素質
-			&& CFLAG:LOCAL:特殊状態 != 特殊状態_死亡 && !ALLSAMES(CFLAG:LOCAL:特殊状態, CFLAG:LOCAL:所属, 0)
+			&& CFLAG:LOCAL:特殊状態 != 特殊状態_死亡 && !ALLSAMES(CFLAG:LOCAL:特殊状態, CFLAG:LOCAL:所属, 0) && CFLAG:LOCAL:702 != 1 && 連邦構成国:(CFLAG:LOCAL:所属) != 1
 	}
 		SIF CFLAG:LOCAL:所属 == CFLAG:MASTER:所属 && RAND:3
 			CONTINUE
@@ -60,66 +79,66 @@ RETURN 1
 対象 = DAILY_TARGET:(RAND:DAILY_TARGET_NUM)
 夢魔 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_サキュバス)
 
-PRINTFORML 是梦魔应该把%ANAME(対象)%做为朋友着眼的那样
-PRINTFORMW 为了唤起她心中的性欲，做了个淫乱的梦……
+PRINTFORML サキュバスが%ANAME(対象)%を仲間にするべく目を付けた様だ
+PRINTFORMW 彼女の中の性欲を呼び起こすべく、淫らな夢を見せている…
 PRINTFORML 
 SELECTCASE RAND:5
 	CASE 0
-		PRINTFORML %ANAME(対象)%被理想的身材的男性抱着疯狂地做瑜伽
-		PRINTFORML 一边被他抱一边用强壮的肉棒激烈地被推上，没有那个地喘息
-		PRINTFORML 对于激烈又温柔的性爱%ANAME(対象)%非常伤感，用雌性的脸紧紧地抱住他
-		PRINTFORMW 像嫉妒一样伸出舌头，他也巧妙地缠绕起来，太舒服了，脑袋也发呆了
-		PRINTFORML 有爱的接吻hame子宫砰地疼，在梦中他紧紧地抱住扭腰
-		PRINTFORML 彼の逞しい肉棒が動くのをを膣全体で感じながら%ANAME(対象)%は二度三度と軽くアクメに達する
-		PRINTFORML 为了配合%ANAME(対象)%的高性感官能，他将一点点加速腰部运动
-		PRINTFORMW 以及他的灼热的精液被释放到子宫的同时，%ANAME(対象)%达到了昏迷程度的顶峰
-		PRINTFORMW %ANAME(対象)%在他之后也接吻不断，沉溺在爱与肉欲之中……
+		PRINTFORML %ANAME(対象)%は理想的な体躯の男性に抱かれてヨガリ狂っている
+		PRINTFORML 彼に抱えられながら逞しいペニスで激しく突き上げられ、あられもなく喘ぐ
+		PRINTFORML 激しくも優しいセックスに%ANAME(対象)%はメロメロとなっており雌の顔で彼にしがみつく
+		PRINTFORMW ねだる様に舌を差し出すと、彼も巧みに絡ませてきて心地よさのあまり頭がボーっとする
+		PRINTFORML 愛のあるキスハメに子宮がきゅんきゅんと疼き、夢中で彼にしがみつき腰をくねらせる
+		PRINTFORML 彼の逞しいペニスが動くのをを膣全体で感じながら%ANAME(対象)%は二度三度と軽くアクメに達する
+		PRINTFORML %ANAME(対象)%の官能の高ぶりに合わせる様に彼が腰の動きを少しずつ加速させていく
+		PRINTFORMW そして彼の灼熱の精液が子宮に放たれると同時に、%ANAME(対象)%は気を失う程の絶頂に達した
+		PRINTFORMW %ANAME(対象)%は彼とその後も延々とキスハメを続け愛と肉欲に溺れていった…
 	CASE 1
-		PRINTFORML %ANAME(対象)%被巨大的身体的鬼推倒一边激烈地被侵犯呻吟着
-		PRINTFORML 人的胳膊那样有的巨大的肉棒被拧进的阴道成为千钧一发的
-		PRINTFORML 每当他摇动腰部时，肚子就咕噜咕噜地膨胀起来，%ANAME(対象)%就会一边吹着潮水一边剥开白眼皮痉挛
-		PRINTFORMW 可是为了梦中的，%ANAME(対象)%感到痛苦血也不流只有暴力的快感遍布全身
-		PRINTFORML 虽然不是性奴隶，而是像个肉尿鱼一样对待，但也有像狗一样耷拉着舌头的神经质
-		PRINTFORML 身体也完全被教育，扩展到子宫中他的肉棒到(连)根源叼入
-		PRINTFORML 每刺一次绝顶的同时理性被破坏，变得不能只考虑性的事
-		PRINTFORMW 在最后，%ANAME(対象)%就像是自己扭腰似的，要求他种子
-		PRINTFORMW 被他中意的%ANAME(対象)%之后也作为onaho不断地被侵犯……
+		PRINTFORML %ANAME(対象)%は巨躯の鬼に押し倒されながら激しく犯され呻いている
+		PRINTFORML 人の腕ほどもある巨大なペニスをねじ込まれ膣ははち切れんばかりになっている
+		PRINTFORML 彼が腰を振る度にお腹がボコッと膨れ上がり、%ANAME(対象)%は潮を吹きながら白目を剥き痙攣する
+		PRINTFORMW しかし夢の中の為、%ANAME(対象)%は苦痛は感じず血も流れずただ暴力的な快感が全身を駆け巡る
+		PRINTFORML 性奴隷どころか肉オナホの様な扱いだが、犬の様にだらしなく舌を垂らしたアヘ顔を晒す
+		PRINTFORML 身体もすっかり躾けられ、子宮の中まで広げきって彼のペニスを根元まで咥え込んでいる
+		PRINTFORML 一突き毎に絶頂し同時に理性が破壊され、セックスの事だけしか考えられなくなってく
+		PRINTFORMW 挙句の果てに、%ANAME(対象)%は自ら腰をくねらせねだる様に彼の子種を求める様になっていた
+		PRINTFORMW 彼に気に入られた%ANAME(対象)%はその後もオナホとして延々と犯されまくる事になった…
 	CASE 2
-		PRINTFORML %ANAME(対象)%是作为肉便器被圈起来，被中年父亲饲养的
-		PRINTFORML 虽然从看被侵犯了欲望滚滚的肥胖中年，%ANAME(対象)%像狗一样地感到喜悦
-		PRINTFORML %ANAME(対象)%是他强壮的精力超群肉棒和粘糊糊的性感所调教出来的
-		PRINTFORMW 连日连夜被主人疼爱，充分注入可爱的子种的事是最好的奖励
-		PRINTFORML 雌孔已经成为主人恰好的专用肉棒盒，平时滴着蜜
-		PRINTFORML %ANAME(対象)%向他献媚，认为被饲养的事被使用是女人的喜悦
-		PRINTFORML 任何可耻的游戏都是奖励，%ANAME(対象)%对其生活方式没有任何迷惑。
-		PRINTFORMW 然后今天也是%ANAME(対象)%在主人的命令下跌倒在床上打开了胯股
-		PRINTFORMW 主人专用的雌性小鸡宠物直到醒来为止都被宠爱不已……
+		PRINTFORML %ANAME(対象)%は肉便器として首輪をつけられて中年親父に飼われている
+		PRINTFORML 見るからに欲望の塊の脂ぎったメタボ中年に犯されながら、%ANAME(対象)%は犬の様に悦んでいる
+		PRINTFORML %ANAME(対象)%は彼の逞しい絶倫ペニスとねっとりとしたセックスに調教されきっている様だ
+		PRINTFORMW 連日連夜ご主人様に可愛がられ、愛おしい子種をたっぷり注がれる事が至上のご褒美だ
+		PRINTFORML 雌穴は既にご主人様ピッタリの専用ペニスケースになっており、常時蜜を垂らしている
+		PRINTFORML %ANAME(対象)%は飼われる事使われる事犯される事が女の悦びだとばかりに彼に媚びを売る
+		PRINTFORML どんな恥ずかしいプレイももはやご褒美であり、%ANAME(対象)%はその生き方に何の迷いもない
+		PRINTFORMW そして今日もまた%ANAME(対象)%はご主人様に命ぜられるままにベッドに転がり股を開いた
+		PRINTFORMW ご主人様専用のおチンポ雌ペットとして目が覚めるまで延々と可愛がられた…
 	CASE 3
-		PRINTFORML %ANAME(対象)%与恋人的男性一边缠绕全身一边埋头于性爱
-		PRINTFORML 他的手指每当舌头在皮肤上爬行时就会充满幸福感，吐出甜美的呼吸，露出多伦多表情
-		PRINTFORML 用雄伟的肉棒好好地被刺激阴道内的话麻痹跑不禁哆嗦了
-		PRINTFORMW 被说温柔的拥抱着生下我的孩子%ANAME(対象)%不禁绝顶了
-		PRINTFORML 胎内感受着他子宫内射向PRINTFORML 的种子之热，一再往高潮
-		PRINTFORML 被阴道一边拿出一边激烈地吸舌头，%ANAME(対象)%成为象迷恋了一样的心情与bikubiku痉挛了
-		PRINTFORML 射精结束后两人紧紧拥抱在一起，沉浸在愉快的余韵中
-		PRINTFORMW 不久，再次动了腰，%ANAME(対象)%也亲吻了他，回答了，再次埋头于性
-		PRINTFORMW 对有爱的性爱入迷，变得无法考虑其他的事情……
+		PRINTFORML %ANAME(対象)%は恋人の男性と全身を絡ませながらのセックスに没頭している
+		PRINTFORML 彼の指が舌が肌を這う度に幸福感で満ち、甘い吐息を漏らしてトロンとした表情になる
+		PRINTFORML 雄々しいペニスでじっくりと膣内を刺激されるとシビレが走りゾクゾクと震えてしまう
+		PRINTFORMW 彼に優しく抱かれながら俺の子を孕んでくれと言われ%ANAME(対象)%はたまらず絶頂してしまった
+		PRINTFORML びゅるびゅると放たれる彼の子種の熱を胎内で感じながら何度も絶頂を繰り返していく
+		PRINTFORML 膣出しされながら舌を激しく吸われ、%ANAME(対象)%は惚けた様な気分になりビクビクと痙攣した
+		PRINTFORML 射精が終わった後もしばらく二人で抱きしめ合い、心地よい余韻に浸り続けた
+		PRINTFORMW やがて再び彼が腰を動かすと%ANAME(対象)%も彼にキスをして答え、再びセックスに没頭した
+		PRINTFORMW 愛のあるセックスに夢中になり、それ以外の事を考えられなくなっていった…
 	CASE 4
-		PRINTFORML %ANAME(対象)%在流浪妖怪的巢穴中受到激烈的种子冲击
-		PRINTFORML 受到dosun和子宫快要崩溃了的程度的活塞%ANAME(対象)%手脚发抖呻吟
-		PRINTFORML 不拘泥于那样粗暴的待遇痛苦也不觉得，每刺每强烈的快乐视野变得雪白
-		PRINTFORMW 热胶!猛射精了之后快乐就没有达到顶点，又被高潮了
-		PRINTFORML 似乎喜欢%ANAME(対象)%，之后又精力超群妖怪小苍令人喜爱
-		PRINTFORML 曾经一度绝顶的%ANAME(対象)%已经无法抗拒快乐，自己弯腰接受他几度绝顶
-		PRINTFORML 使他孕育出真心的%ANAME(対象)%，拼命地紧紧抱住发出欢喜的声音
-		PRINTFORMW 虽然第几次将射精射入胎内，但%ANAME(対象)%却达到了从未尝过的雌性喜悦
-		PRINTFORMW 已经%ANAME(対象)%的身心和他的妻子或性奴隶一起沉溺在快乐中…
+		PRINTFORML %ANAME(対象)%は野良妖怪のねぐらで巣の主に激しい種付けプレスを受けている
+		PRINTFORML ドスンドスンと子宮が潰れそうな程のピストンを受けて%ANAME(対象)%は手足をビクつかせて呻く
+		PRINTFORML そんな乱暴な扱いにも拘らず苦痛は感じず、一突き毎に強烈な快楽で視界が真っ白になる
+		PRINTFORMW ドビュルルル！と勢いよく射精されると快楽は頂点に達したまらず絶頂させられてしまった
+		PRINTFORML 彼は%ANAME(対象)%の事を気に入った様でその後も絶倫妖怪ちんぽで可愛がられ続ける事になる
+		PRINTFORML 一度絶頂した%ANAME(対象)%はもはや快楽に抗えず、自ら腰をくねらせ彼を受け入れ何度も絶頂する
+		PRINTFORML 彼の本気の孕ませ種付けプレスを受けた%ANAME(対象)%は、必死でしがみついて歓喜の声を上げる
+		PRINTFORMW 何度目かの射精を胎内に放たれながら%ANAME(対象)%は味わったことのない雌の悦びに達した
+		PRINTFORMW もはや%ANAME(対象)%は身も心も彼の妻もしくは性奴隷と成り下がり快楽に溺れていった…
 ENDSELECT
 CALL FUCK(対象, "欲望, 欲望, 奉仕, 性技, 性交, 精愛, Ｃ, Ｖ, Ｂ, Ｍ, Ｖ性交, 接吻, 口淫", "CFLAG減少", 0, "", "", "")
 PRINTFORML 
 IF RAND:5 + ABL:対象:欲望 >= 5
-	PRINTFORMW %ANAME(対象)%是梦魔给予的快乐俘虏
-	CALL COLOR_PRINTW("她无法忘记梦中的梦想，坠入了梦魔势力……", カラー_ピンク)
+	PRINTFORMW %ANAME(対象)%はサキュバスから与えられる快楽の虜となった
+	CALL COLOR_PRINTW("彼女は見せられた夢を忘れられずサキュバス勢力に下ってしまった…", カラー_ピンク)
 	;CFLAG:対象:所属 = 夢魔
 	CALL CHANGE_COUNTRY(対象, 夢魔)
 ELSE

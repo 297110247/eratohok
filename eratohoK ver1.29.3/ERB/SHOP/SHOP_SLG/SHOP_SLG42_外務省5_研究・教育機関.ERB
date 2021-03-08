@@ -1,0 +1,404 @@
+﻿;-------------------------------------------------
+;「研究・教育機関」本体
+;-------------------------------------------------
+@Colonial_Office_university
+#DIM 研究ポイント
+
+;研究担当者の担当可能判定
+IF CFLAG:RESEARCHER_UNION:所属 != CFLAG:MASTER:所属 || CFLAG:RESEARCHER_UNION:捕虜先 != 0
+	RESEARCHER_UNION = 0
+ENDIF
+
+
+CALL SINGLE_DRAWLINE
+IF RESEARCHER_UNION == 0
+	PRINTFORML 现在的负责人[无]
+ELSE
+	PRINTFORML 现在的负责人[%ANAME(RESEARCHER_UNION)%]
+ENDIF
+研究ポイント = RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属)
+PRINTFORML 现在的研究点数[ {研究ポイント} ]
+CALL SINGLE_DRAWLINE
+
+LOCALS:0 = 变更负责人
+LOCALS:1 = 共享研究进度
+LOCALS:2 = 煽动叛乱
+LOCALS:3 = 调查特殊势力
+LOCALS:4 = 调查特殊计数
+LOCALS:5 = 教育子女
+
+;従属国・永久同盟国がいないと「研究を共有する」は選択不可
+IF !IS_TREATY_UNI:(CFLAG:MASTER:所属)
+	LOCAL:101 = 1
+ELSE
+	LOCAL:101 = 0
+ENDIF
+
+;特殊勢力が存在するとき
+LOCAL:103 = 1
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY(LOCAL:0)
+		LOCAL:103 = 0
+		BREAK
+	ENDIF
+NEXT
+
+;未実装部分は選択不可
+LOCAL:104 = 1
+
+FOR LOCAL:0, 0, 10
+	IF LOCALS:(LOCAL:0) != ""
+		PRINTL 
+		IF LOCAL:(LOCAL:0 + 100)
+			SETCOLOR カラー_選択不可
+			PRINTPLAINFORM {LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]
+			RESETCOLOR
+		ELSE
+			PRINTBUTTON @"{LOCAL:0, 2}[%LOCALS:(LOCAL:0), 18%]", LOCAL:0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+
+PRINTL
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF RESULT >= 0 && RESULT < 10 && !LOCAL:(RESULT + 100)
+	;担当者を変更する
+	IF RESULT == 0
+		CALL Colonial_Office_university_RESEARCHER
+	;研究を共有する
+	ELSEIF RESULT == 1
+		CALL Colonial_Office_university_BOOST
+	;反乱を工作する
+	ELSEIF RESULT == 2
+		CALL Colonial_Office_university_INDEPENDENCE_support
+	;特殊勢力を調査する
+	ELSEIF RESULT == 3
+		CALL Colonial_Office_university_RESEARCH_SP_COUNTRY
+	;特殊技術を調査する
+	;子供を教育する
+	ELSEIF RESULT == 5
+		CALL Colonial_Office_university_EDUCATION
+	ENDIF
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「担当者を変更する」
+;-------------------------------------------------
+@Colonial_Office_university_RESEARCHER
+#DIM 担当者候補
+
+PRINTFORML 要让谁来当负责人？
+PRINTFORML 负责人的能力值会影响每回合的研究点收入
+CALL SINGLE_DRAWLINE
+CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("university_RESEARCHER", "university_RESEARCHER")
+担当者候補 = RESULT
+IF RESULT == -1
+	PRINTFORMW 返回
+	REDRAW 1
+	RETURN 0
+ENDIF
+
+RESEARCHER_UNION = 担当者候補
+PRINTFORMW %ANAME(担当者候補)%成为了负责人
+
+RETURN
+
+@SELECT_CHARA_LIST_SHOW_LOGIC_university_RESEARCHER(対象)
+#DIM 対象
+RETURN CFLAG:対象:所属 == CFLAG:MASTER:所属 && !IS_ANIMAL(対象) && CFLAG:対象:行動不能状態 != 行動不能_子供
+
+@SELECT_CHARA_LIST_SELECT_LOGIC_university_RESEARCHER(対象)
+#DIM 対象
+RETURN IS_FREE(対象) && CFLAG:対象:捕虜先 == 0
+
+;-------------------------------------------------
+;「研究を共有する」
+;-------------------------------------------------
+@Colonial_Office_university_BOOST
+#DIM 共有対象
+
+PRINTFORML 宗主国・従属国・永久同盟国共享研究结果
+PRINTFORML 战略回合结束时，这些势力的研究进度会增加2回合
+PRINTFORML 研究加速可重复，超额部分将会保存到下一回合。
+PRINTFORML 
+PRINTFORML 现在的研究点数[ {RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属)} ]
+PRINTFORML 需要15点研究点
+
+IF RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) < 15
+	PRINTFORMW 研究点不足
+	RETURN
+ELSE
+	PRINTFORML 要支付研究点吗？
+	;はい／いいえ入力処理
+	CALL ASK_YN()
+	IF RESULT == 1
+		RETURN
+	ENDIF
+	
+	RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 15
+	RESEARCH_UNIVERSITY_BOOST:(CFLAG:MASTER:所属) += 2
+	PRINTFORML %ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:所属))%势力的研究正在加速 現在累計增加[ {RESEARCH_UNIVERSITY_BOOST:(CFLAG:MASTER:所属)} ]
+	
+	;連邦構成国を検索
+	FOR LOCAL:0, 0, MAX_COUNTRY
+		FOR LOCAL:1, 0, MAX_COUNTRY
+			;連邦参加国のとき
+			IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属
+				FOR LOCAL:2, 0, MAX_COUNTRY
+					IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0 > 0 && TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0 != CFLAG:MASTER:所属
+						共有対象 = TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0
+						RESEARCH_UNIVERSITY_BOOST:共有対象 += 2
+						PRINTFORML %ANAME(GET_COUNTRY_BOSS(共有対象))%势力的研究正在加速 現在累計增加[ {RESEARCH_UNIVERSITY_BOOST:共有対象} ]
+					ELSEIF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0 && TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1 != CFLAG:MASTER:所属
+						共有対象 = TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1
+						RESEARCH_UNIVERSITY_BOOST:共有対象 += 2
+						PRINTFORML %ANAME(GET_COUNTRY_BOSS(共有対象))%势力的研究正在加速 現在累計增加[ {RESEARCH_UNIVERSITY_BOOST:共有対象} ]
+					ENDIF
+				NEXT
+			;連邦形成国のとき
+			ELSEIF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+				FOR LOCAL:2, 0, MAX_COUNTRY
+					IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0 > 0 && TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0 != CFLAG:MASTER:所属
+						共有対象 = TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):0
+						RESEARCH_UNIVERSITY_BOOST:共有対象 += 2
+						PRINTFORML %ANAME(GET_COUNTRY_BOSS(共有対象))%势力的研究正在加速 現在累計增加[ {RESEARCH_UNIVERSITY_BOOST:共有対象} ]
+					ELSEIF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1 > 0 && TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1 != CFLAG:MASTER:所属
+						共有対象 = TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:2):1
+						RESEARCH_UNIVERSITY_BOOST:共有対象 += 2
+						PRINTFORML %ANAME(GET_COUNTRY_BOSS(共有対象))%势力的研究正在加速 現在累計增加[ {RESEARCH_UNIVERSITY_BOOST:共有対象} ]
+					ENDIF
+				NEXT
+			ENDIF
+		NEXT
+	NEXT
+ENDIF
+
+RETURN
+
+;-------------------------------------------------
+;「反乱を工作する」
+;-------------------------------------------------
+@Colonial_Office_university_INDEPENDENCE_support
+#DIM FIRST_LINE
+#DIM 対象勢力
+#DIM 対象勢力名
+#DIM 支援対象
+#DIM 独立成功判定
+
+PRINTFORML 在没有签订任何条约的敌国支持不稳分子发生叛乱
+PRINTFORML 独立的叛乱势力将成为我国的殖民地
+PRINTFORML 
+PRINTFORML 现在的研究点数[ {RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属)} ]
+PRINTFORML 现在的国库资金[ {MONEY:(CFLAG:MASTER:所属)} ]
+PRINTFORML 需要30点研究点数与10000国库资金
+
+IF RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) < 30 || MONEY:(CFLAG:MASTER:所属) < 10000
+	PRINTFORMW 资源不足
+	RETURN
+ELSE
+	PRINTFORML 要支付吗？
+	;はい／いいえ入力処理
+	CALL ASK_YN()
+	IF RESULT == 1
+		RETURN
+	ENDIF
+ENDIF
+
+PRINTFORML 选择作为叛乱目标的国家
+
+;必要な高速化用マップの作成
+CALL TMP_CREATE_RELATION_MAP
+CALL TMP_CREATE_COUNTRY_BOSS_MAP
+CALL TMP_CREATE_UNION_TARGET_MAP
+CALL TMP_PREPARE_CHARA_STARS
+CALL TMP_PREPARE_COUNTRY_STARS
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TMP_COUNTRY_RELATION:(CFLAG:MASTER:所属):(LOCAL:0) == 0 && IS_COUNTRY(LOCAL:0)
+		SETCOLOR COUNTRY_COLOR:(LOCAL:0)
+		PRINTBUTTON @"[%SNAME(TMP_COUNTRY_BOSS_NUMBER:(LOCAL:0)), MAX_CHARANAME_LENGTH / 2, LEFT%]", LOCAL:0
+		RESETCOLOR
+		PRINTL
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON " 0[    取消]", 0
+PRINTL
+
+REDRAW 0
+
+$INPUT_LOOP1
+INPUT
+
+IF RESULT == 0
+	REDRAW 1
+	PRINTFORMW 取消了，研究点不会被消耗。
+	RETURN 0
+ELSEIF IS_COUNTRY(RESULT)
+	REDRAW 1
+ELSE
+	GOTO INPUT_LOOP1
+ENDIF
+
+対象勢力 = RESULT
+対象勢力名 = GET_COUNTRY_BOSS(対象勢力)
+INDEPENDENCE_university = 対象勢力
+
+CALL SELECT_CHARA_RANDOM("university_INDEPENDENCE_support", "SLG_RANDOM_INDEPENDENCE")
+
+支援対象 = RESULT
+
+IF 支援対象 == -1
+	PRINTFORMW %ANAME(対象勢力名)%势力没有发现不稳分子。研究点不会被消耗。
+	RETURN 0
+ENDIF
+
+PRINTFORML %ANAME(支援対象)%似乎企图从%ANAME(対象勢力名)%势力中独立出来
+PRINTFORML 是否要支援?
+;はい／いいえ入力処理
+CALL ASK_YN()
+IF RESULT == 1
+	PRINTFORMW 取消了，研究点不会被消耗。
+	RETURN
+ENDIF
+
+CALL NPC_INDEPENDENCE(支援対象)
+
+独立成功判定 = RESULT
+IF 独立成功判定 == -1
+	PRINTFORMW 没有发生叛乱。研究点不会被消耗。
+	RETURN
+ENDIF
+
+PRINTFORML 作为我国支持叛乱的代价，%ANAME(GET_COUNTRY_BOSS(CFLAG:支援対象:所属))%势力成为了我国的殖民地。
+CALL INIT_Colony(CFLAG:支援対象:所属, CFLAG:MASTER:所属)
+RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 30
+MONEY:(CFLAG:MASTER:所属) -= 10000
+
+PRINTFORML 
+PRINTFORMW 我国与%ANAME(対象勢力名)%势力之间的关系大幅度恶化
+CALL CHANGE_RELATION_C_TO_C(対象勢力, CFLAG:MASTER:所属, -200, 600)
+
+RETURN
+
+@SELECT_CHARA_RANDOM_LOGIC_university_INDEPENDENCE_support(対象)
+#DIM 対象
+RETURN CAN_RANDOM_INDEPENDENCE(対象) && CFLAG:対象:所属 == INDEPENDENCE_university
+
+;-------------------------------------------------
+;「特殊勢力を調査する」
+;-------------------------------------------------
+@Colonial_Office_university_RESEARCH_SP_COUNTRY
+#DIM サキュバス
+#DIM ホフゴブリン
+#DIM 外来人
+#DIM 触手
+#DIM 調査対象
+
+サキュバス = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_サキュバス))
+ホフゴブリン = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_ホフゴブリン)
+外来人 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_外来人)
+触手 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_触手)
+
+PRINTFORML 调查对所有势力构成威胁的特殊势力
+PRINTFORML 建立外交关系的基础，准备接收特殊的技术
+PRINTFORML 
+PRINTFORML 现在的研究点数[ {RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属)} ]
+PRINTFORML 需要50点研究点
+
+IF RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) < 50
+	PRINTFORMW 研究点不足
+	RETURN
+ELSE
+	PRINTFORML 是否支付？
+	;はい／いいえ入力処理
+	CALL ASK_YN()
+	IF RESULT == 1
+		RETURN
+	ENDIF
+ENDIF
+
+PRINTFORML 请选择要调查的外来势力
+;対象はホフゴブリン・外来人・触手・サキュバス
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY(LOCAL:0) && LOCAL:0 > 0
+		IF LOCAL:0 == サキュバス
+			SETCOLOR COUNTRY_COLOR:(LOCAL:0)
+			PRINTBUTTON " {LOCAL:0}[　　　　　调查魅魔势力]", LOCAL:0
+			RESETCOLOR
+			PRINTL
+		ELSEIF LOCAL:0 == ホフゴブリン
+			SETCOLOR COUNTRY_COLOR:(LOCAL:0)
+			PRINTBUTTON " {LOCAL:0}[　　　　调查哥布林势力]", LOCAL:0
+			RESETCOLOR
+			PRINTL
+		ELSEIF LOCAL:0 == 外来人
+			SETCOLOR COUNTRY_COLOR:(LOCAL:0)
+			PRINTBUTTON " {LOCAL:0}[　　　　调查外来人势力]", LOCAL:0
+			RESETCOLOR
+			PRINTL
+		ELSEIF LOCAL:0 == 触手
+			SETCOLOR COUNTRY_COLOR:(LOCAL:0)
+			PRINTBUTTON " {LOCAL:0}[　　　　　调查触手势力]", LOCAL:0
+			PRINTFORML 　当前版本没有收益
+			RESETCOLOR
+			PRINTL
+		ENDIF
+	ENDIF
+NEXT
+PRINTBUTTON " 0[　　　　　　　　　取消]", 0
+
+$INPUT_LOOP1
+INPUT
+
+IF RESULT == 0
+	RETURN 0
+ELSEIF IS_SP_COUNTRY(RESULT)
+	調査対象 = RESULT
+ELSE
+	GOTO INPUT_LOOP1
+ENDIF
+
+IF 調査対象 == サキュバス
+	RESEARCH_UNIVERSITY_CAN_COMMUNICATE_SP:(CFLAG:MASTER:所属):6 = 1
+	RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 50
+	PRINTFORML 对魅魔们的行为形态・心理・行为伦理・思想等进行详细的了解
+	PRINTFORMW 可以在「外交部」菜单中的「与特殊勢力的外交」中进行秘密外交了
+ELSEIF 調査対象 == ホフゴブリン
+	RESEARCH_UNIVERSITY_CAN_COMMUNICATE_SP:(CFLAG:MASTER:所属):2 = 1
+	RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 50
+	PRINTFORML 对哥布林们的行为形态・心理・行为伦理・思想等进行详细的了解
+	PRINTFORMW 可以在「外交部」菜单中的「与特殊勢力的外交」中进行秘密外交了
+ELSEIF 調査対象 == 外来人
+	RESEARCH_UNIVERSITY_CAN_COMMUNICATE_SP:(CFLAG:MASTER:所属):3 = 1
+	RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 50
+	PRINTFORML 对外来人们的行为形态・心理・行为伦理・思想等进行详细的了解
+	PRINTFORMW 可以在「外交部」菜单中的「与特殊勢力的外交」中进行秘密外交了
+ELSEIF 調査対象 == 触手
+	RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):1 = 1
+	RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) -= 50
+	PRINTFORML 对触手进行更深层次的了解
+	PRINTFORMW 「研究・教育機関」界面中使用更多关于触手的知识(未实装)
+ENDIF
+
+RETURN
+
+

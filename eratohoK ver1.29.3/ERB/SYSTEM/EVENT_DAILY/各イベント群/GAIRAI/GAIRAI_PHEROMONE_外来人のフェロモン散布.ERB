@@ -33,13 +33,38 @@ RETURN デイリー_ジャンル_特殊勢力
 @EVENT_DAILY_GAIRAI_PHEROMONE_SETTARGET()
 #DIM 対象
 #DIM 外来人
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+VARSET 連邦構成国
+連邦ナンバー = 0
 外来人 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:特殊勢力_外来人)
 対象 = ID_TO_CHARA(DVAR:フェロモン中毒_対象ID)
+
+;(従属国パッチ)外来人のいる連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF IS_SP_COUNTRY_IN_UNION:(LOCAL:0):3 == 1
+		連邦ナンバー = LOCAL:0
+		BREAK
+	ENDIF
+NEXT
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
 
 ;前回の発生からの状態変化をみる
 IF 対象 != -1
 	;君主になっているなら解除
 	IF 対象 == GET_COUNTRY_BOSS(CFLAG:対象:所属)
+		DVAR:フェロモン中毒_対象ID = 0
+		RETURN 0
+	ENDIF
+	
+	;(従属国パッチ)念のため辺境伯になっているなら解除
+	IF GET_COUNTRY_BOSS(対象) == 対象 && CFLAG:対象:所属 != 対象
 		DVAR:フェロモン中毒_対象ID = 0
 		RETURN 0
 	ENDIF
@@ -75,11 +100,11 @@ IF 対象 != -1
 ELSE
 	FOR LOCAL, 0, CHARANUM
 		;所属が外来人でなく、捕虜でなく、女。
-		;MASTERでなく、君主でなく、動物でなく、特殊キャラでなく、特殊勢力キャラでなく、死んでおらず、未登場でもない
+		;MASTERでなく、君主でなく、動物でなく、特殊キャラでなく、特殊勢力キャラでなく、死んでおらず、未登場でもない(従属国パッチ)辺境伯はだめ、外来人が加入している連邦構成国所属はダメ
 		{
 			IF CFLAG:(LOCAL):所属 != 外来人 && !CFLAG:(LOCAL):捕虜先 && IS_FEMALE(LOCAL) 
 				&& LOCAL != MASTER && LOCAL != GET_COUNTRY_BOSS(CFLAG:LOCAL:所属) && !IS_ANIMAL(LOCAL) && !IS_SP_CHARA(LOCAL) && !TALENT:LOCAL:特殊勢力素質
-				&& CFLAG:LOCAL:特殊状態 != 特殊状態_死亡 && !ALLSAMES(CFLAG:LOCAL:特殊状態, CFLAG:LOCAL:所属, 0)
+				&& CFLAG:LOCAL:特殊状態 != 特殊状態_死亡 && !ALLSAMES(CFLAG:LOCAL:特殊状態, CFLAG:LOCAL:所属, 0) && CFLAG:LOCAL:702 != 1 && 連邦構成国:(CFLAG:LOCAL:所属) != 1
 		}
 			SIF CFLAG:LOCAL:所属 == CFLAG:MASTER:所属 && RAND:3
 				CONTINUE

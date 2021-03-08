@@ -33,7 +33,8 @@ RETURN 1
 
 @SELECT_CHARA_RANDOM_LOGIC_DAILY_MILLIONAIRE(対象)
 #DIM 対象
-RETURN 対象 != MASTER && IS_FEMALE(対象) && CFLAG:対象:所属 == CFLAG:MASTER:所属 && !CFLAG:対象:捕虜先 && GET_COUNTRY_BOSS(CFLAG:対象:1) != 対象 && CFLAG:対象:行動不能状態 != 行動不能_子供
+;(従属国パッチ)辺境伯はだめ
+RETURN 対象 != MASTER && IS_FEMALE(対象) && CFLAG:対象:所属 == CFLAG:MASTER:所属 && !CFLAG:対象:捕虜先 && GET_COUNTRY_BOSS(CFLAG:対象:1) != 対象 && CFLAG:対象:行動不能状態 != 行動不能_子供 && CFLAG:対象:702 != 1
 
 @SELECT_CHARA_RANDOM_BIAS_DAILY_MILLIONAIRE(対象)
 #DIM 対象
