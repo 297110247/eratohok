@@ -56,151 +56,223 @@ RETURN デイリー_ジャンル_その他
 @KOJO_DAILY_K30_INVITATION_FROM_KAGUYA(対象)
 #DIM 対象
 #DIM 永琳
-#DIM てゐ
+#DIM 帝
 #DIM 鈴仙
 #DIM ボス
 永琳 = NAME_TO_CHARA("永琳")
 鈴仙 = NAME_TO_CHARA("鈴仙")
-てゐ = NAME_TO_CHARA("てゐ")
+帝 = NAME_TO_CHARA("てゐ")
 ボス = GET_COUNTRY_BOSS(CFLAG:MASTER:所属)
 
 CALL COLORPRINT(NAME_FORMAL(対象), カラー_注意)
-PRINTFORMW 在据点举行的宴会上发出了请帖
-PRINTFORMW %ANAME(対象)%是与月都有关的人物，也是永远亭的公主。
-PRINTFORML ……如此高贵的人，会召集像自己一样的普通军官来干什么呢。…
+PRINTFORMW 据点举行的宴会的邀请函被送来了
+;TranslatedMark の拠点にて行われる宴の、招待状が送られてきた
+PRINTFORMW %ANAME(対象)%是与月都有关的人物，也是永远亭的公主
+;TranslatedMark %ANAME(対象)%といえば、月の都に関係する人物で、永遠亭の姫である人物だ
+PRINTFORML ……这样有地位的人会邀请像自己这样的普通军官来干什么呢……
+;TranslatedMark ……そんな有力者が、自分のようなただの士官を招いてどうするつもりだろう……
 PRINTFORML 虽然存有疑问，但在当权者面前混个脸熟也不错吧。……
+;TranslatedMark 疑問でしかないが、有力者に顔を売っておくのも悪くはないだろう……
 PRINTFORML
-CALL ASK_YN("出席する", "やめておく")
+CALL ASK_YN("出席", "还是算了")
 
 IF RESULT == 1
-	PRINTFORML ……莫非是有什么好事情
-	PRINTFORMW 这么一想%ANAME(MASTER)%は、圆滑的回复了为何缺席的疑问……
+	PRINTFORML ……不想陪着大人物们玩
+	;TranslatedMark ……えらいがたの遊びに付き合うこともあるまい
+	PRINTFORMW %ANAME(MASTER)%这样想着，在回信上想了个理由缺席……
+	;TranslatedMark そう考えた%ANAME(MASTER)%は、欠席にマルをつけて返事を出した……
 	KDVAR:対象:輝夜_貴族の誘い = 1
 	RETURN 1
 ENDIF
 
-PRINTFORMW 难得的机会。去看看吧……
+PRINTFORMW 机会难得。去看看吧……
+;TranslatedMark せっかくの機会だ。行ってみるとしよう……
 PRINTFORML ・
 PRINTFORML ・
 PRINTFORML ・
 PRINTFORML 永远亭在竹林深处，听说是在十分偏僻的地方。
-PRINTFORMW ……咦，似乎并没有准备宴席的样子
-PRINTFORMW 「初次见面，您是%ANAME(MASTER)%吧。……至于我是谁，您应该知道吧？」
-PRINTFORM 虽然是第一次看到对方，但是从那出众的美丽可以看出.的确能确认就是她
+;TranslatedMark 永遠亭とやらは竹林の奥深く、話に聞くよりも辺鄙なところにあった
+PRINTFORMW ……而且，并没有准备宴会的样子
+;TranslatedMark ……そして、宴の準備など何一つされていなかった
+PRINTFORMW 「初次见面，你是%ANAME(MASTER)%吧。……至于我是谁，您应该知道吧？」
+;TranslatedMark 「はじめまして、貴方が%ANAME(MASTER)%ね。……私が誰かは、知っているでしょう？」
+PRINTFORM 虽然是第一次看到对方，但是从那出众的美丽可以确认就是她
+;TranslatedMark 初めて見る相手だが、その図抜けた美しさでわかる。彼女こそ
 CALL COLORPRINT(NAME_FORMAL(対象), カラー_注意)
-PRINTFORMW  ……
-PRINTFORMW 「谢谢你的到来。我当然不会只邀请一个军官来参加宴会。」
-PRINTFORMW 「你也明白的吧。.。不会吧，你真的只是想参加宴会？」
-PRINTFORMW 实际上只是方便起见才发出了邀请函
-PRINTFORMW %PRONOUN(対象)%不管有没有害处，事已至此怎么也会有改变了……
-PRINTFORMW 「别担心，今天我为你准备了非常棒的东西。……%ANAME(永琳)%」
-PRINTFORMW 「是」
-PRINTFORMW 被传唤的，%PRONOUN(対象)%の后面的银发女性走上前去。
-PRINTFORMW 「%ANAME(MASTER)%先生。我听说你是个优秀的武将。」
-PRINTFORMW 「公主是聪明的人。了解人才的必要性，并且将会不择手段以将人才保留在手中。」
-PRINTFORMW 我想既然这里是密谈的地方，这恐怕就不是很和平的话了………
-PRINTFORMW 也就是%ANAME(MASTER)%是说要背叛现在的主人并投诚于她。
-PRINTFORMW 似乎只是建议，但从实际情况来考虑的话，能选择的余地就比较少了……
+PRINTFORMW 是吧……
+;TranslatedMark だろう……
+PRINTFORMW 「谢谢你能来。但是当然，我不会邀请一介士官来参加宴会的」
+;TranslatedMark 「まずは来てくれてありがとう。だけどもちろん、一介の士官を宴になんて招いたりしないわ、わざわざ」
+PRINTFORMW 「你也能明白吧？　……难道真的是想参加宴会吗？」
+;TranslatedMark 「貴方もそれは理解してたでしょう？　……まさか、本当に宴会に混ざろうとしてたわけじゃないわよね？」
+PRINTFORMW 原来如此，邀请函本身就很方便啊
+;TranslatedMark なるほど、招待状自体が方便だったということか
+PRINTFORMW %PRONOUN(対象)%不管有没有恶意，事已至此怎么也会有改变了……
+;TranslatedMark %PRONOUN(対象)%に害意があるかないかで、ここからどう動くかが変わるが……
+PRINTFORMW 「别担心，今天给你准备了非常棒的东西。……%ANAME(永琳)%」
+;TranslatedMark 「心配しないで、今日は貴方に、とっても素敵な話を用意したの。……%ANAME(永琳)%」
+PRINTFORMW 「是的」
+;TranslatedMark 「はい」
+PRINTFORMW 被传唤之后，站在%PRONOUN(対象)%后面的银发女性走了出来
+;TranslatedMark 呼ばれ、%PRONOUN(対象)%の後ろに控えていた銀髪の女性が進み出る
+PRINTFORMW 「%ANAME(MASTER)%大人。我听说你是优秀的武将」
+;TranslatedMark 「%ANAME(MASTER)%様。貴方は優秀な武将だと、聞き及んでいます」
+PRINTFORMW 「公主是个聪慧的人。了解人才的必要性，并且将会不择手段以将人才保留在手中。」
+;TranslatedMark 「姫は聡い方です。そういった人材の必要性を理解しており、また手元におくために、手段を選ばない」
+PRINTFORMW 既然是密谈的场合，就觉得这不是和平的话题……
+;TranslatedMark 密談の場などもうける以上、平和な話ではないと思っていたが……
+PRINTFORMW 也就是说，要%ANAME(MASTER)%背叛现在的主人并投诚于她。
+;TranslatedMark つまり%ANAME(対象)%は、今の主人を裏切り、自分につけと言っているのだ
+PRINTFORMW 虽然好像是提案，但是从现在的状况来看，没什么选择的余地……
+;TranslatedMark 提案のようだが、状況から考えると、選択肢は少ないように思える……
 PRINTFORMW 「%ANAME(永琳)%。我不是说过没有这样的事吗？」
-PRINTFORMW 「对不起，我并没有威胁你哦？我绝不会对所有的人用不光彩的手段的」
+;TranslatedMark 「%ANAME(永琳)%。そういうのはなしだと言っておいたはずだけど？」
+PRINTFORMW 「对不起，我并没有威胁你哦？我绝不会对人用不光彩的手段的」
+;TranslatedMark 「ごめんなさいね、別に、脅すつもりはないのよ？　これから働いてもらう人を、無下には扱わないわ」
 PRINTFORMW 「比现在在的地方，给你更好的待遇.。金、其他的都可以。女色什么的怎么样？」
+;TranslatedMark 「今いるところより、ずっといい待遇で迎えてあげる。金、それから……そうね、色なんてどうかしら？」
 PRINTFORM 「
-CALL COLORPRINT(NAME_FORMAL(てゐ), カラー_注意)
+CALL COLORPRINT(NAME_FORMAL(帝), カラー_注意)
 PRINTFORM 、
 CALL COLORPRINT(NAME_FORMAL(鈴仙), カラー_注意)
 PRINTFORM 、
 CALL COLORPRINT(NAME_FORMAL(永琳), カラー_注意)
-PRINTFORMW 。你可以挑选自己喜欢的选择」
-PRINTFORMW %ANAME(対象)%爽快地说出了不得了的话
-PRINTFORMW %PRONOUN(対象)%后面坐着三个女人。可以让其中一人做自己的情妇……
+PRINTFORMW 。你可以选择你喜欢的。给你吧」
+;TranslatedMark 。好きなのを選んでいいわよ。あげるわ」
+PRINTFORMW %ANAME(対象)%爽快地说出了意想不到的话
+;TranslatedMark %ANAME(対象)%はさらりと、とんでもないことを言ってのけた
+PRINTFORMW 站在%PRONOUN(対象)%后面的三位女性。可以让其中一个人当自己的情妇……
+;TranslatedMark %PRONOUN(対象)%の後ろに並ぶ、三人の女性。そのうち一人を情婦にしてやろうというのだ……
 IF IS_FEMALE(MASTER)
-	PRINTFORMW %ANAME(対象)%不知是从哪里听到的，对%ANAME(MASTER)%的身体也做了调查。
+	PRINTFORMW 不知道是从哪听说的%ANAME(対象)%，对%ANAME(MASTER)%的身体好像也有调查
+	;TranslatedMark %ANAME(対象)%はどこから嗅ぎ付けたのか、%ANAME(MASTER)%の身体についても調べが付いているようだ
 ENDIF
-PRINTFORMW 话虽如此，我还以为会有什么事情呢，没想到是这种情况啊。
-PRINTFORMW 不足为奇。幻想乡处于混乱的时代。用这种手段也不足为奇。
-PRINTFORMW 这也是为了活下来，尽量增强自己的力量才是上策。
-PRINTFORMW 一方面，接受的话，和主君方面的关系，肯定会变得很僵硬吧？
-PRINTFORMW 那麼、要怎麼辦呢……
+PRINTFORMW ……话虽如此，还以为会发生什么事，没想到是被人挖角
+;TranslatedMark ……それにしても、何かあると思っていたが、まさか引き抜きをかけられるとは
+PRINTFORMW 没什么好惊讶的。幻想乡处于混乱的时代。用这种手段来增强自己的势力也不值得奇怪
+;TranslatedMark 驚くほどのことではない。幻想郷は混迷の時代にある。そういう手段にでる勢力がいてもおかしくはない
+PRINTFORMW 即使是我们，为了生存下去，尽可能地拥有强大的势力才是上策
+;TranslatedMark こちらとしても、生き延びるためには、少しでも強力な勢力についておくのが得策だ
+PRINTFORMW 另一方面，如果接受的话，跟现在的主公的关系也会变得僵硬吧
+;TranslatedMark 一方で、この話を受ければ、今の主君の方面との関係は、間違いなくこじれるだろう
+PRINTFORMW 那么，怎么办呢……
+;TranslatedMark さて、どうするか……
 CALL SINGLE_DRAWLINE
-PRINTFORML %ANAME(対象)%的領地数:{GET_OWN_CITY(CFLAG:対象:所属)} %ANAME(ボス)%的領地数:{GET_OWN_CITY(CFLAG:MASTER:所属)}
+PRINTFORML %ANAME(対象)%的领地数：{GET_OWN_CITY(CFLAG:対象:所属)}%ANAME(ボス)%的领地数：{GET_OWN_CITY(CFLAG:MASTER:所属)}
+;TranslatedMark %ANAME(対象)%の領地数:{GET_OWN_CITY(CFLAG:対象:所属)} %ANAME(ボス)%の領地数:{GET_OWN_CITY(CFLAG:MASTER:所属)}
 PRINTFORML 
-CALL ASK_YN("話にのる", "やめておく")
+CALL ASK_YN("接受", "不行")
 
 IF RESULT == 1
-  PRINTFORMW “哎呀。真是的。
-  PRINTFORMW “嘛，倒是也没什么。如果是这样，我会放弃的。”
-  PRINTFORMW 虽然已经做好了被杀的觉悟，但是%ANAME(対象)%意外地轻易地放弃了。
-  	PRINTFORMW 「不用害怕，也没什么害处啊。既然如此我就放弃吧」
-  PRINTFORMW “如果在这里杀人的话，是得不到你的。即使你现在不低头，只要把%ANAME(ボス)%压倒夺走就行了。不是吗？.。
-  PRINTFORMW “嘛就是这么回事，下次见面的时候我不会留情的.。。
-  PRINTFORMW 之后，%ANAME(MASTER)%平安地回到了据点.
+	PRINTFORMW 「哎呀……是的」
+	;TranslatedMark 「あら……そう」
+	PRINTFORMW 「好大的胆子啊，在敌人的阵地中说出拒绝」
+	;TranslatedMark 「大した度胸ね、敵陣まっただ中で、この話を断るなんて」
+	PRINTFORMW 「嘛，倒没什么恶意。那样的话我就放弃了」
+	;TranslatedMark 「ま、別に害意はないんだけどね。そういうことなら諦めるわ」
+	PRINTFORMW 虽然已经做好了被杀的思想准备，但%ANAME(対象)%却意外地轻易放弃了
+	;TranslatedMark 刃傷沙汰は覚悟の上だったが、%ANAME(対象)%は案外あっさりと諦めてみせた
+	PRINTFORMW 「即使在这里把你杀掉，也是得不到你的。即使现在不同意，只要击败%ANAME(ボス)%再把你夺走就行了。不是吗？」
+	;TranslatedMark 「ここで殺したら、手に入らないもの。頷かないなら、%ANAME(ボス)%をねじ伏せて奪えばいいだけ。違う？」
+	PRINTFORMW 「嘛，就是这样，下次见面的时候我可不会留情的……库库」
+	;TranslatedMark 「まぁそういうわけだから、次に会うときは容赦しないわよ……くくっ」
+	PRINTFORMW 之后，%ANAME(MASTER)%安全地回到了据点……
+	;TranslatedMark その後、%ANAME(MASTER)%は無事に拠点まで帰り着いた……
 	KDVAR:対象:輝夜_貴族の誘い = 2
 	RETURN 1
 ENDIF
 
-PRINTFORMW 「我还以为你会这么说呢」
-PRINTFORMW 「呵呵，那么以后拜托了呢？」
-PRINTFORMW %ANAME(MASTER)%は頷き返した……
+PRINTFORMW 「我就猜到你会这么说」
+;TranslatedMark 「そう言ってくれると思ってたわ」
+PRINTFORMW 「呵呵，以后拜托你了吧？」
+;TranslatedMark 「ふふ、よろしくお願いするわね？」
+PRINTFORMW %ANAME(MASTER)%点了点头……
+;TranslatedMark %ANAME(MASTER)%は頷き返した……
 LOCAL:0 = MIN((ABL:MASTER:武闘 + ABL:MASTER:知略 + ABL:MASTER:政治 + ABL:MASTER:防衛) * 200, 50000)
 MONEY += LOCAL:0
 CALL CHANGE_RELATION_O_TO_O(ボス, 対象, -500, 500)
 CALL CHANGE_RELATION_O_TO_O(ボス, MASTER, -500, 500)
 CALL CHANGE_COUNTRY(MASTER, CFLAG:対象:所属, 1)
-CALL COLOR_PRINTW(@"收到{LOCAL:0}金安家費", カラー_注意)
-CALL COLOR_PRINTW(@"与%ANAME(ボス)%的外交関係変得非常悪劣了", カラー_警告)
-PRINTFORMW 「……那么。这就是约定好的『色』」
-PRINTFORMW 「选择谁？　请随意」
+CALL COLOR_PRINTW(@"获得了安家费{LOCAL:0}", カラー_注意)
+CALL COLOR_PRINTW(@"和%ANAME(ボス)%的外交关系变得紧张了", カラー_警告)
+PRINTFORMW 「……然后，关于约定好的"女色"」
+;TranslatedMark 「……それで、約束の『色』のほうだけれど」
+PRINTFORMW 「选谁？请随意」
+;TranslatedMark 「誰にするの？　どうぞご自由に」
 PRINTFORML
-CALL ASK_MULTI(ANAME(てゐ), ANAME(鈴仙), ANAME(永琳), ANAME(対象))
+CALL ASK_MULTI(ANAME(帝), ANAME(鈴仙), ANAME(永琳), ANAME(対象))
 LOCAL:0 = RESULT
 SELECTCASE LOCAL
 	CASE 0
-		LOCAL = てゐ
+		LOCAL = 帝
+		;TranslatedMark てゐ
 	CASE 1
 		LOCAL = 鈴仙
+		;TranslatedMark 鈴仙
 	CASE 2
 		LOCAL = 永琳
 	CASE 3
 		LOCAL = 対象
+		;TranslatedMark 対象
 ENDSELECT
 
 SELECTCASE LOCAL
-	CASE てゐ, 鈴仙, 永琳
-		PRINTFORMW 「嗯.。喜欢%ANAME(LOCAL)%吗？.」
-		PRINTFORMW 「嘛，我也对你的爱好没兴趣。好吧，从今天开始，%ANAME(LOCAL)%就是你的了。”」
-		PRINTFORMW 「煮也好烤也好，随你的便吧。我对你如何对待女人不感兴趣」
-		PRINTFORMW 脸上浮现出无聊的表情%ANAME(対象)%、%ANAME(LOCAL)%往前迈了一步……
+	CASE 帝, 鈴仙, 永琳
+		PRINTFORMW 「嗯……喜欢%ANAME(LOCAL)%吗？」
+		;TranslatedMark 「ふぅん……%ANAME(LOCAL)%がお好み？」
+		PRINTFORMW 「嘛，我对你的爱好没兴趣。我知道了，从今天开始%ANAME(LOCAL)%就属于你了」
+		;TranslatedMark 「ま、貴方の趣味に興味はないけど。わかったわ、今日から%ANAME(LOCAL)%は貴方のものよ」
+		PRINTFORMW 「煮也好烤也好，随你的便。我对你怎么对待女人没有兴趣」
+		;TranslatedMark 「煮るなり焼くなり、好きにしなさいな。貴方が女をどう扱うかに興味はないから」
+		PRINTFORMW %ANAME(対象)%脸上浮现出无聊的表情，%ANAME(LOCAL)%往前迈了一步……
+		;TranslatedMark それきり退屈げな表情を浮かべた%ANAME(対象)%の代わりに、%ANAME(LOCAL)%が一歩前に進み出る……
 		SELECTCASE LOCAL
-			CASE てゐ
+			CASE 帝
 				PRINTFORMW 「请多关照。话说回来，你居然会选我。你该不会是萝莉控吧？」
+				;TranslatedMark 「まぁよろしく。それにしても私を選ぶとはねー。あんたひょっとしてロリコンってやつ？」
 				PRINTFORMW 「没什么。遵照公主殿下的命令，我会成为你的东西，暂时的」
+				;TranslatedMark 「別にいーけど。我らが姫様の命令だ、あんたのモノになってあげるよ、しばらくは」
 			CASE 鈴仙
-				PRINTFORMW 「我.。是么，既不是师傅也不是.。哈。」
-				PRINTFORMW 「呃，.。那个，我会竭尽全力的.。请多关照」
+				PRINTFORMW 「我……是吗，既不是老师也不是帝……哈」
+				;TranslatedMark 「私……ですか、師匠でもてゐでもなく……はぁ」
+				PRINTFORMW 「嗯……那个，我会尽力的。请多关照」
+				;TranslatedMark 「えーっと、……その、精一杯努めさせていただきます。よろしくお願いします」
 			CASE 永琳
 				PRINTFORMW 「公主也太过儿戏了。没错，我会把它想象成是一生中仅有的微不足道的错误。」
-				PRINTFORMW 「活着的时候我就是你的东西，至少请不要让我感到无聊」
+				;TranslatedMark 「姫もお戯れが過ぎるわ……そうね、終わらない一生の、ほんの一瞬の些細な間違いだとでも思っておくことにするわ」
+				PRINTFORMW 「我会在有生之年成为你的东西，至少不要让我感到无聊」
+				;TranslatedMark 「生きている間は貴方のものになってあげるから、せめて退屈はさせないでちょうだいね」
 		ENDSELECT
-		CALL COLOR_PRINTW(@"%ANAME(LOCAL)%达成了协议", カラー_ピンク)
+		CALL COLOR_PRINTW(@"取得了%ANAME(LOCAL)%的合意", カラー_ピンク)
 		TALENT:LOCAL:合意 = 1
 		TALENT:LOCAL:チョロイン = 1
 	CASE 対象
-		PRINTFORMW 「……へぇ、我吗？」
-		PRINTFORMW %ANAME(対象)%脸上浮现出淡淡的笑容，凝视着我。
+		PRINTFORMW 「……诶，我？」
+		;TranslatedMark 「……へぇ、私？」
+		PRINTFORMW %ANAME(対象)%浮现出淡淡的笑容，凝视着这边
+		;TranslatedMark %ANAME(対象)%は薄っすらとした笑みを浮かべ、じっとこちらを見つめてきた
 		IF IS_LOVER(対象)
 			PRINTFORMW 「就算不是这样的情况下，是你的话就很好了。」
-			PRINTFORMW 「如果这是你想要的，那就好」
-			PRINTFORMW 「但是，要温柔点呢？」
+			;TranslatedMark 「別にこんな機会でなくても、貴方だったら別にいいのだけど」
+			PRINTFORMW 「啊，如果你希望的话，那就好」
+			;TranslatedMark 「まあ、それがお望みなら、いいわよ」
+			PRINTFORMW 「但是，要温柔一点哦？」
+			;TranslatedMark 「でも、優しくしてね？」
 			CALL COLOR_PRINTW(@"取得了%ANAME(対象)%的合意", カラー_ピンク)
 			CFLAG:対象:好感度 += 500
 			TALENT:LOCAL:合意 = 1
 			TALENT:LOCAL:チョロイン = 1
 		ELSEIF IS_SLAVE(対象)
-			PRINTFORMW 「即使没有这样的机会，只要是你的话，什么时候都行。」
+			PRINTFORMW 「就算不是这样的机会，只要是你的话什么时候都可以」
+			;TranslatedMark 「別にこんな機会でなくても、貴方だったらいつでもいいのに」
 			PRINTFORMW 「还是说，你那么想要我吗？」
-			PRINTFORMW 「什么都行。我的一切都属于你」
-			PRINTFORMW 「请使用我吧，主人.」
+			;TranslatedMark 「それとも、それだけ私を欲してくださってるということかしら？」
+			PRINTFORMW 「什么都可以。我是属于你的」
+			;TranslatedMark 「なんでもいいわ。私は貴方のものだもの」
+			PRINTFORMW 「请使用我吧，主人……♥」
+			;TranslatedMark 「どうぞ私めをお使いくださいませ、ご主人様……♥」
 			PRINTFORMW 抱紧了期待着的%ANAME(対象)%
+			;TranslatedMark 期待するようにしなだれかかる%ANAME(対象)%を抱きしめた……
 			CALL COLOR_PRINTW(@"取得了%ANAME(対象)%的合意", カラー_ピンク)
 			CFLAG:対象:依存度 += 500
 			TALENT:対象:合意 = 1
@@ -211,85 +283,122 @@ SELECTCASE LOCAL
 		ELSE
 			PRINTFORML
 			PRINTFORMW ……然后，她突然狠狠地打了我一巴掌。
+			;TranslatedMark ……そして、いきなり強烈な平手を食らわせてきた
 			PRINTFORML
-			PRINTFORMW 「贵族们，甚至是帝王都向我求爱的我？」
+			PRINTFORMW 「贵族们甚至连皇帝都无法追求到的我？」
+			;TranslatedMark 「貴族どもが、ひいてはてゐまでがこぞって求めたこの私を？」
 			PRINTFORMW 「您认为此%NAME_FORMAL(対象)%如何？这么容易就能弄到手吗？」
-			PRINTFORMW 「看起来受了很大的挫折啊。真是的，笑死人了」
-			PRINTFORMW 「我喜欢优秀的人呢。但是，因为这个理由而自以为是的愚蠢的人，比起无能更讨厌。」
-			PRINTFORMW 「……算了，被我的魅力俘虏也是没办法的事啊.。看在这一点上，我就不追究你刚才的行为了」
-			PRINTFORMW 「但是，我非常不高兴。为了挽回因为现在失言而失去的信用，尽量努力吧，愚蠢的猪猡」
-			PRINTFORMW 然后，%ANAME(対象)%什么也没说
-			IF ((IS_LOVER(てゐ) || IS_SLAVE(てゐ)) && (IS_LOVER(鈴仙) || IS_SLAVE(鈴仙)) && (IS_LOVER(永琳) || IS_SLAVE(永琳)))
+			;TranslatedMark 「この%NAME_FORMAL(対象)%を、貴方ごときが？　こんなに簡単に、手に入れられると？」
+			PRINTFORMW 「真是受了很多打击啊。真是的，真是个让人笑不出来的玩笑」
+			;TranslatedMark 「ずいぶんと、コケにされたものね。まったく、本当に、笑えない冗談だわ」
+			PRINTFORMW 「我的确喜欢优秀的人，但是，因为我的赏识而自高自大的傻瓜，比起无能者更让人讨厌」
+			;TranslatedMark 「私は優秀な者は好きよ？　でも、それを理由に思い上がるような愚か者は、無能よりもよほど嫌い」
+			PRINTFORMW 「……嘛，被我的魅力俘虏也是没办法的事。看在这一点上，我就不追究了」
+			;TranslatedMark 「……ま、私の魅力に虜になるのは仕方のないことね。その点に免じて、今のは不問にしてあげる」
+			PRINTFORMW 「但是，我非常不高兴。为了挽回因现在的失言而失去的信任，尽最大努力吧，愚蠢的猪」
+			;TranslatedMark 「でも、とっても不愉快だったわ。今の失言で失った信用を取り戻せるよう、せいぜい努めなさい、卑しい豚」
+			PRINTFORMW 之后，%ANAME(対象)%什么也没说
+			;TranslatedMark それきり、%ANAME(対象)%は何も言わなかった
+			IF ((IS_LOVER(帝) || IS_SLAVE(帝)) && (IS_LOVER(鈴仙) || IS_SLAVE(鈴仙)) && (IS_LOVER(永琳) || IS_SLAVE(永琳)))
 				PRINTFORML
-				PRINTFORMW ……这样的%ANAME(対象)%被%ANAME(永琳)%们包围，压在地板上
-				PRINTFORMW 突然间，%ANAME(対象)%似乎在动摇。
-				PRINTFORMW 「%ANAME(永琳)%、你到底想干什么！？」
+				PRINTFORMW ……那样的%ANAME(対象)%，被%ANAME(永琳)%们包围，压在地板上
+				;TranslatedMark ……そんな%ANAME(対象)%を、%ANAME(永琳)%達が取り囲み、床に押さえつける
+				PRINTFORMW 非常突然，%ANAME(対象)%似乎在动摇
+				;TranslatedMark 突然のことに、%ANAME(対象)%は動揺しているようだ
+				PRINTFORMW 「%ANAME(永琳)%，你们打算做什么！？」
+				;TranslatedMark 「%ANAME(永琳)%、どういうつもり！？」
 				PRINTFORMW 「对不起辉夜但是你也应该知道我和他的关系的」
+				;TranslatedMark 「ごめんなさいね輝夜、でも貴女も彼の良さを知るべきよ」
 				PRINTFORMW 「对不起公主……」
-				PRINTFORMW 「哎呀，怎么说呢，公主殿下，还是放弃抵抗接受现实比较好吧？」
-				PRINTFORML 看到她们的反应后，%ANAME(対象)%似乎明白了自己受到了部下的背叛
-				PRINTFORML 想要逃脱，可惜的是没办法打赢三个人
-				PRINTFORMW %ANAME(MASTER)%缓慢地向被封住身体的%ANAME(対象)%靠近。
-				PRINTFORMW 「别过来！你，到底是谁的人……」
-				PRINTFORMW %ANAME(対象)%怒目而视。但却无可奈何
-				PRINTFORML 那么，接下来该怎么办呢？…
+				;TranslatedMark 「すいません姫様……」
+				PRINTFORMW 「哎呀，怎么说呢，公主，还是放弃抵抗接受现实比较好吧？」
+				;TranslatedMark 「や、まあなんていうか姫様、諦めて受け入れたほうがいいんじゃない？」
+				PRINTFORML 对于她们的反应，%ANAME(対象)%似乎明白了部下已经背叛了
+				;TranslatedMark 彼女らの反応に、%ANAME(対象)%は部下の背信を悟ったようだった
+				PRINTFORML 疯狂的扭动身体想要从拘束中逃脱，但是没有办法赢过三人
+				;TranslatedMark 拘束から逃れようと暴れるが、三人に勝てるはずもない
+				PRINTFORMW %ANAME(MASTER)%向着被封印了身体动作的%ANAME(対象)%慢慢地走近
+				;TranslatedMark 身動きを封じられた%ANAME(対象)%に、%ANAME(MASTER)%はゆっくりと歩み寄る
+				PRINTFORMW 「不要过来！你到底要做什么……」
+				;TranslatedMark 「来ないで！　あなた、いったい誰に向かって……」
+				PRINTFORMW %ANAME(対象)%愤怒地看着这边。嗯，会这样也很正常
+				;TranslatedMark %ANAME(対象)%は怒りの籠った目でこちらを見ている。まあ、そうもなるだろう
+				PRINTFORML 那么，怎么办呢…
+				;TranslatedMark さて、どうしようか…
 				PRINTFORML
 				CALL ASK_MULTI_JUDGE("侵犯", HAS_PENIS(MASTER), "投獄", 1, "処刑", GET_COUNTRY_BOSS(対象) != 対象)
 				SELECTCASE RESULT
 					CASE 0
-						PRINTFORMW 「这。。。。给我适可而止吧.。哎呀」
-						PRINTFORMW 虽然是想要抵抗%ANAME(対象)%，但是看到越过衣服勃起的%ANAME(MASTER)%的肉棒，发出了小小的尖叫声。
-						PRINTFORMW 或许是察觉到这之后的发展吧，那双美丽的眼睛里浮现出恐怖的神色
-						PRINTFORMW 「住手。。。不，拜托」
-						PRINTFORMW 先前的威严不知去了哪里%ANAME(対象)%只剩下一个无力的少女在卑微的请求原谅
-						PRINTFORMW 「来，请吧%ANAME(MASTER)%。我觉得这孩子如果能感受到%ANAME(MASTER)%的好处的话，她一定会改变的。」
-						PRINTFORMW 「请你像我们一样爱上他吧，公主殿下？」
-						PRINTFORMW %ANAME(MASTER)%的情妇们毫不介意，只是揭开%ANAME(対象)%的衣服，敞开大腿
-						PRINTFORMW %ANAME(MASTER)%は%ANAME(対象)%贴近了她的身体，慢慢地覆盖在了上面。……
+						PRINTFORMW 「这个……适可而止吧……噫」
+						;TranslatedMark 「この……いい加減に、しなさいッ……ひッ」
+						PRINTFORMW 虽然%ANAME(対象)%仍想要抵抗，但看到衣服下面已经勃起的%ANAME(MASTER)%的阴茎，发出轻微的悲鸣
+						;TranslatedMark なおも抵抗しようとする%ANAME(対象)%だったが、服越しにもわかるほど勃起した%ANAME(MASTER)%のペニスを見、小さな悲鳴をあげる
+						PRINTFORMW 大概是已经察觉到了之后会发生什么，那双眼睛里浮现出恐惧的神色
+						;TranslatedMark この後の展開を察したのだろう、その瞳には恐怖の色が浮かんでいる
+						PRINTFORMW 「住手……讨厌，拜托了，喂」
+						;TranslatedMark 「やめて……嫌、お願い、ねぇ」
+						PRINTFORMW 刚才为止的威严不知道丢到了哪里，%ANAME(対象)%现在就像无力的少女一样胆怯，乞求原谅
+						;TranslatedMark 先ほどまでの威厳はどこへやら、%ANAME(対象)%は無力な少女として怯え、許しを乞うている
+						PRINTFORMW 「来，请吧，%ANAME(MASTER)%。这孩子，如果能知道%ANAME(MASTER)%的好处的话一定会改变想法的」
+						;TranslatedMark 「さあ、どうぞ、%ANAME(MASTER)%。この子も、%ANAME(MASTER)%の良さをしればきっと変われると思うわ」
+						PRINTFORMW 「请和公主殿下做爱吧，就像跟我们做的那样，好吗？」
+						;TranslatedMark 「私たちにしてくれるように、姫様のことも愛してさしあげてくださいね？」
+						PRINTFORMW %ANAME(MASTER)%的情妇们毫不在意，敞开%ANAME(対象)%的衣服，把两腿分开
+						;TranslatedMark %ANAME(MASTER)%の情婦たちは意に介さず、%ANAME(対象)%の服をはだけ、股を開かせる
+						PRINTFORMW %ANAME(MASTER)%靠近%ANAME(対象)%，慢慢的伏在了她的身体上……
+						;TranslatedMark %ANAME(MASTER)%は%ANAME(対象)%ににじり寄り、ゆっくりと覆いかぶさった……
 						PRINTFORMW 「不要，骗人的吧、不，不，不要，讨厌啊！……！」
+						;TranslatedMark 「うそ、嘘よこんなの、いや、やめて、いやぁぁああッ……！」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「讨厌，快拿开，哦，哦，我的天啊……！」
+						PRINTFORMW 「讨厌、那样的、啊、好脏、啊啊啊啊……！」
+						;TranslatedMark 「嫌、そんな、あ、穢れがッ、あ、あぁぁあああッ……！」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「哇、哇♥　啊、啊、誰啊、啊、啊啊！」
+						PRINTFORMW 「哇，哈♥啊、唔、谁来、啊、啊！」
+						;TranslatedMark 「うぁッ、はッ♥　あッ、く、誰が、ァッ、ああッ！」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「不要啊，这种感觉♥　快，快住手啊……！」
+						PRINTFORMW 「不要，这种感觉♥啊，住手……！」
+						;TranslatedMark 「違うッ、そんな、感じてなんかッ♥　ぅァ、やめッ……！」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「拜托，不要再射精了……啊!♥」
+						PRINTFORMW 「啊，求你了，不要再射了……啊……♥」
+						;TranslatedMark 「お願い、もう射精さないでッ……あぁッ……♥」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「好棒，哈哈♥　啊、啊、哇♥　啊啊啊啊♥」
+						PRINTFORMW 「噫、哈♥啊，唔，啊♥嗯，嗯♥」
+						;TranslatedMark 「ひッ、はぁッ♥　あっ、くぁッ、あぁ♥　んんんッ♥」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「哦，拜托了。。。。请插进来吧。。。请，请把欧金金插入我的小穴吧。」
+						PRINTFORMW 「哦，拜托了……请插进来吧……请把欧金金、插进我的小穴……！」
+						;TranslatedMark 「お、ねがいします……挿れてください……ッ、私のおまんこに、おちんちんくださいぃッ……！」
 						PRINTFORML 
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						PRINTFORMW 「哦♥　哦♥　哦、好舒服 好舒服啊♥」
+						PRINTFORMW 「唔♥啊，嗯啊♥啊，好舒服，好舒服啊♥」
+						;TranslatedMark 「うぁッ♥　あッ、んぁあッ♥　あっ、きもちっ、気持ちいい、気持ちいいぃッ♥」
 						PRINTFORML 
 						PRINTFORML 
 						PRINTFORML 
-						FOR LOCAL, 0, 3
-							CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
+						PRINTFORMW 几个小时后，%ANAME(対象)%像被丢弃在地上一样一动不动
+						;TranslatedMark 数時間後、%ANAME(対象)%は床に打ち捨てられたように転がっていた
+						PRINTFORMW 豪奢的和服被体液浸透变得黏糊糊的，黑发上也沾满了白浊
+						;TranslatedMark 豪奢な着物は体液でどろどろになり、黒髪にも白濁がこびりついている
+						PRINTFORMW 两腿之间\@TALENT:対象:処女 ? 血和 # \@爱液、精液混合的液体缓慢的流出。
+						;TranslatedMark 股間からは\@TALENT:対象:処女 ? 血と # \@愛液と精液の混ざった液体がごぽごぽと逆流している
+						PRINTFORMW 被剥夺一切尊严，被侵犯了所有的洞，%ANAME(対象)%现在堕落为只会被蹂躏的雌性
+						;TranslatedMark あらゆる尊厳を剥ぎ取られ、穴という穴を犯されて、%ANAME(対象)%は今や蹂躙されるだけの雌に堕ちている
+						PRINTFORMW 在那空虚的眼睛里，倒映着坐在刚才自己使用过的宝座上的%ANAME(MASTER)%
+						;TranslatedMark 虚ろなその瞳には、先ほどまで自分が使っていた玉座に座る%ANAME(MASTER)%と、
+						PRINTFORMW 看着正在为%ANAME(MASTER)%侍奉、口舌纠缠、露出恍惚表情的曾经的部下们
+						;TranslatedMark %ANAME(MASTER)%に奉仕し、絡み合い、恍惚の表情を浮かべるかつての部下たちが映っている
+						PRINTFORMW %ANAME(対象)%终于意识到自己已经失去了一切。
+						;TranslatedMark 自分が何もかも失ったことを、%ANAME(対象)%は改めて悟る
+						PRINTFORMW 然后，摇摇晃晃地起身，向%ANAME(MASTER)%恳求……
+						;TranslatedMark そして、ふらふらと起き上がり、%ANAME(MASTER)%に懇願する……
+						PRINTFORMW 「%ANAME(MASTER)%大人……我错了，请把我也变成%ANAME(MASTER)%大人的东西吧……♥」
+						;TranslatedMark 「%ANAME(MASTER)%様……私が間違っていました、どうか、私も、%ANAME(MASTER)%様のモノにしてくださいっ……♥」
+						PRINTFORMW %ANAME(対象)%跪坐在叉开腿坐着的%ANAME(MASTER)%的脚下，作为忠诚的证明，开始主动吮吸沾满爱液的肉棒
+						;TranslatedMark %ANAME(対象)%は脚を広げて座る%ANAME(MASTER)%のもとに跪くと、忠誠の証として、愛液まみれのモノを自らしゃぶり始める
+						PRINTFORMW %ANAME(MASTER)%微微笑着，%ANAME(対象)%也和其他的情妇一样爱着他……
+						;TranslatedMark %ANAME(MASTER)%はニヤリと笑い、%ANAME(対象)%も他の情婦同様に可愛がってやることにした……
+						FOR LOCAL, 0, 11
+						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, マゾ, キス, 口淫, Ｖ性交, Ａ性交", "キス喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%的阴茎", ANAME(MASTER))
 						NEXT
-						PRINTFORML 
-						PRINTFORML 
-						PRINTFORML 
-						PRINTFORMW 数時間後、%ANAME(対象)%像被抛弃一样在地板上滚动着。
-						PRINTFORMW 奢华的和服因体液而变得粘稠，黑发上也沾满白浊。
-						PRINTFORMW 从腹股沟\@TALENT:対象:処女 ? 血と # \@混有爱液和精液的液体咕嘟地倒流着。
-						PRINTFORMW 被剥去所有尊严、所有的小穴都被侵犯了%ANAME(対象)%现在堕落为一只只有欲望的雌性。
-						PRINTFORMW 空虚的瞳孔中，倒映着刚才自己使用的王座%ANAME(MASTER)%と、
-						PRINTFORMW 为%ANAME(MASTER)%服务，缠绕着，看着浮现出恍惚表情的以前的部下。
-						PRINTFORMW 、%ANAME(対象)%重新意识到自己失去了一切。
-						PRINTFORMW 然后摇摇晃晃地站起来，向%ANAME(MASTER)%恳求……
-						PRINTFORMW 「%ANAME(MASTER)%先生.。我错了，请让我也变成%ANAME(MASTER)%的东西.。……♥」
-						PRINTFORMW %ANAME(対象)%在张开腿坐的%ANAME(MASTER)%下跪下，作为忠诚的证据，开始亲吻沾满爱液的地方
-						PRINTFORMW %ANAME(MASTER)%嘻嘻地笑着、%ANAME(対象)%也决定和其他的情妇一样爱着他……
-						CALL FUCK(対象, "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 排泄, 射精, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, Ｖ性交, Ａ性交", "接吻喪失, 処女喪失, Ａ処女喪失, 膣内射精, 腸内射精, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%の肉棒", ANAME(MASTER))
-						CALL COLOR_PRINTW(@"%ANAME(対象)%を手なずけました", カラー_注意)
+						CALL COLOR_PRINTW(@"%ANAME(対象)%被篡位了", カラー_注意)
 						CFLAG:対象:好感度 += 1000
 						CFLAG:対象:依存度 += 500
 						CFLAG:対象:従属度 += 1500
@@ -297,24 +406,30 @@ SELECTCASE LOCAL
 						TALENT:対象:合意 = 1
 						TALENT:対象:孤高 = 0
 						TALENT:対象:自尊心高 = 0
-						TALENT:対象:自尊心低 = 1
+						TALENT:対象:自尊心低  = 1
 						TALENT:対象:貞操観念 = 0
 						TALENT:対象:討厭男人 = 0
 						TALENT:対象:チョロイン = 1
 					CASE 1
-						PRINTFORMW 什么嘛，慢慢地把手捆起来比较好吧？
-						PRINTFORMW %ANAME(永琳)%命他们把%ANAME(対象)%下狱.
+						PRINTFORMW 呐，还是花点时间慢慢的调教一下吧
+						;TranslatedMark なに、じっくりと手なずけてやればいいだろう
+						PRINTFORMW 命令%ANAME(永琳)%他们将%ANAME(対象)%下狱……
+						;TranslatedMark %ANAME(永琳)%たちに命じ、%ANAME(対象)%を投獄させた……
 						CALL CAPTURE(対象, CFLAG:MASTER:所属)
 					CASE 2
-						PRINTFORMW 政变成功了。
-						PRINTFORMW 不再需要%ANAME(対象)%
-						PRINTFORMW 下令处决……
+						PRINTFORMW 政变成功
+						;TranslatedMark クーデターは成功だ
+						PRINTFORMW 已经不需要%ANAME(対象)%了
+						;TranslatedMark もはや%ANAME(対象)%は必要ない
+						PRINTFORMW 命令部下处刑……
+						;TranslatedMark 部下に命じ、処刑させることにした……
 						CALL EXECUTION(対象)
 						CALL CHANGE_COUNTRY(対象, 0, 1, 1)
 				ENDSELECT
 			ELSE
-				PRINTFORMW %ANAME(MASTER)%は促されるままに退出した……
-				CALL COLOR_PRINTW(@"%ANAME(対象)%の反感を買いました", カラー_警告)
+				PRINTFORMW %ANAME(MASTER)%默默的离开了……
+				;TranslatedMark %ANAME(MASTER)%は促されるままに退出した……
+				CALL COLOR_PRINTW(@"引起了%ANAME(対象)%的反感", カラー_警告)
 				CFLAG:対象:好感度 = -500
 				CFLAG:対象:依存度 = -500
 				CFLAG:対象:従属度 = -500
