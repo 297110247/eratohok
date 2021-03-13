@@ -7,9 +7,29 @@
 #DIM 勢力行動順, MAX_COUNTRY
 #DIM 勢力
 #DIM 表示フラグ
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
 ;国家関係マップの作成(処理の高速化)
 CALL TMP_CREATE_RELATION_MAP
 
+;(従属国パッチ)連邦ナンバー・連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			連邦構成国:(CFLAG:MASTER:所属) = 1
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
 ;野盗は都市をもってたら外交できる
 LOCAL = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(特殊勢力_野盗))
 IF LOCAL > 0 && GET_OWN_CITY(LOCAL) > 0
@@ -141,6 +161,16 @@ IF DAY >= SLG_PP:1
 		CALL RESET_CITY_COLOR
 	ENDIF
 ENDIF
+
+;(従属国パッチ)(処刑機能拡張パッチ)記念品を持っているとき、特殊区画の処理
+FOR LOCAL:0, 0, 10
+	IF HAVE_GOODS_EXECUTED:(LOCAL:0) > 0
+		PRINTFORML 特殊区画フェイズ
+		CALL COLOR_LINE
+		CALL Colonial_Office_GOODS_EXECUTED_TURN_END
+		BREAK
+	ENDIF
+NEXT
 
 ;(従属国パッチ)研究・教育機関での教育
 PRINTFORML 研究・教育機関フェイズ
@@ -304,6 +334,10 @@ FOR LOCAL:0, 0, MAX_COUNTRY
 			CONTINUE
 		SIF !UNIT_FBATTLE:(LOCAL:0):(LOCAL:1)
 			UNIT_TIRED_COUNT:(LOCAL:0):(LOCAL:1) = MAX(UNIT_TIRED_COUNT:(LOCAL:0):(LOCAL:1) - (RAND:3 + 3), 0)
+		;(従属国パッチ)(処刑機能拡張パッチ)部隊疲労度回復バフが有効なとき、連邦構成国の部隊の疲労度を回復
+		IF CAN_ACCEPT_UNION_BUFF:連邦ナンバー:0 == 1 && 連邦構成国:(LOCAL:0) == 1 && UNIT_TIRED_COUNT:(LOCAL:0):(LOCAL:1) > 0
+			UNIT_TIRED_COUNT:(LOCAL:0):(LOCAL:1) = MAX(UNIT_TIRED_COUNT:(LOCAL:0):(LOCAL:1) - 3, 0)
+		ENDIF
 		UNIT_FBATTLE:(LOCAL:0):(LOCAL:1) = 0
 	NEXT
 NEXT
@@ -364,6 +398,21 @@ FOR LOCAL, 0, MAX_COUNTRY
 	CALL SLG_AI_TECHNOLOGY(LOCAL)
 NEXT
 CALL PROGRESS_TECHNOLOGY_SEARCH
+
+;(従属国パッチ)(処刑機能拡張パッチ)もしプレイヤー所属勢力が連邦を形成していない場合、記念品の使用を停止
+IF 連邦構成国:(CFLAG:MASTER:所属) != 1
+	FOR LOCAL:0, 0, 999
+		IF IS_GOODS_EXECUTED:(LOCAL:0) == 1
+			FOR LOCAL:1, 0, 10
+				IF TYPE_GOODS_EXECUTED:(LOCAL:0):(LOCAL:1):0 > 1
+					TYPE_GOODS_EXECUTED:(LOCAL:0):(LOCAL:1):0 = 1
+				ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):(LOCAL:1):1 > 1
+					TYPE_GOODS_EXECUTED:(LOCAL:0):(LOCAL:1):1 = 1
+				ENDIF
+			NEXT
+		ENDIF
+	NEXT
+ENDIF
 
 
 ;-------------------------------------------------
@@ -700,6 +749,28 @@ RESETCOLOR
 #DIM 難易度補正
 #DIM 防衛振り分け表示
 #DIM 防衛振り分け数
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+
+;(従属国パッチ)連邦ナンバー・連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			連邦構成国:(CFLAG:MASTER:所属) = 1
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
+
 ;増加する兵数は経済規模×0.5(警邏・歌唱などによる補正あり)
 ;最大兵数は経済規模×10
 
@@ -769,6 +840,10 @@ SIF TECHNOLOGY_STATUS:(ARG:0):TECHNOLOGY_CONSCRIPTION >= 4
 SIF TECHNOLOGY_STATUS:(ARG:0):TECHNOLOGY_CONSCRIPTION >= 7
 	TIMES 増加量, 1.20
 
+;(従属国パッチ)(処刑機能拡張パッチ)人的資源バフが有効なとき、連邦構成国の兵士増加量はさらに1.1倍
+IF CAN_ACCEPT_UNION_BUFF:連邦ナンバー:2 ==1 && 連邦構成国:(ARG:0) == 1
+	TIMES 増加量, 1.10
+ENDIF
 
 ;経済力の10倍以上は保持できない
 最大増加量 = MAX(GET_RECRUIT_LIMIT(ARG:0) - 兵数, 0)
@@ -809,6 +884,27 @@ ENDIF
 @VARY_ECONOMY
 #DIM CITY_DAMAGE, 3
 #DIM ECONOMY_POWER, MAX_COUNTRY, 3
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+
+;(従属国パッチ)連邦ナンバー・連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			連邦構成国:(CFLAG:MASTER:所属) = 1
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
 
 FOR LOCAL:0, 0, MAX_CITY
 	VARSET CITY_DAMAGE
@@ -890,6 +986,11 @@ FOR LOCAL:0, 0, MAX_COUNTRY
 		;(従属国パッチ)植民地だとさらに1.2倍
 		IF COUNTRY_Protectorate:(LOCAL:0) == 3
 			TIMES LOCAL:5, 1.20
+		ENDIF
+
+		;(従属国パッチ)(処刑機能拡張パッチ)経済成長バフが有効なとき、連邦構成国の都市の成長率をさらに1.1倍
+		IF CAN_ACCEPT_UNION_BUFF:連邦ナンバー:1 ==1 && 連邦構成国:(LOCAL:0) == 1
+			TIMES LOCAL:5, 1.10
 		ENDIF
 
 		;成長値に所有都市数の補正を掛けて都市を成長させる

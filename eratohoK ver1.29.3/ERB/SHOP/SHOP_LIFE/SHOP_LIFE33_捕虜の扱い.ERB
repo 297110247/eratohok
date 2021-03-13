@@ -56,15 +56,15 @@ CALL COLUMN_RIGHT_PRINTL
 PRINTFORM %SNAME(ARG:0), MAX_CHARANAME_LENGTH / 2, LEFT%
 CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 0, 1, "監禁")
 CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 1 && CFLAG:(ARG:0):捕虜の扱い == 0, 2, "軟禁")
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 2, 3, "拷問")
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 3, 4, "身体開発")
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 4, 5, "説得")
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 5, 6, "性処理")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 2) || CFLAG:(ARG:0):703 == 1, 3, "拷問")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 3) || CFLAG:(ARG:0):703 == 1, 4, "身体開発")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 4) || CFLAG:(ARG:0):703 == 1, 5, "説得")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 5) || CFLAG:(ARG:0):703 == 1, 6, "性処理")
 IF SYOKUSYU_FLAG
-	CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 6, 7, "触手")
+	CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 6) || CFLAG:(ARG:0):703 == 1, 7, "触手")
 ENDIF
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 7, 8, "娼館")
-CALL SHOP_LIFE_BUTTON33(ARG:0, CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 8, 9, "搾乳")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 7) || CFLAG:(ARG:0):703 == 1, 8, "娼館")
+CALL SHOP_LIFE_BUTTON33(ARG:0, (CFLAG:(ARG:0):軟禁中 == 0 && CFLAG:(ARG:0):捕虜の扱い == 8) || CFLAG:(ARG:0):703 == 1, 9, "搾乳")
 CALL COLUMN_RIGHT_PRINTL
 
 SETCOLOR カラー_注釈

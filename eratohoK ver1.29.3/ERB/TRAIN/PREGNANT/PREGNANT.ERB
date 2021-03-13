@@ -489,6 +489,32 @@ IF IS_PREGNANT_MSG(MOTHER)
 		FLAG:能力表示モード = 0
 		CALL SHOW_INFO_WITH_UI(CHILD, 0, 0)
 		CALL SINGLE_DRAWLINE
+				
+		;(従属国パッチ)捕虜が産んだ子供の処理
+		IF CFLAG:MASTER:所属 == CFLAG:MOTHER:捕虜先
+			PRINTFORML 这孩子是俘虏生的孩子
+			PRINTFORMW 和父母一样入狱吗？
+			CALL ASK_YN("入狱", "不入狱")
+			IF RESULT == 0
+				CFLAG:CHILD:捕虜先 = CFLAG:MASTER:所属
+				CFLAG:CHILD:703 = 1
+				PRINTFORMW 把孩子关进监狱
+				PRINTFORML 自己起名字吗?
+				CALL ASK_YN("手动命名", "随机命名")
+				IF RESULT == 0
+					;手動での命名処理
+					CALL INPUT_CHILD_NAME(CHILD)
+					RETURN CHILD
+				ELSE
+					;ランダムに命名
+					CALL RANDOM_CHILD_NAMING(CHILD)
+					PRINTFORMW 这个孩子就決定名是「%CSTR:(CHILD):1%」\@ CSTR:(CHILD):2 != "" ? 、字是「%CSTR:(CHILD):2%」 # \@了
+					CALL SINGLE_EMPTY_LINE()
+					RETURN CHILD
+				ENDIF
+			ENDIF
+		ENDIF
+		
 		PRINTFORMW 這個孩子、要当做本国将来的士官而進行教育麼？
 		CALL ASK_MULTI("是", "是（今後自動当做士官）", "不要", "不要（今後自動無視）")
 		IF GROUPMATCH(RESULT, 2, 3)
@@ -529,12 +555,33 @@ RETURN CHILD
 ;---------------------------------------------------------
 @IS_CONFISCATE_CHILD(ARG:0)
 #FUNCTION
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+VARSET 連邦構成国
+
+;(従属国パッチ)主人公勢力の従属国・永久同盟国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
 
 SIF FLAG:観戦モード
 	RETURNF 1
 
-;主人公の勢力の捕虜になっている場合、没収されない
-SIF CFLAG:(ARG:0):捕虜先 && CFLAG:(ARG:0):捕虜先 == CFLAG:MASTER:所属
+;主人公の勢力の捕虜になっている場合、没収されない(従属国パッチ)主人公勢力の従属国・永久同盟国の捕虜になっている場合、没収されない
+SIF CFLAG:(ARG:0):捕虜先 && (CFLAG:(ARG:0):捕虜先 == CFLAG:MASTER:所属 || 連邦構成国:(CFLAG:(ARG:0):捕虜先) == 1)
 	RETURNF 0
 
 ;特殊勢力所属で、かつその特殊勢力が主人公のところでなければ、没収される
@@ -580,8 +627,8 @@ RETURNF RAND:4
 ;---------------------------------------------------------
 @TURNEND_PREGNANT_CHECK_CHILD(ARG:0)
 
-;被育児状態の子供
-IF CFLAG:(ARG:0):行動不能状態 == 行動不能_子供
+;被育児状態の子供(従属国パッチ)死んでいたら判定しない
+IF CFLAG:(ARG:0):行動不能状態 == 行動不能_子供 && CFLAG:(ARG:0):特殊状態 == 特殊状態_死亡
 	;一部能力の初期値を現在の値で上書き
 	;CALL SET_INI_ABL(ARG:0, "武闘")
 	;CALL SET_INI_ABL(ARG:0, "知略")
@@ -611,7 +658,7 @@ IF CFLAG:(ARG:0):行動不能状態 == 行動不能_子供
 ENDIF
 
 ;[幼兒]があり成長度が15以上の子供を成長させる
-IF TALENT:(ARG:0):幼兒 && CFLAG:(ARG:0):子の成長度 >= 15 && IS_CHILD(ARG:0)
+IF TALENT:(ARG:0):幼兒 && CFLAG:(ARG:0):子の成長度 >= 15 && IS_CHILD(ARG:0) && CFLAG:(ARG:0):特殊状態 == 特殊状態_死亡
 	IF IS_PREGNANT_MSG(ARG:0)
 		SETCOLOR カラー_注意
 		PRINTFORML 年幼的%ANAME(ARG:0)%出色的成長了
@@ -660,8 +707,9 @@ IF TALENT:(ARG:0):幼兒 && CFLAG:(ARG:0):子の成長度 >= 15 && IS_CHILD(ARG:
 		TALENT:(ARG:0):体型 = LIMIT(ROUND_NEAREST(WEIGHT_GENE(ARG:0) + RAND:31 - 15, 10), -3, 3)
 	ENDIF
 
-	;(従属国パッチ)そのキャラの教育内容フラグをリセット
+	;(従属国パッチ)そのキャラの教育内容フラグ・捕虜経験子供フラグをリセット
 	CFLAG:(ARG:0):701 = 0
+	CFLAG:(ARG:0):703 = 0
 
 	TALENT:(ARG:0):幼稚 = TALENT:(ARG:0):成長後幼稚
 	TALENT:(ARG:0):幼兒 = 0

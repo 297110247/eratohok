@@ -1,0 +1,623 @@
+﻿;-------------------------------------------------
+;「特殊区画」本体
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED
+#DIM 連邦ナンバー
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+LOCAL:101 = 1
+LOCAL:102 = 1
+LOCAL:103 = 1
+LOCAL:104 = 1
+LOCAL:105 = 1
+LOCAL:106 = 1
+LOCAL:107 = 1
+LOCAL:108 = 1
+LOCAL:109 = 1
+
+CALL SINGLE_DRAWLINE
+PRINTL 特殊区画　記念品・特殊建造物を利用できます
+CALL SINGLE_DRAWLINE
+
+PRINTL ◇記念品を利用する◇
+IF HAVE_GOODS_EXECUTED:1 > 0
+	PRINTBUTTON "[1]设置、撤去磔刑像", 1
+	LOCAL:101 = 0
+	PRINTL 
+ENDIF
+IF HAVE_GOODS_EXECUTED:2 > 0
+	PRINTBUTTON "[2]设置、撤去肉便器", 2
+	LOCAL:102 = 0
+	PRINTL 
+ENDIF
+IF HAVE_GOODS_EXECUTED:3 > 0
+	PRINTBUTTON "[3]设置、撤去性奴隷", 3
+	LOCAL:103 = 0
+	PRINTL 
+ENDIF
+IF HAVE_GOODS_EXECUTED:5 > 0
+	PRINTBUTTON "[4]让触手房间的副管理员工作", 4
+	LOCAL:104 = 0
+	PRINTL 
+ENDIF
+
+PRINTL ◇利用特殊建筑物◇
+IF HAVE_GOODS_EXECUTED:4 > 0 && RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):4 == 1
+	PRINTBUTTON "[5]启动精子发电站", 5
+	LOCAL:105 = 0
+	PRINTL 
+ENDIF
+IF HAVE_GOODS_EXECUTED:6 > 0 && RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):5 == 1
+	PRINTBUTTON "[6]启动触手・信标", 6
+	LOCAL:106 = 0
+	PRINTL 
+ENDIF
+IF RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3 > 0 && RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):6 == 1
+	PRINTBUTTON "[7]启动触手・戴森炮", 7
+	LOCAL:107 = 0
+	PRINTL 
+ENDIF
+IF RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3 > 0 && HAVE_GOODS_EXECUTED:7 > 1 && RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):7 == 1
+	PRINTBUTTON "[8]启动触手・歼灭者", 8
+	LOCAL:108 = 0
+	PRINTL 
+ENDIF
+IF RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3 > 0 && HAVE_GOODS_EXECUTED:7 > 1 && RESEARCH_UNIVERSITY_CAN_KNOWLEDGE_SP:(CFLAG:MASTER:所属):8 == 1
+	PRINTBUTTON "[9]启动矩阵姦・大脑", 9
+	LOCAL:109 = 0
+	PRINTL 
+ENDIF
+
+PRINTL
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF RESULT >= 1 && RESULT < 10 && !LOCAL:(RESULT + 100)
+	;磔刑像を設置・撤去する
+	IF RESULT == 1
+		CALL Colonial_Office_GOODS_EXECUTED_01
+	;肉便器を設置・撤去する
+	ELSEIF RESULT == 2
+		CALL Colonial_Office_GOODS_EXECUTED_02
+	;性奴隷を設置・撤去する
+	ELSEIF RESULT == 3
+		CALL Colonial_Office_GOODS_EXECUTED_03
+	;触手部屋副管理人を働かせる
+	ELSEIF RESULT == 4
+		CALL Colonial_Office_GOODS_EXECUTED_04
+	;発電所を稼働する
+	ELSEIF RESULT == 5
+		CALL Colonial_Office_GOODS_EXECUTED_05
+	;テンタクル・ビーコンを起動する
+	ELSEIF RESULT == 6
+		CALL Colonial_Office_GOODS_EXECUTED_06
+	;テンタクル・ダイソン砲を起動する
+	ELSEIF RESULT == 7
+		CALL Colonial_Office_GOODS_EXECUTED_07
+	;テンタクル・オブリテーターを起動する
+	ELSEIF RESULT == 8
+		CALL Colonial_Office_GOODS_EXECUTED_08
+	;マトリョーシ姦・ブレインを起動する
+	ELSEIF RESULT == 9
+		CALL Colonial_Office_GOODS_EXECUTED_09
+	ENDIF
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「磔刑像を設置・撤去する」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_01
+#DIM 加工元識別ナンバー
+
+CALL SINGLE_DRAWLINE
+PRINTL 可以設置・撤去磔刑像
+PRINTL 作为与各势力的态度恶化的交换，获得自国和従属国・永久同盟国的经济增长速度不重复的buff
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:1:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:1:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:1%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:1:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:1:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:1%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:1:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:1%]", 加工元識別ナンバー
+		PRINTL [不能使用]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:1:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:1:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:1:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:1:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:1:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:1:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:1:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:1:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「肉便器を設置・撤去する」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_02
+#DIM 加工元識別ナンバー
+
+CALL SINGLE_DRAWLINE
+PRINTL 可以設置・撤去肉便器
+PRINTL 作为与各势力的态度恶化的交换，获得自国和従属国・永久同盟国的兵力增长速度不重复的buff
+PRINTL 但是工厂人员在育儿状态或是小孩的场合、会获得部隊疲労度回復量不重复的buff
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:2:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:2:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:2%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:2:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:2:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:2%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:2:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:2%]", 加工元識別ナンバー
+		PRINTL [不能使用]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:2:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:2:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:2:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:2:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:2:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:2:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:2:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:2:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「性奴隷を設置・撤去する」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_03
+#DIM 加工元識別ナンバー
+
+CALL SINGLE_DRAWLINE
+PRINTL 可以設置・撤去性奴隷
+PRINTL 作为与各势力的态度恶化的交换，获得自国和従属国・永久同盟国的部隊疲労度回復量增长速度不重复的buff
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:3:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:3:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:3%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:3:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:3:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:3%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:3:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:3%]", 加工元識別ナンバー
+		PRINTL [不能使用]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:3:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:3:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:3:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:3:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:3:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:3:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:3:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:3:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「触手部屋副管理人を働かせる」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_04
+#DIM 加工元識別ナンバー
+
+CALL SINGLE_DRAWLINE
+PRINTL 让触手房的副管理员工作
+PRINTL 获得研究点
+PRINTL 但是工厂人员是育儿状态或是小孩的场合，效果会降低
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:5:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:5:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:5%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:5:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:5:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:5%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:5:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:5%]", 加工元識別ナンバー
+		PRINTL [使用できません]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:5:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:5:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:5:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:5:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:5:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:5:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:5:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:5:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「精子力発電所を稼働する」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_05
+#DIM 加工元識別ナンバー
+#DIM 連邦ナンバー
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTL 可以启动精子力发电厂
+PRINTL 作为与各势力的态度恶化的交换，自国和従属国・永久同盟国获得国庫資金
+PRINTFORML 而且可以取得特殊资源　現在的高濃度精力量[@{RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:2}]
+PRINTL 但是工厂人员是育儿状态或是小孩的场合、得到的国庫資金量会减少、并且无法取得特殊資源
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:4:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:4:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:4%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:4:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:4:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:4%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:4:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:4%]", 加工元識別ナンバー
+		PRINTL [不能使用]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:4:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:4:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:4:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:4:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:4:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:4:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:4:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:4:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;「テンタクル・ビーコンを稼働する」
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_06
+#DIM 加工元識別ナンバー
+#DIM 連邦ナンバー
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTL 可以启动触手・信标
+PRINTFORML 作为与各势力的态度恶化的交换取得了特殊资源　現在的触手能量[@{RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3}]
+CALL SINGLE_DRAWLINE
+
+FOR 加工元識別ナンバー, 0, 999
+	IF TYPE_GOODS_EXECUTED:加工元識別ナンバー:6:0 == 1 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:6:1 == 1
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:4%]", 加工元識別ナンバー
+		PRINTL
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:6:0 == 2 || TYPE_GOODS_EXECUTED:加工元識別ナンバー:6:1 == 2
+		PRINTBUTTON @"{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:4%]", 加工元識別ナンバー
+		PRINTL [使用中]
+	ELSEIF TYPE_GOODS_EXECUTED:加工元識別ナンバー:6:1 == 3
+		PRINTFORM "{加工元識別ナンバー}[%NAME_AFTER_GOODS_EXECUTED:加工元識別ナンバー:6%]", 加工元識別ナンバー
+		PRINTL [不能使用]
+	ENDIF
+NEXT
+
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "99[取消]", 99
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT
+
+IF RESULT == 99
+	REDRAW 1
+	RETURN
+
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:6:0 == 1
+	TYPE_GOODS_EXECUTED:RESULT:6:0 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:6:1 == 1
+	TYPE_GOODS_EXECUTED:RESULT:6:1 = 2
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:6:0 == 2
+	TYPE_GOODS_EXECUTED:RESULT:6:0 = 1
+ELSEIF TYPE_GOODS_EXECUTED:RESULT:6:1 == 2
+	TYPE_GOODS_EXECUTED:RESULT:6:1 = 1
+ELSE
+	CLEARLINE 1
+	GOTO INPUT_LOOP
+ENDIF
+RESTART
+
+;-------------------------------------------------
+;戦略フェイズ終了時の「特殊区画」の処理
+;-------------------------------------------------
+@Colonial_Office_GOODS_EXECUTED_TURN_END
+#DIM 連邦ナンバー
+#DIM 連邦構成国, MAX_COUNTRY
+#DIM 研究力加算基礎
+#DIM 加工元
+#DIM 関係悪化フラグ, 9
+
+;連邦ナンバー・連邦構成国を検索
+FOR LOCAL:0, 0, MAX_COUNTRY
+	FOR LOCAL:1, 0, MAX_COUNTRY
+		IF TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):0 == CFLAG:MASTER:所属 || TREATY_UNI_COUNTRY:(LOCAL:0):(LOCAL:1):1 == CFLAG:MASTER:所属
+			連邦ナンバー = LOCAL:0
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+
+FOR LOCAL:0, 0, MAX_COUNTRY
+	IF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):0) = 1
+	ELSEIF TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1 > 0
+		連邦構成国:(TREATY_UNI_COUNTRY:連邦ナンバー:(LOCAL:0):1) = 1
+	ENDIF
+NEXT
+
+CAN_ACCEPT_UNION_BUFF:連邦ナンバー:0 = 0
+CAN_ACCEPT_UNION_BUFF:連邦ナンバー:1 = 0
+CAN_ACCEPT_UNION_BUFF:連邦ナンバー:2 = 0
+
+FOR LOCAL:0, 0, 999
+	IF TYPE_GOODS_EXECUTED:(LOCAL:0):1:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:1 = 1
+		関係悪化フラグ:1 = 1
+		PRINTFORML 在街道的中央，全裸的%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%被高高挂起、其肢体暴露在众目睽睽之下…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 苦痛快楽, 緊縛, 被虐, 露出, 露出")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):1:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:1 = 1
+		関係悪化フラグ:1 = 1
+		PRINTFORML 在街道的中央，一丝不挂的%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%被高高挂起、幼小的肢体暴露在众目睽睽之下……
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 苦痛快楽, 緊縛, 被虐, 苦痛快楽, 緊縛, 被虐, 露出, 露出")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):2:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:2 = 1
+		関係悪化フラグ:2 = 1
+		PRINTFORML 全身被束缚的%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%、作为生产下一代士兵的苗床被士兵们不断灌注精子…
+		CALL FUCK_GANGBANG(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), GET_SPERM_ID("兵士"), "兵士的阴茎", "兵士")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):2:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		関係悪化フラグ:2 = 1
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:0 = 1
+		PRINTFORML 全身被束缚的%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%、作为士兵们不满的发泄口被蹂躏着尚未成熟的身体…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｕ, Ｖ拡張, Ａ拡張, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 露出, 排泄, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, 輪姦, Ｖ性交, Ａ性交, ＢＬ, 排泄, 苦痛快楽, 緊縛, 被虐", "接吻喪失, 処女喪失, Ａ処女喪失,  CFLAG減少, 性癖取得, 膣内射精, 腸内射精, 口内射精", GET_SPERM_ID("兵士"), "兵士的阴茎", "兵士", "", "輪姦")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):3:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:0 = 1
+		関係悪化フラグ:3 = 1
+		IF IS_MALE(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))
+			IF TALENT:(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)):性別 == 4 || TALENT:(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)):性別 == 5
+				SELECTCASE RAND:2
+					CASE 0
+						PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%被女官当成了娱乐的玩具…
+						CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, 精愛, 性交, 射精, Ｃ, Ｂ, Ｍ, Ａ, 苦痛快楽, 緊縛, 被虐, 輪姦, 口淫, Ａ性交, Ｖ挿入, 露出", "童貞喪失, Ａ処女喪失, 接吻喪失, CFLAG減少, 性癖取得", 0, "女官", "女官的穿戴式阴茎", "女官", "輪姦")
+					CASE 1
+						PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%用全身给士兵们进行了慰安侍奉…
+						CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "ＢＬ")
+						CALL FUCK_GANGBANG(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), GET_SPERM_ID("兵士"), "兵士的阴茎", "兵士")
+				ENDSELECT
+			ELSE
+				PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%被女官当成了娱乐的玩具…
+				CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, 精愛, 性交, 射精, Ｃ, Ｂ, Ｍ, Ａ, 苦痛快楽, 緊縛, 被虐, 輪姦, 口淫, Ａ性交, Ｖ挿入, 露出", "童貞喪失, Ａ処女喪失, 接吻喪失, CFLAG減少, 性癖取得", 0, "女官", "女官的穿戴式阴茎", "女官", "輪姦")
+			ENDIF
+		ELSE
+			PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%用全身给士兵们进行了慰安侍奉…
+			CALL FUCK_GANGBANG(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), GET_SPERM_ID("兵士"), "兵士的阴茎", "兵士")
+		ENDIF
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):3:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		CAN_ACCEPT_UNION_BUFF:連邦ナンバー:0 = 1
+		関係悪化フラグ:3 = 1
+		IF IS_MALE(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))
+			SELECTCASE RAND:2
+				CASE 0
+					PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%作为女官们的玩具，被玩弄着小小的身体…
+					CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, 精愛, 性交, Ｃ, Ｂ, Ｍ, Ａ, 苦痛快楽, 苦痛快楽, 緊縛, 被虐, 被虐, 輪姦, 口淫, Ａ性交, Ｖ挿入, 露出, Ａ拡張", "童貞喪失, Ａ処女喪失, 接吻喪失, CFLAG減少, 性癖取得", 0, "女官", "女官的穿戴式阴茎", "女官", "輪姦")
+				CASE 1
+					PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%用小小的身体给士兵们进行了慰安侍奉…
+					CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, Ｃ, Ａ, Ｂ, Ｍ, Ｕ, Ａ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 露出, 排泄, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, 輪姦, Ｖ挿入, Ａ性交, ＢＬ, 排泄, 苦痛快楽, 緊縛, 被虐", "接吻喪失, 童貞喪失, Ａ処女喪失, CFLAG減少, 性癖取得, 腸内射精, 口内射精", GET_SPERM_ID("領民"), "兵士的阴茎", "兵士", "女兵士", "処刑")
+			ENDSELECT
+		ELSE
+			PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%用小小的身体给士兵们进行了慰安侍奉…
+			CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, Ｃ, Ｖ, Ａ, Ｂ, Ｍ, Ｕ, Ｖ拡張, Ａ拡張, Ｖ拡張, Ａ拡張, 性交, 自慰, 精愛, 露出, 露出, 排泄, 苦痛快楽, 緊縛, 被虐, 接吻, 口淫, 輪姦, Ｖ性交, Ａ性交, ＢＬ, 排泄, 苦痛快楽, 緊縛, 被虐", "接吻喪失, 処女喪失, Ａ処女喪失,  CFLAG減少, 性癖取得, 膣内射精, 腸内射精, 口内射精", GET_SPERM_ID("兵士"), "兵士的阴茎", "兵士", "", "処刑")
+		ENDIF
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):4:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:2 += 1
+		関係悪化フラグ:4 = 1
+		MONEY:(CFLAG:MASTER:所属) += 200
+		FOR LOCAL:1, 0, MAX_COUNTRY
+			IF 連邦構成国:(LOCAL:1) == 1 && LOCAL:1 != CFLAG:MASTER:所属
+				MONEY:(LOCAL:1) += 200
+			ENDIF
+		NEXT
+		PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%不断射出白浊液体，用自身进行着发电…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 精愛, 射精, Ｃ, Ｃ, 自慰, 自慰, 射精, 苦痛快楽, 被虐", "CFLAG減少, 性癖取得")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):4:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		関係悪化フラグ:4 = 1
+		MONEY:(CFLAG:MASTER:所属) += 50
+		FOR LOCAL:1, 0, MAX_COUNTRY
+			IF 連邦構成国:(LOCAL:1) == 1 && LOCAL:1 != CFLAG:MASTER:所属
+				MONEY:(LOCAL:1) += 50
+			ENDIF
+		NEXT
+		PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%抚摸着尚未成熟的阴茎，小小的身体不停抽搐…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 精愛, 被虐, Ｃ, Ｃ, 自慰, 自慰, 苦痛快楽, 苦痛快楽, 被虐", "CFLAG減少, 性癖取得")
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):5:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		研究力加算基礎 += 2
+		PRINTFORML %ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%作为触手房间副管理员工作着……
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):5:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		研究力加算基礎 += 1
+		PRINTFORML まだ幼い%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%作为触手房间副管理员拼命工作着…
+		
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):6:0 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		関係悪化フラグ:5 = 1
+		RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3 += 1
+		PRINTFORML 触手们为了榨干%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%、将身体的每个角落都侵犯了…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 性技, 精愛, 性交, Ｃ, Ｖ, Ｂ, Ｍ, Ａ, 苦痛快楽, 緊縛, 被虐, 輪姦, 口淫, 触手, Ｖ性交, Ａ性交", "処女喪失, Ａ処女喪失, 膣内射精, 接吻喪失, 腸内射精, 口内射精, CFLAG減少, 性癖取得", GET_SPERM_ID("触手"), "触手", "触手", "", "輪姦")
+	ELSEIF TYPE_GOODS_EXECUTED:(LOCAL:0):6:1 == 2
+		加工元 = NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0)
+		関係悪化フラグ:5 = 1
+		RESEARCH_UNIVERSITY_SP_POINT:連邦ナンバー:3 += 1
+		PRINTFORML 触手们为了榨干%ANAME(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0))%、将小小的身体的每个角落都侵犯了…
+		CALL FUCK(NAME_BEFORE_GOODS_EXECUTED:(LOCAL:0), "欲望, 精愛, 性交, Ｖ拡張, Ａ拡張, 苦痛快楽, 被虐, Ｃ, Ｖ, Ｂ, Ｍ, Ａ, 苦痛快楽, 緊縛, 被虐, 輪姦, 口淫, 触手, Ｖ性交, Ａ性交", "処女喪失, Ａ処女喪失, 膣内射精, 接吻喪失, 腸内射精, 口内射精, CFLAG減少, 性癖取得", GET_SPERM_ID("触手"), "触手", "触手", "", "輪姦")
+	ENDIF
+NEXT
+
+研究力加算基礎 /= 2
+RESEARCH_UNIVERSITY_POINT:(CFLAG:MASTER:所属) += 研究力加算基礎
+
+;連邦構成国以外の国の態度が、関係悪化フラグの個数分悪化
+FOR LOCAL:0, 0, 5
+	IF 関係悪化フラグ:(LOCAL:0) == 1
+		FOR LOCAL:1, 0, MAX_COUNTRY
+			SIF 連邦構成国:(LOCAL:1) == 1 || LOCAL:1 == CFLAG:MASTER:所属 || !IS_COUNTRY(LOCAL:1)
+				CONTINUE
+			CALL CHANGE_RELATION_C_TO_C(LOCAL:1, CFLAG:MASTER:所属, -10, 15)
+		NEXT
+	ENDIF
+NEXT
+

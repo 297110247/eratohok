@@ -59,11 +59,17 @@ LOCALS:24 = 接收士兵
 LOCALS:25 = 接收/转让俘虏
 LOCALS:26 = 变更従属形式
 LOCALS:50 = 与特殊勢力的外交
-LOCALS:51 = 使役奴隷
+LOCALS:51 = 特殊区画
 LOCALS:52 = 研究・教育機関
 
-;未実装部分は選択不可
+;「処刑機能拡張パッチ」連動、記念品を持っていないと選択不可
 LOCAL:151 = 1
+FOR LOCAL:0, 0, 10
+	IF HAVE_GOODS_EXECUTED:(LOCAL:0) > 0
+		LOCAL:151 = 0
+		BREAK
+	ENDIF
+NEXT
 
 ;従属国・永久同盟国がいないと「研究・教育機関」は選択不可
 IF !IS_TREATY_UNI:(CFLAG:MASTER:所属)
@@ -141,7 +147,7 @@ PRINTL
 ;NEXT
 ;PRINTL
 
-PRINT ◇特殊行動◇
+;PRINT ◇特殊行動◇
 ;FOR LOCAL:0, 40, 50
 ;	IF LOCALS:(LOCAL:0) != ""
 ;		PRINTL 
@@ -221,8 +227,9 @@ ELSEIF RESULT >= 0 && RESULT < 60 && !LOCAL:(RESULT + 100)
 	;特殊勢力と外交
 	ELSEIF RESULT == 50
 		CALL Colonial_Office_COMMUNICATE_SP_COUNTRY
-	;奴隷を使役する
-	
+	;特殊区画
+	ELSEIF RESULT == 51
+		CALL Colonial_Office_GOODS_EXECUTED
 	;研究・教育機関を運営する
 	ELSEIF RESULT == 52
 		CALL Colonial_Office_university

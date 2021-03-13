@@ -81,7 +81,7 @@ RESTART
 ;-------------------------------------------------
 @Colonial_Office_university_EDUCATION_CHANGE(変更対象)
 #DIM 変更対象
-#DIM 変更可能, 4
+#DIM 変更可能, 5
 VARSET 変更可能
 
 PRINTFORM 改变[%ANAME(変更対象)%]的教育内容　
@@ -103,9 +103,11 @@ IF ID_TO_CHARA(FLAG:触手部屋管理者) != -1
 	PRINTBUTTON "[2] 泡在触手群中锻炼妖术", 2
 ENDIF
 PRINTL
-IF CFLAG:変更対象:捕虜先 > 0 || CFLAG:変更対象:700 == 1
+IF CFLAG:変更対象:捕虜先 > 0 || CFLAG:変更対象:700 == 1 || CFLAG:変更対象:703 == 1
 	変更可能:3 = 1
 	PRINTBUTTON "[3] 「教育」(調教)", 3
+	変更可能:4 = 1
+	PRINTBUTTON "[4] 洗脑", 3
 ENDIF
 PRINTL
 CALL SINGLE_DRAWLINE
@@ -132,8 +134,11 @@ ELSEIF RESULT == 2
 	PRINTFORML [%ANAME(変更対象)%]被泡在触手群中锻炼妖术
 	PRINTFORMW 战略回合结束时增加妖术经验值
 ELSEIF RESULT == 3
-	PRINTFORML [%ANAME(変更対象)%]进行名为「教育」的调教
+	PRINTFORML [%ANAME(変更対象)%]进行了名为「教育」的调教
 	PRINTFORMW 战略回合结束时增加各种经验值
+ELSEIF RESULT == 4
+	PRINTFORML [%ANAME(変更対象)%]被洗脑了
+	PRINTFORMW 战略回合结束时增加従属度・依存度
 ENDIF
 
 RETURN
@@ -199,10 +204,10 @@ FOR 教育対象, 0, CHARANUM
 			PRINTFORML %ANAME(教育対象)%被泡在触手中
 			IF CFLAG:教育対象:子の成長度 < 6
 				PRINTFORML 蠕动的触手在%ANAME(教育対象)%幼小的身体上爬行着…
-				CALL FUCK(教育対象, "Ｃ, Ｂ, 苦痛快楽, 苦痛快楽, 緊縛, 被虐, 被虐, 触手")
+				CALL FUCK(教育対象, "Ｃ, Ｂ, 苦痛快楽, 苦痛快楽, 緊縛, 被虐, 被虐, 触手, 露出")
 			ELSE
 				PRINTFORML 蠕动的触手在%ANAME(教育対象)%还在成长中的身体上爬行着…
-				CALL FUCK(教育対象, "欲望, 精愛, 射精, Ｃ, Ｂ, 苦痛快楽, 緊縛, 被虐, 触手")
+				CALL FUCK(教育対象, "欲望, 精愛, 射精, Ｃ, Ｂ, 苦痛快楽, 緊縛, 被虐, 触手, 露出")
 			ENDIF
 			IF !TALENT:(教育対象):妖術知識
 				TALENT:(教育対象):妖術知識 = 1
@@ -217,11 +222,14 @@ FOR 教育対象, 0, CHARANUM
 			PRINTFORML %ANAME(教育対象)%被带去进行了名为「教育」的调教…
 			IF CFLAG:教育対象:子の成長度 < 6
 				PRINTFORML 对于年幼的%ANAME(教育対象)%来说，痛苦似乎大于快乐
-				CALL FUCK(教育対象, "Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 苦痛快楽, 被虐, 被虐")
+				CALL FUCK(教育対象, "Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 苦痛快楽, 被虐, 被虐, 露出")
 			ELSE
-				PRINTFORML 对于还在成长中的%ANAME(教育対象)%来说，似乎渐渐从痛苦中感受到了快乐
-				CALL FUCK(教育対象, "欲望, 精愛, 射精, 射精, Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 被虐")
+				CALL FUCK(教育対象, "欲望, 精愛, 射精, 射精, Ｃ, Ｃ, Ｂ, Ｂ, Ｖ, Ｖ, Ａ, Ａ, Ｍ, Ｍ, 苦痛快楽, 被虐, 露出")
 			ENDIF
+		ELSEIF CFLAG:教育対象:701 == 4
+			PRINTFORML %ANAME(教育対象)%被洗脑了…
+			CFLAG:教育対象:依存度 += 30
+			CFLAG:教育対象:従属度 += 150
 		ENDIF
 	ENDIF
 NEXT
