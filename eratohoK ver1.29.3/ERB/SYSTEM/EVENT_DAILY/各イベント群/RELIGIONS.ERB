@@ -27,80 +27,80 @@ RETURN デイリー_ジャンル_エロ
 #DIM 対象
 
 IF DVAR:新興宗教_発生フラグ == 1 && GETBIT(TALENT:MASTER:日常系, 素質_デイリー_教祖様のしもべ)
-	PRINTFORML 教祖大人来到了%ANAME(対象)%的身边
+	PRINTFORML 教祖大人來拜訪%ANAME(対象)%了
 	;TranslatedMark 教祖様が%ANAME(対象)%の元を訪れた
-	PRINTFORML 为了得到疼爱而接近他
+	PRINTFORML %ANAME(対象)%期待著被疼愛而貼上了他
 	;TranslatedMark %ANAME(対象)%は可愛がってもらえると期待して彼に擦り寄る
-	PRINTFORML 教祖一边爱抚%ANAME(対象)%，一边命令新奴隶的筹措
+	PRINTFORML 教祖大人一邊愛撫著%ANAME(対象)%一邊下令召集新的奴隸
 	;TranslatedMark 教祖様は%ANAME(対象)%を愛撫しながら新しい奴隷の調達を命じてきた
-	PRINTFORMW %ANAME(対象)%毫不犹豫地点了点头，以潜入调查的名义把新女儿送了出去
+	PRINTFORMW %ANAME(対象)%毫不猶豫地點頭了，以潛入調查的名義選召了新的女孩
 	;TranslatedMark %ANAME(対象)%は一も二もなく頷き、新しい娘を潜入調査の名目で送り込む事にした
 	$SENNYU_SENTAKU
-	PRINTFORML 要献给谁呢？
+	PRINTFORML 要獻上誰呢？
 	;TranslatedMark 誰を捧げよう？
 	CALL SELECT_CHARA_LIST_ONLY_LOGIC_SEX("RELIGIONS", "NONE")
 	対象 = RESULT
 	IF 対象 == -1
-		PRINTFORML 但是很遗憾没有找到新的仆人
+		PRINTFORML 但是很遺憾並沒有獲得新僕人的條件
 		;TranslatedMark しかし残念ながら新しいしもべの都合がつかなかった
-		PRINTFORMW 我这样告诉了教祖，他就把眉毛往上吊，向这边靠近，手搭在肩上低声私语
+		PRINTFORMW 這樣告知教祖大人後他的眉頭翹了翹，把手放在%ANAME(対象)%肩上輕輕說著
 		;TranslatedMark 教祖様にそう告げると彼は眉を釣り上げてこちらに近づき、肩に手を回して囁いた
-		PRINTFORML 「那么作为道歉，怎么办才好呢…你知道吗？」
+		PRINTFORML 「那麼作為補償，你應該知道要怎麼做吧？」
 		;TranslatedMark 「ならば詫びとして、どうすればいいか…わかっておるな？」
-		PRINTFORMW %ANAME(対象)%扑通一声，背脊抖了一下，点了点头，被他抱着肩膀走向卧室
+		PRINTFORMW %ANAME(対象)%身體一震然後深深地點了頭，被他抱著肩帶進了寢室
 		;TranslatedMark %ANAME(対象)%はブルっと背筋を震わせるとコクリと頷き、彼に肩を抱かれながら寝室に向かった
 		PRINTFORML 
-		PRINTFORMW 从关断了的卧室的门，马上传来娇声…
+		PRINTFORMW 從緊閉的寢室的門那裡很快就漏出了陣陣嬌聲…
 		;TranslatedMark 閉じ切った寝室の扉から、すぐに嬌声が漏れ聞こえてきた…
 		PRINTFORML 
 		CALL FUCK_RAPE(MASTER, GET_SPERM_ID("教祖様"), @"教祖様の\@ RAND:2 ? 肉棒 # 唇\@", @"教祖様")
 	ELSE
-		PRINTFORML 召唤出%ANAME(対象)%
+		PRINTFORML 把%ANAME(対象)%叫出來了
 		;TranslatedMark %ANAME(対象)%を呼び出した
-		PRINTFORMW 她在可疑的新兴宗教团体调查的场面上赋予了任务，并派她前往教团
+		PRINTFORMW 把調查新興的奇怪宗教團體的任務交給她，派去了教團
 		;TranslatedMark 彼女に、怪しい新興宗教団体の調査という建前で任務を与え、教団に向かわせた
 		DVAR:新興宗教_潜入中キャラID = GET_ID(対象)
 	ENDIF
 ELSE
 	IF DVAR:新興宗教_発生フラグ == 2
-		PRINTFORML 又听到那个新兴宗教的传闻了
+		PRINTFORML 又聽到了那個新興宗教的傳聞
 		;TranslatedMark 再び例の新興宗教の噂が耳に届いた
-		PRINTFORMW 果然是在背地里干坏事…
+		PRINTFORMW 果然在暗地裡做著什麼不好的事
 		;TranslatedMark やはり裏で良からぬことをしている様だ…
 	ELSE
-		PRINTFORML 听到了奇怪的新兴宗教的传闻
+		PRINTFORML 聽說了奇怪新興宗教的傳聞
 		;TranslatedMark 妖しい新興宗教の噂を聞いた
-		PRINTFORMW 年轻人不断地入信，但似乎在背地里染指非法的事情…
+		PRINTFORMW 雖然年輕人一個又一個地入教，但是在背地裡似乎做著不合法的事情…
 		;TranslatedMark 若者たちが次々と入信しているが、裏で非合法なことに手を染めているらしい…
 		DVAR:新興宗教_発生フラグ = 2
 	ENDIF
-	PRINTFORML 怎么办？
+	PRINTFORML 要怎麼做呢？
 	;TranslatedMark どうしよう？
 	CALL ASK_YN("潜入调查" ,"交给警察")
 	IF RESULT == 1
-		PRINTFORML 现在忙于和其他国家的战争
+		PRINTFORML 現在忙於和他國的戰爭
 		;TranslatedMark 今は他国との戦争で忙しい
-		PRINTFORMW 决定交给警察处理
+		PRINTFORMW 還是交給警察來處理吧
 		;TranslatedMark 警察に任せておく事にした
 		RETURN
 	ELSE
-		PRINTFORML 因为不能置之不理，所以决定调查
+		PRINTFORML 必須徹查，不能放任這種事發生
 		;TranslatedMark 放置できないので調査する事にした
-		PRINTFORMW 看来女性更容易潜入
+		PRINTFORMW 看起來女性潛入會比較容易
 		;TranslatedMark どうやら女性の方が潜入しやすそうだ
-		PRINTFORML 让谁潜入呢？
+		PRINTFORML 要派誰去潛入呢？
 		;TranslatedMark 誰を潜入させようか？
 		CALL SELECT_CHARA_LIST_ONLY_LOGIC_SEX("RELIGIONS", "NONE")
 		対象 = RESULT
 		IF 対象 < 0
-			PRINTFORMW 还是算了
+			PRINTFORMW 果然还是放弃吧
 			;TranslatedMark やはりやめておいた
 			RETURN
 		ELSEIF 対象 == MASTER
-			PRINTFORMW 决定自己潜入
+			PRINTFORMW 自己去進行潛入吧
 			;TranslatedMark 自ら潜入する事にした
 		ELSE
-			PRINTFORMW 交给了%ANAME(対象)%
+			PRINTFORMW 交給%ANAME(対象)%了
 			;TranslatedMark %ANAME(対象)%に任せた
 		ENDIF
 	ENDIF
@@ -109,74 +109,74 @@ ENDIF
 PRINTFORML …
 PRINTFORML …
 PRINTFORMW ………
-PRINTFORML 顺利地作为信徒潜入成功了
+PRINTFORML 成功地作為信徒潛入了
 ;TranslatedMark 首尾よく信者として潜入に成功した
-PRINTFORMW 那里有很多年轻人，好像都沾染上了教团的思想
+PRINTFORMW 那裡有著很多的年輕人，看上去都被染上了教團的思想
 ;TranslatedMark そこには若者が大勢おり、一様に教団の思想に染まっている様だ
-PRINTFORML 自称教祖的是丰满的中年男性，带领着很多信徒
+PRINTFORML 自稱為教祖的是一名肥胖的中年男子，他領導著很多的信徒
 ;TranslatedMark 教祖を名乗るのはふくよかな中年男性で、大勢の信者を引き連れている
-PRINTFORMW 乍看之下很温和的人，真的是这个男人在背后染指犯罪吗？
+PRINTFORMW 一眼看上去是很溫和的人，真的是這個男人在背地裡染指犯罪嗎？
 ;TranslatedMark 一見穏やかそうな人物だが、本当にこの男が裏で犯罪に手を染めているのだろうか？
-PRINTFORML …正要开始搜查的时候，被一个看起来很了不起的男人搭讪了
+PRINTFORML …想要開始搜查的時候，突然被一個看起來很了不起的男人搭話了
 ;TranslatedMark …捜査を開始しようとした時、偉そうな男に声をかけられた
-PRINTFORMW 「很感谢教祖能给你特别的说法"
+PRINTFORMW 「教祖大人要對你進行特別的說法，就好好在心裡謝謝他吧」這樣說著
 ;TranslatedMark 「教祖様からお前に特別な説法を頂けるのでありがたく思え」とのことだ
-PRINTFORML 看了他一眼，他带着平静的笑容看着我
+PRINTFORML 瞥了一眼他，看到的是一幅溫和的笑顏
 ;TranslatedMark チラッと彼の方を見ると穏やかそうな笑顔でこちらを見ていた
-PRINTFORMW 以为这是抓住教团真相的机会的%ANAME(対象)%应邀来到教祖的房间
+PRINTFORMW 認為這是抓住教團真相的機會的%ANAME(対象)%接受邀請去了教祖的房間
 ;TranslatedMark これは教団の真相を掴むチャンスと思った%ANAME(対象)%は誘いに応じて教祖の部屋について行った
 PRINTFORML 
-PRINTFORML 他确实很会说话
+PRINTFORML 他確實很擅長言語
 ;TranslatedMark 彼は確かに話が上手かった
-PRINTFORML 用巧妙的口才面对%ANAME(対象)%，诉说着爱、未来等各种各样的事情
+PRINTFORML 巧舌如簧地對%ANAME(対象)%訴說了愛和未來以及很多其他的事情
 ;TranslatedMark 巧みな弁舌で%ANAME(対象)%に対し、愛とか未来とか、色んな事を説いてきた
-PRINTFORMW %ANAME(対象)%为了调查，暂时和他说了几句话
+PRINTFORMW %ANAME(対象)%為了進行調查而附和著他的話
 ;TranslatedMark %ANAME(対象)%は捜査の為にしばらく彼の話に合わせていた
-PRINTFORML …听了他几句话，我的脑袋渐渐发愣了
+PRINTFORML …聽了一會他的話結果腦袋變得麻木了起來
 ;TranslatedMark …しばらく彼の話を聞いていると徐々に頭がボーっとしてきた
-PRINTFORMW 身体高涨，心跳加快，教祖的话在脑中反复渗透
+PRINTFORMW 身體開始興奮心跳也變快了，教祖的言語在腦袋裡面反復迴響
 ;TranslatedMark 体が高揚し、鼓動が早まり、教祖の言葉が頭の中を反復ししみ込んでくる
-PRINTFORML 有什么奇怪的…但是当我意识到这是从房间角落飘来的香味的效果的时候已经晚了
+PRINTFORML 有什麼不對勁…但是察覺到原因是房間角落飄來的香味效果的時候已經晚了
 ;TranslatedMark 何かおかしい…しかしそれが部屋の隅から漂うお香の効果だと気づいた時にはもう遅かった
-PRINTFORML 看到放心的%ANAME(対象)%，教祖舔舐着嘴喃喃地说："工作吧。"
+PRINTFORML 看著精神恍惚的%ANAME(対象)%，教祖舔了舔嘴說『開始工作吧』
 ;TranslatedMark 放心する%ANAME(対象)%を見て教祖は舌なめずりをして『お勤めをしろ』と囁いた
-PRINTFORMW 听到这句话，%ANAME(対象)%点了点头，脱去了衣服
+PRINTFORMW 聽到這句話，%ANAME(対象)%點了點頭，然後脫光了衣服
 ;TranslatedMark その言葉に%ANAME(対象)%はコクリと頷くと服を脱ぎだした
 PRINTFORMW 
-PRINTFORML …过了一会儿，从教祖的房间里传来了%ANAME(対象)%艳丽的喘息声
+PRINTFORML …過了一會、從教祖的房間裡傳來了%ANAME(対象)%艷麗的喘叫聲
 ;TranslatedMark …しばらくすると、教祖の部屋から%ANAME(対象)%の艶めかしい喘ぎ声が漏れて来た
-PRINTFORML 赤身裸体的%ANAME(対象)%被教组大人命令着跨上了一物，激烈地摆动着腰
+PRINTFORML 赤身裸體的%ANAME(対象)%聽從教祖大人的命令跨了上去，激烈地擺動著腰
 ;TranslatedMark 裸になった%ANAME(対象)%は教組様に命ぜられるままに一物に跨り、激しく腰を振っている
-PRINTFORML 用强健的阴茎贯穿阴道孔的感觉醉了的眼睛♥亲切地叫了起来
+PRINTFORML 被強健的肉棒貫穿腔穴的感覺麻醉，眼睛變成了♥，發出了陣陣嬌聲
 ;TranslatedMark 逞しいペニスで膣穴いっぱいに貫かれる感覚に酔いしれ目を♥にして嬌声を上げた
 IF TALENT:対象:処女 == 1
-	PRINTFORMW 从结合部垂下了献给教组大人的纯洁的证明，阴唇在抽搐着
+	PRINTFORMW 從結合部垂落下的是獻給教祖大人純潔的證明，陰唇抽搐著痙攣了
 	;TranslatedMark 結合部からは教組様に捧げた純潔の証が垂れており、陰唇がヒクヒクと痙攣している
 ELSE
-	PRINTFORMW 从结合部流出了大量的爱液，阴唇像喜悦一样抽搐着
+	PRINTFORMW 從結合部垂落下了大量的愛液，陰唇快樂地抽搐著迎來了痙攣
 	;TranslatedMark 結合部からは大量の愛液が溢れ出ており、陰唇が悦ぶ様にヒクヒクと痙攣している
 ENDIF
-PRINTFORML 沉浸在快乐中，毫无疑问瑜伽狂舞的%ANAME(対象)%的样子让教祖露出了下流的笑容
+PRINTFORML 沉迷在快樂中直至發狂的%ANAME(対象)%讓教祖露出了卑劣的笑容
 ;TranslatedMark 快楽に没頭し、あられもなくヨガリ狂う%ANAME(対象)%の姿に教祖は下卑た笑みを浮かべている
-PRINTFORML 用巧妙的手指揉搓着胸口，%ANAME(対象)%忍不住吐出甜美的气息，扭动着身子
+PRINTFORML 被巧妙的指技玩弄這胸部，%ANAME(対象)%漏出了快樂的喘息扭動著身體
 ;TranslatedMark 巧みな指使いで胸を揉み上げられると、%ANAME(対象)%は甘い吐息を漏らしてたまらず身をくねらせた
-PRINTFORML 反筋斗的阴茎咯吱咯吱地挖出阴道肉的快感让%ANAME(対象)%扑哧一声后背发抖，摆动着腰
+PRINTFORML 被肉棒勁烈挖弄腔肉的%ANAME(対象)%挺直背擺動著腰
 ;TranslatedMark 反り返ったペニスがゴリゴリと膣肉を抉る快感に%ANAME(対象)%はゾクゾクと背筋を震わせ腰を振る
-PRINTFORMW 突然强烈的推上，%ANAME(対象)%仰面而来
+PRINTFORMW 突然的強烈突進讓%ANAME(対象)%大幅度仰起身體達到了高潮
 ;TranslatedMark 不意に強烈な突き上げ、%ANAME(対象)%は大きく仰け反りながら達した
-PRINTFORML 同时大量的精液被子宫猛烈地敲打着，视野一下子变得混乱
+PRINTFORML 同時大量的精液被射入衝擊著子宮、視線變得一片混亂
 ;TranslatedMark 同時に大量のザーメンが勢いよく子宮に叩きつけられ、視界がチカチカしてアヘリ狂う
-PRINTFORML 但是，在绝顶的同时，肉体也追求着更大的快感♥木桩♥继续摇晃着腰
+PRINTFORML 但是達到頂峰後肉體還在尋求著更多的快感，“咕嚦♥咕嚦♥”地繼續擺動腰
 ;TranslatedMark しかし絶頂しながらも肉体は更なる快感を求めてくい♥くい♥と腰を揺すり続けた
-PRINTFORML 他微笑着面对着AQUME的余韵轻飘飘地追求更多的%ANAME(対象)%
+PRINTFORML 看著因為達到高潮而輕飄飄的%ANAME(対象)%還在渴求著更多愉悅，他不禁露出了笑容
 ;TranslatedMark アクメの余韻にふわふわになりながらもっともっとと求める%ANAME(対象)%に彼はニヤリと笑った
-PRINTFORMW 被教祖大人中意的%ANAME(対象)%，在整晚都被给予了满满的恩惠……
+PRINTFORMW 被教祖看上的%ANAME(対象)%、一整晚都在接受他的慈悲……
 ;TranslatedMark 教祖様に気に入られた%ANAME(対象)%は、一晩中たっぷりとご慈悲を与えられる事になった……
 CALL FUCK_RAPE(対象, GET_SPERM_ID("教祖様"), @"教祖様の\@ RAND:2 ? 肉棒 # 唇\@", @"教祖様")
 PRINTFORML 
-PRINTFORMW %ANAME(対象)%成为教祖专属的佣人
+PRINTFORMW %ANAME(対象)%成為了教祖專屬的僕人
 ;TranslatedMark %ANAME(対象)%は教祖専属の奉公人となった
-PRINTFORMW 虽然入室后的记忆模糊，但没想到对搜查很方便……
+PRINTFORMW 儘管進入房間後的記憶模糊不清，但是考慮到對調查有幫助便沒有多想……
 ;TranslatedMark 入室後の記憶が曖昧だが、捜査には都合がよいと深く考えなかった……
 
 RETURN 1
