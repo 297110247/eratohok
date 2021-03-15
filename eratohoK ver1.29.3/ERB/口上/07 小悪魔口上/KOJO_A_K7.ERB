@@ -57,7 +57,7 @@ IF CFLAG:200 == 0
 		;TranslatedMark %ANAME(MASTER)%は%ANAME(TARGET)%に、これからよろしく　と手を差し出した
 		PRINTFORML 「啊，请多关照」
 		;TranslatedMark 「はぁ、まあよろしくです」
-		PRINTFORML 「但是我已经和帕金利先生签了合同，我只帮你一点小事哦？」
+		PRINTFORML 「但是我已经和帕秋莉签了合同，我只帮你一点小事哦？」
 		;TranslatedMark 「でも私はもうパチュリー様と契約してるんで、本当にちょっとした事くらいしか手伝えませんよ？」
 		PRINTFORMW ……和恶魔定下契约获得力量，虽然没有这个目标，但还是和她开始了交流
 		;TranslatedMark ……悪魔と契約して力を得る、という当ては外れたが、ともあれ彼女と交流を開始した
@@ -100,7 +100,7 @@ ELSEIF (CFLAG:200 < 6) && (CFLAG:240 == 3)
 	;TranslatedMark 「クスクス♪　どうしたんです？　『何だか今までと違う』？　ああ、そういうことですか…」
 	PRINTFORML 「不要对最喜欢H的自己撒谎，只是稍微坦率了一点而已…♥出于自己的本能♥」
 	;TranslatedMark 「エッチな事大好きな自分に嘘をつくのをやめて、ちょっと素直になっただけですよぉ…♥　自分の本能に、ね♥」
-	PRINTFORMW %ANAME(MASTER)%为了不让她强烈的淫乱、理性被夺走而坚强地保持着，再次开始了交流…
+	PRINTFORMW %ANAME(MASTER)%保持清醒的理智，避免被她强烈的淫乱所影响，开始了交流…
 	;TranslatedMark %ANAME(MASTER)%は彼女の強い淫気に、理性を飛ばされないよう気を強く保って交流を再開した…
 	PRINTL 
 
@@ -116,7 +116,7 @@ ELSEIF CFLAG:200 < 5 && TALENT:合意
 		;TranslatedMark %ANAME(TARGET)%を訪ねると、彼女は%ANAME(MASTER)%の腕に抱きついてきた
 		PRINTFORML 「嘿嘿♪今天要做什么？如果可以的话…要是心情好就好了…♥」
 		;TranslatedMark 「えへへ♪　今日はどんなことするんですか？　出来たら…キモチいい事だといいなぁ…♥」
-		PRINTFORMW 在和平时一样明亮的环境中可以窥见的妖艳的气氛让%ANAME(MASTER)%怦然心动
+		PRINTFORMW 在和平时一样明亮的环境中窥见的妖艳的气氛让%ANAME(MASTER)%怦然心动
 		;TranslatedMark 普段通りの明るさの中に垣間見える妖艶な雰囲気が%ANAME(MASTER)%をドキリとさせた
 	;それ以外
 	ELSE
@@ -135,7 +135,7 @@ ELSEIF CFLAG:200 < 4 && TALENT:恋人
 	IF TALENT:恋慕
 		PRINTFORML 「啊，%ANAME(MASTER)%。早上好♪今天要做什么？」
 		;TranslatedMark 「あ、%ANAME(MASTER)%。おはようございまーす♪　今日は何をするんですか？」
-		PRINTFORMW 「反正要去约会吧。没有不炫耀这么可爱的她的手♥搞砸了♪」
+		PRINTFORMW 「真是♪我们去约会吧。炫耀这么可爱的女朋友♥ 」
 		;TranslatedMark 「どうせならデート行きましょうよ。こんなに可愛い彼女を見せびらかさない手は無いですよ♥　なんちゃって♪」
 		PRINTFORMW %ANAME(TARGET)%以非常高兴的样子迎接了%ANAME(MASTER)%
 		;TranslatedMark %ANAME(TARGET)%はとても上機嫌な様子で%ANAME(MASTER)%を迎えた
@@ -152,9 +152,9 @@ ELSEIF CFLAG:200 < 3 && CFLAG:250 == 1
 	PRINTL 
 	PRINTFORML 「啊，%ANAME(MASTER)%。早上好」
 	;TranslatedMark 「あ、%ANAME(MASTER)%。おはようございます」
-	PRINTFORMW 前几天本应该接吻的，%ANAME(TARGET)%却和以前没什么变化
+	PRINTFORMW 前几天本来该接吻的，%ANAME(TARGET)%却和以前没什么变化
 	;TranslatedMark 先日キスを交わしたはずだったが、%ANAME(TARGET)%は今までとあまり変わらない様子だ
-	PRINTFORMW 「并没有因为接吻就那么吵闹。像是稍微有点亲密的问候呢♪」
+	PRINTFORMW 「并没有因为接吻就那么兴奋。像是稍微有点亲密的问候呢♪」
 	;TranslatedMark 「別にキスくらいでそんなに騒いだりしませんって。ちょっと親密な挨拶みたいなものですよぉ♪」
 	PRINTL 
 
@@ -164,7 +164,7 @@ ELSEIF CFLAG:200 < 2 && !TALENT:恋人 && TALENT:恋慕 && !TALENT:合意 && CFL
 	PRINTL 
 	PRINTFORML （…我做好了心理准备。%ANAME(MASTER)%，我随时欢迎你！）
 	;TranslatedMark （…心の準備は出来てます。%ANAME(MASTER)%、私はいつでもウェルカムですよ！）
-	PRINTFORMW %ANAME(TARGET)%把一种炽热的视线投向了%ANAME(MASTER)%
+	PRINTFORMW %ANAME(TARGET)%炽热的视线投向%ANAME(MASTER)%
 	;TranslatedMark %ANAME(TARGET)%はなにやら熱っぽい視線を%ANAME(MASTER)%に送っている
 	PRINTL 
 
@@ -178,29 +178,29 @@ ELSEIF TALENT:親愛 || TALENT:隷属
 			CASE 0
 				PRINTFORML 「我一直在等你哦，%ANAME(MASTER)%。等不及了，正想去袭击你呢♥」
 				;TranslatedMark 「もうっ、待ってましたよぉ、%ANAME(MASTER)%。待ちきれなくて、襲いに行っちゃうところでしたよぉ♥」
-				PRINTFORMW %ANAME(TARGET)%在充满魅力的气氛中，浮现笑容迎接%ANAME(MASTER)%
+				PRINTFORMW %ANAME(TARGET)%在充满魅力的气氛中，脸浮现笑容迎接%ANAME(MASTER)%
 				;TranslatedMark %ANAME(TARGET)%は色っぽい雰囲気を纏ったまま、笑顔を浮かべて%ANAME(MASTER)%を出迎えた
 			CASE 1
-				PRINTFORML 「啊哈哈♥今天也来了呢。难道不是因为想念我的身体吗？呼呼♥」
+				PRINTFORML 「啊哈哈♥ 今天也来了呢。难道不是因为想念我的身体吗♥」
 				;TranslatedMark 「あは♥　今日も来てくれたんですねぇ%ANAME(MASTER)%。もしかして、私の身体が恋しくなったんじゃないですかぁ？　うふ♥」
 				PRINTFORMW %ANAME(TARGET)%紧贴在%ANAME(MASTER)%的乳房上
 				;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に乳房をぐいぐい押し当てるように密着してきた
 			CASE 2
 				PRINTFORML 「啊，等累了啊♥这样的话，今天不好好疼爱我的话就不喜欢了…♥」
 				;TranslatedMark 「あぁん、待ちくたびれましたよぉ♥　これじゃあ今日は、たっぷり可愛がってくれないとイヤですよぉ…♥」
-				PRINTFORMW 被%ANAME(MASTER)%紧紧抱住的%ANAME(TARGET)%散发出的魔性香味，将%ANAME(MASTER)%的理性融化…
+				PRINTFORMW 被%ANAME(MASTER)%紧紧抱住的%ANAME(TARGET)%散发出的迷人香味，将%ANAME(MASTER)%的理性融化…
 				;TranslatedMark %ANAME(MASTER)%にぎゅっと抱きつく%ANAME(TARGET)%から発せられる魔性の香りが、%ANAME(MASTER)%の理性を蕩かしていく…
 			CASE 3
 				PRINTFORML 「呵呵呵…来了呢，%ANAME(MASTER)%♥那么两个人一起尽情享受到晚上吧…♥」
 				;TranslatedMark 「うふふ…来てくれましたね、%ANAME(MASTER)%♥　それじゃあ二人で、夜までたっぷり楽しみましょう…♥」
-				PRINTFORMW 从%ANAME(TARGET)%中散发出的，使理性荡漾的魔性香味扑鼻而来…
+				PRINTFORMW 从%ANAME(TARGET)%中散发出的，使内心荡漾的香味扑鼻而来…
 				;TranslatedMark %ANAME(TARGET)%から発せられる、理性を蕩けさせる魔性の香りが%ANAME(MASTER)%の鼻腔をくすぐる…
 			CASE 4
 				PRINTFORML 「啊哈哈♥我一直在等你哦，%ANAME(MASTER)%♪嗯，嗯…嗯…♥」
 				;TranslatedMark 「あはっ♥　待ってましたよぉ%ANAME(MASTER)%♪　ぁん、んん…ちゅぅ…♥」
-				PRINTFORML %ANAME(TARGET)%一边缠着费洛蒙一边抱住了她，在%ANAME(MASTER)%的嘴唇上亲了她
+				PRINTFORML 散发着费洛蒙的%ANAME(TARGET)%将%ANAME(MASTER)%紧紧抱住，浓烈地接吻着
 				;TranslatedMark フェロモンを纏いながら抱きついてきた%ANAME(TARGET)%は、%ANAME(MASTER)%の唇に熱烈なキスを見舞ってくれた
-				PRINTFORMW 「呼呼♥对不起，我忍不住了♥反正就这样…到了吗？呼呼皮♥」
+				PRINTFORMW 「呼呼♥ 对不起，我忍不住了♥ 反正就这样…到了吗？呼呼奈♥」
 				;TranslatedMark 「うふふ♥　ごめんなさいねぇ、我慢できませんでしたぁ♥　どうせならこのまま…シちゃいますか？　うふふっ♥」
 		ENDSELECT
 	ELSE
@@ -213,12 +213,12 @@ ELSEIF TALENT:親愛 || TALENT:隷属
 			CASE 1
 				PRINTFORML 「啊♪早上好，%ANAME(MASTER)%。今天也请度过美好的一天哦♥」
 				;TranslatedMark 「あっ♪　おはようございます、%ANAME(MASTER)%。今日も素敵な一日にしてくださいね♥」
-				PRINTFORMW %ANAME(TARGET)%幸福地眯起眼睛，拿起了%ANAME(MASTER)%的手臂
+				PRINTFORMW %ANAME(TARGET)%幸福地眯起眼睛，搂住%ANAME(MASTER)%的手臂
 				;TranslatedMark %ANAME(TARGET)%は幸せそうに目を細め、%ANAME(MASTER)%の腕を取ってきた
 			CASE 2
 				PRINTFORML 「啊哈哈，你来了呢♪今天也请好好疼爱我吧♥」
 				;TranslatedMark 「あは、来てくれたんですねぇ♪　今日もたっぷり、私を可愛がってください♥」
-				PRINTFORMW %ANAME(TARGET)%抱住了%ANAME(MASTER)%的手臂，撒娇地贴近了脸颊
+				PRINTFORMW %ANAME(TARGET)%搂住%ANAME(MASTER)%的手臂，撒娇地贴近了脸颊
 				;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の腕を抱き取り、甘えるように頬を寄せてきた
 			CASE 3
 				PRINTFORML 当%ANAME(TARGET)%看到%ANAME(MASTER)%的身影时，她笑着跑了过来
@@ -228,9 +228,9 @@ ELSEIF TALENT:親愛 || TALENT:隷属
 			CASE 4
 				PRINTFORML 「啊！我一直在等你哦——%ANAME(MASTER)%♪嗯，中♥」
 				;TranslatedMark 「あっ！　待ってましたよー%ANAME(MASTER)%ー♪　んー、ちゅっ♥」
-				PRINTFORML 跑过来的%ANAME(TARGET)%，在%ANAME(MASTER)%的脸颊上亲了热吻
+				PRINTFORML 跑过来的%ANAME(TARGET)%，热情地在%ANAME(MASTER)%的脸颊上吻着
 				;TranslatedMark 駆け寄ってきた%ANAME(TARGET)%は、%ANAME(MASTER)%のほっぺに熱いキスを見舞ってくれた
-				PRINTFORMW 「嗯，对不起，我忍不住了♥如果有人看到了怎么办呢？呼呼皮♥」
+				PRINTFORMW 「嗯，对不起，我忍不住了♥ 如果有人看到了怎么办呢？呼呼♥」
 				;TranslatedMark 「えへへー、すみません、我慢できませんでした♥　誰か見てたらどうしましょうね？　うふふっ♥」
 		ENDSELECT
 	ENDIF
@@ -240,7 +240,7 @@ ELSEIF TALENT:合意 && (TALENT:恋慕 || TALENT:服従)
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML 「啊哈哈♥我一直在等哦。等不及了，差点自己安慰你♥」
+				PRINTFORML 「啊哈哈♥ 我一直在等哦。等不及了，差点自己爱抚♥」
 				;TranslatedMark 「あはっ♥　待ってましたよぉ%ANAME(MASTER)%。待ちきれなくて、自分で慰めちゃうところでしたよぉ♥」
 				PRINTFORMW %ANAME(TARGET)%带着害羞的表情迎接了%ANAME(MASTER)%
 				;TranslatedMark %ANAME(TARGET)%は上気した色っぽい表情で%ANAME(MASTER)%を出迎えた
@@ -252,12 +252,12 @@ ELSEIF TALENT:合意 && (TALENT:恋慕 || TALENT:服従)
 			CASE 2
 				PRINTFORML 「啊，等累了啊♥今天也请好好疼爱我啊…♥」
 				;TranslatedMark 「あぁん、待ちくたびれましたよぉ♥　今日もたっぷり、可愛がってくださいねぇ…♥」
-				PRINTFORMW 从抱住%ANAME(MASTER)%的%ANAME(TARGET)%散发出的魔性香味，将%ANAME(MASTER)%的理性融化…
+				PRINTFORMW 抱住%ANAME(MASTER)%的%ANAME(TARGET)%散发出的迷人香味，将%ANAME(MASTER)%的理性融化…
 				;TranslatedMark %ANAME(MASTER)%に抱きついた%ANAME(TARGET)%から発せられる魔性の香りが、%ANAME(MASTER)%の理性を蕩かしていく…
 			CASE 3
 				PRINTFORML 「啊，我等着你呢！%ANAME(MASTER)%♪啊，中…♥」
 				;TranslatedMark 「あぁん、待ってましたよぉ%ANAME(MASTER)%♪　ぁん、ちゅ…♥」
-				PRINTFORML 不情愿地抱住了%ANAME(TARGET)%，在%ANAME(MASTER)%的嘴唇上艳丽地亲了我
+				PRINTFORML 紧紧搂住%ANAME(TARGET)%，强势在%ANAME(MASTER)%的嘴唇上亲吻
 				;TranslatedMark いやらしく抱きついてきた%ANAME(TARGET)%は、%ANAME(MASTER)%の唇に艶かしくキスを見舞ってくれた
 				PRINTFORMW 「呵呵♪对不起，我吃得太多了♥」
 				;TranslatedMark 「うふふ♪　ごめんなさいねぇ、つまみ食いしちゃいましたぁ♥」
@@ -317,7 +317,7 @@ ELSEIF CFLAG:250 == 1
 ELSEIF !TALENT:恋人 && TALENT:恋慕 && !TALENT:合意 && CFLAG:250 < 1
 	PRINTFORML （…我做好了心理准备。%ANAME(MASTER)%，我随时欢迎你！）
 	;TranslatedMark （…心の準備は出来てます。%ANAME(MASTER)%、私はいつでもウェルカムですよ！）
-	PRINTFORMW %ANAME(TARGET)%把一种炽热的视线投向了%ANAME(MASTER)%
+	PRINTFORMW %ANAME(TARGET)%炽热的视线投向%ANAME(MASTER)%
 	;TranslatedMark %ANAME(TARGET)%はなにやら熱っぽい視線を%ANAME(MASTER)%に送っている
 
 ;既成事実Lv0
@@ -419,31 +419,31 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 0
 						PRINTFORML 「呵呵，%ANAME(MASTER)%♥这是礼物♥」
 						;TranslatedMark 「うふふ、%ANAME(MASTER)%♥　これ、プレゼントです♥」
-						PRINTFORMW %ANAME(TARGET)%分手的时候，把自己的内衣交给了%ANAME(MASTER)%
+						PRINTFORMW %ANAME(TARGET)%分开的时候，把自己的内衣交给了%ANAME(MASTER)%
 						;TranslatedMark %ANAME(TARGET)%は別れ際、%ANAME(MASTER)%に自身の下着を手渡してきた
 						PRINTFORML 「刚才还在穿的东西♥这个可以随便用哦…♥」
 						;TranslatedMark 「ついさっきまで穿いてた物です♥　これ、好きに使ってくれていいですよぉ…♥」
-						PRINTFORMW 内衣里残留着她的温暖，侵蚀着%ANAME(MASTER)%的理性，煽动着兴奋……
+						PRINTFORMW 感受内衣里残留着她的温暖，%ANAME(MASTER)%的心跳加速……
 						;TranslatedMark 下着に残る彼女の温もりが、%ANAME(MASTER)%の理性を蝕み、興奮を煽る……
 						CALL FUCK(TARGET, "欲望")
 						CALL FUCK(MASTER, "欲望")
 					CASE 1
 						PRINTFORML 「已经到了分别的时间了吗？但是有点欠缺呢…。呼呼♥」
 						;TranslatedMark 「もうお別れの時間ですかぁ？　でもちょっと物足りないですねぇ…。うふふ♥」
-						PRINTFORMW %ANAME(TARGET)%在分别的时候，拿出%ANAME(MASTER)%的一个东西，接近那娇嫩的嘴唇
+						PRINTFORMW %ANAME(TARGET)%在分别的时候，拿出%ANAME(MASTER)%的阴茎，用嘴唇含住
 						;TranslatedMark %ANAME(TARGET)%は別れ際、%ANAME(MASTER)%の一物を取り出し、その瑞々しい唇を近づける
-						PRINTFORML 「%ANAME(MASTER)%。能把你的生命之素分给寂寞的我吗？呼呼♥」
+						PRINTFORML 「%ANAME(MASTER)%。能把你的精液分给寂寞的我吗？呼呼♥」
 						;TranslatedMark 「ねぇ%ANAME(MASTER)%。%ANAME(MASTER)%と別れるのが寂しい私に、貴方の命の素を分けてくれませんかぁ？　ふふ♥」
 						PRINTFORMW ……%ANAME(MASTER)%最终还是没能拒绝，把精子射在了她嘴里…
 						;TranslatedMark ……%ANAME(MASTER)%は結局断りきれず、彼女の口内に子種を放ってしまった…
 						CALL FUCK(TARGET, "Ｍ, 奉仕, 精愛, 性技, 欲望, 口淫", "接吻喪失, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%的阴茎", "", "", "和姦")
 						CALL FUCK(MASTER, "Ｃ, 射精, 欲望")
 					CASE 2
-						PRINTFORML 「时间到了吗？但是这个，一直很僵硬的话不辣吗？库库♥」
+						PRINTFORML 「时间到了吗？但是这个，一直很僵硬的话不痛吗？库库♥」
 						;TranslatedMark 「もう時間ですか？　でもコレ、ガチガチのままじゃあ辛くないですかぁ？　クスクス♥」
-						PRINTFORMW %ANAME(TARGET)%拿出被她的淫气所驱使而勃起的%ANAME(MASTER)%的一个东西，用手将其包裹起来
+						PRINTFORMW %ANAME(TARGET)%拿出受她刺激所勃起的%ANAME(MASTER)%的阴茎，用手将其包裹起来
 						;TranslatedMark %ANAME(TARGET)%は、彼女の淫気に当てられて勃起している%ANAME(MASTER)%の一物を取り出し、手で包んでシゴいてくる
-						PRINTFORML 「用我的手给你按摩吧？在一天的结束时让它清爽一点比较好哦♥」
+						PRINTFORML 「用我的手给你释放吧？在一天的结束时让它放松比较好哦♥」
 						;TranslatedMark 「私の手で、シコシコしてあげましょうかぁ？　一日の終わりにはスッキリさせたほうがいいですよぉ♥」
 						PRINTFORMW ……%ANAME(MASTER)%最终还是没能拒绝，被她榨取了满满的精液…
 						;TranslatedMark ……%ANAME(MASTER)%は結局断りきれず、彼女に物陰で精をたっぷり搾り取られた…
@@ -456,18 +456,18 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 0
 						PRINTFORML 「呵呵，%ANAME(MASTER)%♥这是礼物♥」
 						;TranslatedMark 「うふふ、%ANAME(MASTER)%♥　これ、プレゼントです♥」
-						PRINTFORMW %ANAME(TARGET)%分手的时候，把自己的内衣交给了%ANAME(MASTER)%
+						PRINTFORMW %ANAME(TARGET)%分开的时候，把自己的内衣交给了%ANAME(MASTER)%
 						;TranslatedMark %ANAME(TARGET)%は別れ際、%ANAME(MASTER)%に自身の下着を手渡してきた
 						PRINTFORML 「今天穿的衣服♥在下次来之前，请把这个当做是我来使用♥」
 						;TranslatedMark 「今日穿いてた物です♥　次に来てくれるまで、これを私だと思って使ってくださいねぇ♥」
-						PRINTFORMW 内衣里残留着她的温暖，侵蚀着%ANAME(MASTER)%的理性，煽动着兴奋……
+						PRINTFORMW 感受内衣里残留着她的温暖，%ANAME(MASTER)%的心跳加速……
 						;TranslatedMark 下着に残る彼女の温もりが、%ANAME(MASTER)%の理性を蝕み、興奮を煽る……
 						CALL FUCK(TARGET, "欲望")
 						CALL FUCK(MASTER, "欲望")
 					CASE 1
 						PRINTFORML 「已经是休息时间了吗？但是有点欠缺呢…。呼呼♥」
 						;TranslatedMark 「もうお休みの時間ですかぁ？　でもちょっと物足りないですねぇ…。うふふ♥」
-						PRINTFORMW %ANAME(TARGET)%把脸贴在%ANAME(MASTER)%的一件东西上，靠近那艳丽的嘴唇
+						PRINTFORMW %ANAME(TARGET)%把嘴贴在%ANAME(MASTER)%的阴茎
 						;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の一物に顔を寄せ、その艶かしい唇を近づける
 						PRINTFORML 「%ANAME(MASTER)%？可以再给想要更多%ANAME(MASTER)%精液的我一点吗？呼呼♥」
 						;TranslatedMark 「ねぇ%ANAME(MASTER)%？　もっと%ANAME(MASTER)%の精が欲しい私に、もうちょっとだけ、出してくれませんかぁ？　ふふ♥」
@@ -476,11 +476,11 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 						CALL FUCK(TARGET, "Ｍ, 奉仕, 精愛, 性技, 欲望, 口淫", "接吻喪失, 口内射精", GET_ID(MASTER), @"%ANAME(MASTER)%的阴茎", "", "", "和姦")
 						CALL FUCK(MASTER, "Ｃ, 射精, 欲望")
 					CASE 2
-						PRINTFORML 「已经休息了吗？但是这个，一直很僵硬的话不辣吗？库库♥」
+						PRINTFORML 「已经休息了吗？但是这个，一直很僵硬的话不痛吗？库库♥」
 						;TranslatedMark 「もうお休みですか？　でもコレ、ガチガチのままじゃあ辛くないですかぁ？　クスクス♥」
-						PRINTFORMW %ANAME(TARGET)%用手包裹着虽然到处都出现了但是被她的淫气所感染还勃起着的%ANAME(MASTER)%的一个东西
+						PRINTFORMW %ANAME(MASTER)%的阴茎被%ANAME(TARGET)%的手，套弄的四溅，但仍然勃起着
 						;TranslatedMark 散々出したにも拘らず彼女の淫気に当てられてまだ勃起している%ANAME(MASTER)%の一物を、%ANAME(TARGET)%は手で包んでシゴいてくる
-						PRINTFORML 「果然一天的结束不弄清楚是不行的呢♥所以，在变小之前，我会好好照顾你的♥」
+						PRINTFORML 「果然一天的结束不弄干净是不行的呢♥ 所以，在变小之前，我会好好照顾你的♥」
 						;TranslatedMark 「やっぱり一日の終わりはスッキリさせないと駄目ですよねぇ♥　だ・か・ら、ちっちゃくなるまでシコシコしてあげますよぉ♥」
 						PRINTFORMW ……%ANAME(MASTER)%最终还是没能拒绝，直到失去意识为止都被她榨取了满满的精液…
 						;TranslatedMark ……%ANAME(MASTER)%は結局断りきれず、気を失うまで彼女に精をたっぷり搾り取られた…
@@ -502,7 +502,7 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 1
 						PRINTFORML 「已经回去了吗？好寂寞……」
 						;TranslatedMark 「もう帰っちゃうんですか？　寂しいです……」
-						PRINTFORML %ANAME(TARGET)%寂寞地抱住了%ANAME(MASTER)%。%ANAME(MASTER)%也温柔地抱住了那样的她
+						PRINTFORML %ANAME(TARGET)%抱住了%ANAME(MASTER)%。%ANAME(MASTER)%也温柔地抱住了她
 						;TranslatedMark %ANAME(TARGET)%は寂しそうに%ANAME(MASTER)%に抱きつく。そんな彼女を、%ANAME(MASTER)%もまた優しく抱きしめる
 						PRINTFORMW 「请再来见我哦。我会准备好%ANAME(MASTER)%喜欢的点心等你的…♥」
 						;TranslatedMark 「また、会いに来てくださいね。%ANAME(MASTER)%の好きなお菓子を用意して待ってますから…♥」
@@ -516,7 +516,7 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 3
 						PRINTFORML 「那个…、%ANAME(MASTER)%。回去之前可以稍微闭上眼睛吗？」
 						;TranslatedMark 「あの…、%ANAME(MASTER)%。帰る前にちょっと目を瞑ってもらえませんか？」
-						PRINTFORMW 按照她说的那样闭上眼睛，%ANAME(TARGET)%柔软的嘴唇在%ANAME(MASTER)%的嘴唇上互相碰触，她的舌头就会进入
+						PRINTFORMW 按照她说的那样闭上眼睛，%ANAME(TARGET)%她的舌头进入%ANAME(MASTER)%的嘴。
 						;TranslatedMark 言うとおりに目を瞑ると、%ANAME(MASTER)%の唇に%ANAME(TARGET)%の柔らかい唇が触れあい、彼女の舌が入り込んでくる
 						PRINTFORML %ANAME(MASTER)%没有抵抗，而是和她用舌头交缠，进行了热情的吻
 						;TranslatedMark %ANAME(MASTER)%は抵抗することなく、彼女と舌を絡ませあって情熱的なキスを行った
@@ -534,7 +534,7 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 1
 						PRINTFORML 「已经是休息时间了吗？好寂寞……」
 						;TranslatedMark 「もうお休みの時間ですか？　寂しいです……」
-						PRINTFORML %ANAME(TARGET)%寂寞地抱住了%ANAME(MASTER)%。她温柔地抱着这样的她，然后开心地微笑了
+						PRINTFORML %ANAME(TARGET)%抱住%ANAME(MASTER)%。当我拥抱她时，开心地微笑了
 						;TranslatedMark %ANAME(TARGET)%は寂しそうに%ANAME(MASTER)%に抱きつく。そんな彼女を優しく抱きしめ返すと、彼女は嬉しそうに微笑んだ
 						PRINTFORMW 「…请再来哦。我会准备好%ANAME(MASTER)%喜欢的点心等你的…♥」
 						;TranslatedMark 「…また来てくださいね。%ANAME(MASTER)%の好きなお菓子を用意して待ってますから…♥」
@@ -548,9 +548,9 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 3
 						PRINTFORML 「那个…、%ANAME(MASTER)%。可以请你闭上眼睛吗？」
 						;TranslatedMark 「あの…、%ANAME(MASTER)%。ちょっと目を瞑ってもらえませんか？」
-						PRINTFORMW 按照她说的那样闭上眼睛，%ANAME(TARGET)%柔软的嘴唇在%ANAME(MASTER)%的嘴唇上互相碰触，她的舌头就会进入
+						PRINTFORMW 按照她说的那样闭上眼睛，%ANAME(TARGET)%她的舌头进入%ANAME(MASTER)%的嘴。
 						;TranslatedMark 言うとおりに目を瞑ると、%ANAME(MASTER)%の唇に%ANAME(TARGET)%の柔らかい唇が触れあい、彼女の舌が入り込んでくる
-						PRINTFORML %ANAME(MASTER)%没有抵抗就接受了，和她用舌头交缠着进行了热情的吻
+						PRINTFORML %ANAME(MASTER)%没有抵抗就接受了，和她用舌头交缠着
 						;TranslatedMark %ANAME(MASTER)%は抵抗することなく受け入れ、彼女と舌を絡ませあって情熱的なキスを行った
 						PRINTFORMW 「嗯，中…、噗哈哈，多谢款待♥我还想再吻一次，呵呵♪」
 						;TranslatedMark 「んん、ちゅ…、ぷはぁっ、ごちそうさまでした♥　もっとキスしたいなぁって思ってたんです、うふふっ♪」
@@ -568,11 +568,11 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 0
 						PRINTFORML 「呵呵，%ANAME(MASTER)%♥这是礼物♥」
 						;TranslatedMark 「うふふ、%ANAME(MASTER)%♥　これ、プレゼントです♥」
-						PRINTFORMW %ANAME(TARGET)%分手的时候，把自己的内衣交给了%ANAME(MASTER)%
+						PRINTFORMW %ANAME(TARGET)%分开的时候，把自己的内衣交给了%ANAME(MASTER)%
 						;TranslatedMark %ANAME(TARGET)%は別れ際、%ANAME(MASTER)%に自身の下着を手渡してきた
 						PRINTFORML 「刚才还在穿的东西♥可以随意使用哦…♥」
 						;TranslatedMark 「ついさっきまで穿いてた物です♥　好きに使ってくれていいですよぉ…♥」
-						PRINTFORMW 内衣里残留着她的温暖，侵蚀着%ANAME(MASTER)%的理性，煽动着兴奋……
+						PRINTFORMW 感受内衣里残留着她的温暖，%ANAME(MASTER)%的心跳加速……
 						;TranslatedMark 下着に残る彼女の温もりが、%ANAME(MASTER)%の理性を蝕み興奮を煽る……
 						CALL FUCK(TARGET, "欲望")
 						CALL FUCK(MASTER, "欲望")
@@ -586,7 +586,7 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 2
 						PRINTFORML 「时间到了吗？但是这个，一直很僵硬好像很辛苦呢。库库♥」
 						;TranslatedMark 「もう時間ですか？　でもコレ、ガチガチのままで辛そうですね。クスクス♥」
-						PRINTFORML %ANAME(TARGET)%隔着衣服抚摸着因她的淫气而勃起的%ANAME(MASTER)%
+						PRINTFORML %ANAME(TARGET)%隔着衣服抚摸着因她刺激而勃起的%ANAME(MASTER)%的硬物
 						;TranslatedMark 彼女の淫気に当てられて勃起している%ANAME(MASTER)%の一物に、%ANAME(TARGET)%は服越しにクニクニと撫でまわす
 						PRINTFORMW 「呵呵，你的脸都变得可爱了呢…♥」
 						;TranslatedMark 「うふふ、お顔が蕩けちゃってますねぇ…♥」
@@ -599,11 +599,11 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 0
 						PRINTFORML 「呵呵，%ANAME(MASTER)%♥这是礼物♥」
 						;TranslatedMark 「うふふ、%ANAME(MASTER)%♥　これ、プレゼントです♥」
-						PRINTFORMW %ANAME(TARGET)%分手的时候，把自己的内衣交给了%ANAME(MASTER)%
+						PRINTFORMW %ANAME(TARGET)%分开的时候，把自己的内衣交给了%ANAME(MASTER)%
 						;TranslatedMark %ANAME(TARGET)%は別れ際、%ANAME(MASTER)%に自身の下着を手渡してきた
 						PRINTFORML 「刚才还在穿的东西♥可以随意使用哦…♥」
 						;TranslatedMark 「ついさっきまで穿いてた物です♥　好きに使ってくれていいですよぉ…♥」
-						PRINTFORMW 内衣里残留着她的温暖，侵蚀着%ANAME(MASTER)%的理性，煽动着兴奋……
+						PRINTFORMW 感受内衣里残留着她的温暖，%ANAME(MASTER)%的心跳加速……
 						;TranslatedMark 下着に残る彼女の温もりが、%ANAME(MASTER)%の理性を蝕み興奮を煽る……
 						CALL FUCK(TARGET, "欲望")
 						CALL FUCK(MASTER, "欲望")
@@ -617,7 +617,7 @@ ELSEIF !(TCVAR:51 || TCVAR:52 || TCVAR:53)
 					CASE 2
 						PRINTFORML 「时间到了吗？但是这个，一直很僵硬好像很辛苦呢。库库♥」
 						;TranslatedMark 「もう時間ですか？　でもコレ、ガチガチのままで辛そうですね。クスクス♥」
-						PRINTFORML 被她的淫乱所迷惑，在行为结束后仍在勃起的%ANAME(MASTER)%中，%ANAME(TARGET)%隔着衣服牵着手抚摸
+						PRINTFORML 受她的刺激，在行为结束后仍在勃起的%ANAME(MASTER)%阴茎，隔着衣服%ANAME(TARGET)%用手爱抚
 						;TranslatedMark 彼女の淫気に当てられて、行為が終わってなお勃起している%ANAME(MASTER)%の一物に、%ANAME(TARGET)%は服越しに手を添えて撫でまわす
 						PRINTFORMW 「呵呵，你的脸都变得可爱了呢…♥」
 						;TranslatedMark 「うふふ、お顔が蕩けちゃってますねぇ…♥」
@@ -821,7 +821,7 @@ ELSEIF TALENT:恋慕
 	IF CFLAG:240 == 3 
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML 「啊啊…%ANAME(MASTER)%的精气，最棒了♥」
+				PRINTFORML 「啊啊…%ANAME(MASTER)%的精液，最棒了♥」
 				;TranslatedMark 「ああ…、%ANAME(MASTER)%の精気、最高ですよぉ♥」
 			CASE 1
 				PRINTFORML 「哈哈…、心情真好啊♥」
@@ -854,7 +854,7 @@ ELSEIF TALENT:服従
 	IF CFLAG:240 == 3 
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML 「啊哈哈…%ANAME(MASTER)%大人的精气，最棒了♥」
+				PRINTFORML 「啊哈哈…%ANAME(MASTER)%大人的精液，最棒了♥」
 				;TranslatedMark 「あはぁ…、%ANAME(MASTER)%様の精気、最高ですぅ♥」
 			CASE 1
 				PRINTFORML 「啊啊啊啊啊…、心情非常好呢♥」
@@ -3156,7 +3156,7 @@ IF SELECTCOM == 30
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -3179,7 +3179,7 @@ IF SELECTCOM == 30
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3260,7 +3260,7 @@ IF SELECTCOM == 30
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -3280,7 +3280,7 @@ IF SELECTCOM == 30
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -3303,7 +3303,7 @@ IF SELECTCOM == 30
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3412,7 +3412,7 @@ IF SELECTCOM == 31
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -3435,7 +3435,7 @@ IF SELECTCOM == 31
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3516,7 +3516,7 @@ IF SELECTCOM == 31
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -3536,7 +3536,7 @@ IF SELECTCOM == 31
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -3559,7 +3559,7 @@ IF SELECTCOM == 31
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3648,7 +3648,7 @@ IF SELECTCOM == 32
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次见面的对象是淫魔之类的，也许会变成普通的对像无法满足的身体呢♥」
 							;TranslatedMark 「うふふ…♥　初めての相手が淫魔だなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんねぇ♥」
-							PRINTFORMW 「那么一边互相凝视，一边用我淫乱的小穴把童贞肉棒做到满足吧♥♥」
+							PRINTFORMW 「那么一边互相凝视，一边用我淫乱的小穴把童贞阴茎做到满足吧♥♥」
 							;TranslatedMark 「それじゃあ見つめ合いながらぁ、私の淫乱おまんこで初物チンポをいっぱいズポズポしてあげますねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -3668,7 +3668,7 @@ IF SELECTCOM == 32
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -3691,7 +3691,7 @@ IF SELECTCOM == 32
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3772,7 +3772,7 @@ IF SELECTCOM == 32
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么，请一边和我互相凝视，一边在淫魔的小穴里用童贞肉棒做到心满意足吧♥♥」
+							PRINTFORMW 「那么，请一边和我互相凝视，一边在淫魔的小穴里用童贞阴茎做到心满意足吧♥♥」
 							;TranslatedMark 「それじゃあ私と見つめ合いながらぁ、淫魔のおまんこに初物チンポをいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -3792,7 +3792,7 @@ IF SELECTCOM == 32
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -3815,7 +3815,7 @@ IF SELECTCOM == 32
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -3924,7 +3924,7 @@ IF SELECTCOM == 33
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -3947,7 +3947,7 @@ IF SELECTCOM == 33
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4028,7 +4028,7 @@ IF SELECTCOM == 33
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4048,7 +4048,7 @@ IF SELECTCOM == 33
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -4071,7 +4071,7 @@ IF SELECTCOM == 33
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4160,7 +4160,7 @@ IF SELECTCOM == 34
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次是淫魔的逆强奸，也许已经变成了普通对像无法满足的身体了呢♥」
 							;TranslatedMark 「うふふ…♥　初めてが淫魔の逆レイプだなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんねぇ♥」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，我就要榨取很多出来，做我的俘虏了呢♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，我就要榨取很多出来，做我的俘虏了呢♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、いっぱい搾り取って私の虜にしてあげますねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4180,7 +4180,7 @@ IF SELECTCOM == 34
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -4203,7 +4203,7 @@ IF SELECTCOM == 34
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4284,7 +4284,7 @@ IF SELECTCOM == 34
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥被淫魔侵犯，处男毕业什么的…可能已经变成普通的对手无法满足的身体了吧？」
 							;TranslatedMark 「うふふ…♥　淫魔に犯されて童貞卒業なんて…、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，我的淫乱小穴会让你心情舒畅的♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，我的淫乱小穴会让你心情舒畅的♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこでいっぱいキモチよくしてあげますねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4304,7 +4304,7 @@ IF SELECTCOM == 34
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -4327,7 +4327,7 @@ IF SELECTCOM == 34
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4414,7 +4414,7 @@ IF SELECTCOM == 35
 					IF CFLAG:261 == 1
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，我就要榨取很多出来，做我的俘虏了呢♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，我就要榨取很多出来，做我的俘虏了呢♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、いっぱい搾り取って私の虜にしてあげますねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4434,7 +4434,7 @@ IF SELECTCOM == 35
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -4457,7 +4457,7 @@ IF SELECTCOM == 35
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4538,7 +4538,7 @@ IF SELECTCOM == 35
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥被淫魔侵犯，处男毕业什么的…可能已经变成普通的对手无法满足的身体了吧？」
 							;TranslatedMark 「うふふ…♥　淫魔に犯されて童貞卒業なんて…、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，我的淫乱小穴会让你心情舒畅的♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，我的淫乱小穴会让你心情舒畅的♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこでいっぱいキモチよくしてあげますねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4558,7 +4558,7 @@ IF SELECTCOM == 35
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -4581,7 +4581,7 @@ IF SELECTCOM == 35
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4764,7 +4764,7 @@ IF SELECTCOM == 37
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -4787,7 +4787,7 @@ IF SELECTCOM == 37
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -4868,7 +4868,7 @@ IF SELECTCOM == 37
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -4888,7 +4888,7 @@ IF SELECTCOM == 37
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -4911,7 +4911,7 @@ IF SELECTCOM == 37
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -5020,7 +5020,7 @@ IF SELECTCOM == 38
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -5043,7 +5043,7 @@ IF SELECTCOM == 38
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -5124,7 +5124,7 @@ IF SELECTCOM == 38
 						IF CFLAG:240 == 3
 							PRINTFORML 「呵呵呵…♥第一次选择淫魔，也许会变成普通的对手无法满足的身体哦？」
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -5144,7 +5144,7 @@ IF SELECTCOM == 38
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -5167,7 +5167,7 @@ IF SELECTCOM == 38
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -5278,7 +5278,7 @@ IF SELECTCOM == 39
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「请温柔一点♥」
@@ -5301,7 +5301,7 @@ IF SELECTCOM == 39
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -5384,7 +5384,7 @@ IF SELECTCOM == 39
 							;TranslatedMark 「うふふ…♥　初めての相手に淫魔を選ぶなんて、もう普通の相手じゃ満足できない身体になっちゃうかもしれませんよぉ？」
 							PRINTFORML %ANAME(TARGET)%轻飘飘地浮起，像抓住%ANAME(MASTER)%的身体一样紧紧地抱住
 							;TranslatedMark %ANAME(TARGET)%はふわりと浮き上がり、%ANAME(MASTER)%の体を捕えるようにピタリと抱きつく
-							PRINTFORMW 「那么%ANAME(MASTER)%的童贞肉棒，请在我的淫乱小穴里满满地做吧♥♥」
+							PRINTFORMW 「那么%ANAME(MASTER)%的童贞阴茎，请在我的淫乱小穴里满满地做吧♥♥」
 							;TranslatedMark 「それじゃあ%ANAME(MASTER)%の初物チンポ、私の淫乱おまんこにいっぱいズポズポしてくださいねぇ♥♥」
 							PRINTFORML 
 							PRINTFORML 
@@ -5404,7 +5404,7 @@ IF SELECTCOM == 39
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「温柔地…请做吧♥」
@@ -5427,7 +5427,7 @@ IF SELECTCOM == 39
 					ELSE
 						;淫魔スイッチon
 						IF CFLAG:240 == 3
-							PRINTFORMW 「我的淫乱小穴♥满满都是%ANAME(MASTER)%♥」
+							PRINTFORMW 「我的淫乱漫画♥ 满满都是%ANAME(MASTER)%的精液♥」
 							;TranslatedMark 「私の淫乱まんこにぃ♥　%ANAME(MASTER)%のいっぱいズポズポしてぇ♥」
 						ELSE
 							PRINTFORMW 「啊啊！　…再温柔一点…」
@@ -11488,7 +11488,7 @@ IF SELECTCOM == 300
 					CASE 1
 						PRINTFORML 「如果这乱世安定下来，要不要和我一起生活？」
 						;TranslatedMark 「この乱世が落ち着いたら、私と一緒に暮らしてみませんか？」
-						PRINTFORMW 「从早上到晚上一直在做爱……一定是像天国一样的时间♥」
+						PRINTFORMW 「从早上到晚上一直在做爱……像是神仙的生活♥」
 						;TranslatedMark 「朝から晩までずうっとセックス……きっと天国のような時間ですよぉ♥」
 					CASE 2
 						PRINTFORML %ANAME(TARGET)%从背后抱住%ANAME(MASTER)%，在耳边轻声说话
@@ -11517,7 +11517,7 @@ IF SELECTCOM == 300
 						PRINTFORMW 「今天也多聊聊吧♪」
 						;TranslatedMark 「今日もいっぱいお話しましょう♪」
 					CASE 1
-						PRINTFORML 「啊，那个…如果和平的话，那个……。哇，要不要和我一起去图书馆工作？」
+						PRINTFORML 「啊，那个…如果平常的话，那个……。哇，要不要和我一起去图书馆工作？」
 						;TranslatedMark 「あ、あの…もし平和になったら、その……。わ、私と一緒に図書館で働いてみませんか？」
 						PRINTFORMW 「如果和%ANAME(MASTER)%在一起的话…每天一定会变得快乐♥」
 						;TranslatedMark 「%ANAME(MASTER)%と一緒なら、…きっと毎日が楽しくなります♥」
@@ -11533,7 +11533,7 @@ IF SELECTCOM == 300
 						PRINTFORMW 「粗暴的事情交给其他的人来处理，我们可以悠闲地调情吗？」
 						;TranslatedMark 「荒事は他の皆さんに任せて、私たちはのんびりイチャイチャしませんか？」
 					CASE 5
-						PRINTFORML 「在和平中如果有一点刺激的话，人生会变得更快乐哦」
+						PRINTFORML 「在平常中如果有一点刺激的话，人生会变得更快乐哦」
 						;TranslatedMark 「平和の中にもちょっとした刺激があると、より楽しい人生になりますよ」
 						PRINTFORMW 「…试着和我玩一下火吧？什么嘛♪」
 						;TranslatedMark 「…試しに私と、ちょっとした火遊び、しちゃいます？　なーんて♪」
@@ -11545,7 +11545,7 @@ IF SELECTCOM == 300
 					PRINTFORMW 「你说什么？」
 					;TranslatedMark 「どんなお話します？」
 				CASE 1
-					PRINTFORMW 「我也是恶魔，不讨厌这种混沌的世界」
+					PRINTFORMW 「我也是恶魔，不讨厌这种混沌的生活」
 					;TranslatedMark 「私も一応は悪魔ですから、こういう混沌の世は嫌いじゃないですね」
 				CASE 2
 					PRINTFORML 「这样的乱世，虽然不谨慎但也很兴奋呢」
@@ -11743,7 +11743,7 @@ IF SELECTCOM == 303
 						PRINTFORMW 「我很擅长这样。交给我吧♪」
 						;TranslatedMark 「こういうのは得意ですよー。任せてください♪」
 					CASE 1
-						PRINTFORMW 「如果侍奉柏青哥利大人的话，这样的知识自然会被培养出来的」
+						PRINTFORMW 「如果侍奉帕秋莉大人的话，这样的知识自然会被培养出来的」
 						;TranslatedMark 「パチュリー様に仕えていると、これくらいの知識は自然と養われるものですよ」
 					CASE 2
 						PRINTFORMW 「这样的话对%ANAME(MASTER)%很有帮助呢。我会加油的哦♪」
@@ -11757,7 +11757,7 @@ IF SELECTCOM == 303
 					PRINTFORMW 「这样的话我很拿手」
 					;TranslatedMark 「こういうのなら得意です」
 				CASE 1
-					PRINTFORMW 「呵呵。并不是为了装帅而侍奉着柏青哥利大人哦」
+					PRINTFORMW 「呵呵。并不是为了装帅而侍奉着帕秋莉大人哦」
 					;TranslatedMark 「ふふーん。伊達でパチュリー様に仕えてるわけじゃあないですよー」
 				CASE 2
 					PRINTFORMW 「恶魔不仅能赐予力量，也能赐予知识，这点还不算什么」
@@ -11804,7 +11804,7 @@ IF SELECTCOM == 304
 						PRINTFORMW 「我很擅长这样的工作。交给我吧♪」
 						;TranslatedMark 「こういうデスクワークは得意ですよー。任せてください♪」
 					CASE 1
-						PRINTFORMW 「侍奉柏青哥利大人的话，能处理这么多工作量哦」
+						PRINTFORMW 「侍奉帕秋莉大人的话，能处理这么多工作量哦」
 						;TranslatedMark 「パチュリー様に仕えていると、これくらいの仕事量はこなせるようになりますよ」
 					CASE 2
 						PRINTFORMW 「即使是无能的我，这样也能起到%ANAME(MASTER)%的作用。我会加油的哦♪」
@@ -11818,7 +11818,7 @@ IF SELECTCOM == 304
 					PRINTFORMW 「这样的话我很拿手」
 					;TranslatedMark 「こういうのなら得意です」
 				CASE 1
-					PRINTFORMW 「呵呵。并不是为了装帅而侍奉着柏青哥利大人哦」
+					PRINTFORMW 「呵呵。并不是为了装帅而侍奉着帕秋莉大人哦」
 					;TranslatedMark 「ふふーん。伊達でパチュリー様に仕えてるわけじゃあないですよー」
 				CASE 2
 					PRINTFORMW 「恶魔不仅能赐予力量，也能赐予知识，这点还不算什么」
@@ -12005,7 +12005,7 @@ IF SELECTCOM == 309
 								PRINTFORMW %ANAME(TARGET)%用炽热的目光注视着%ANAME(MASTER)%……
 								;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に情欲を灯した熱い視線を送っている……
 							CASE 2
-								PRINTFORML 「库斯♥对淫魔说那样的话，也就是说是在说谎吧♥」
+								PRINTFORML 「♥对淫魔说那样的话，也就是说是在说谎吧♥」
 								;TranslatedMark 「くすっ♥　淫魔にそういう話を振るってことは、つまりソウイウコトですよねぇ♥」
 								PRINTFORMW %ANAME(TARGET)%抱住%ANAME(MASTER)%，用那柔软的指尖抚摸着全身
 								;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に抱きつき、そのしなやかな指先で全身を撫で上げてきた
@@ -12070,7 +12070,7 @@ IF SELECTCOM == 309
 								PRINTFORMW %ANAME(TARGET)%用炽热的目光注视着%ANAME(MASTER)%……
 								;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に情欲を灯した熱い視線を送っている……
 							CASE 2
-								PRINTFORML 「库斯♥对淫魔说那样的话，也就是说是在说谎吧♥」
+								PRINTFORML 「♥对淫魔说那样的话，也就是说是在说谎吧♥」
 								;TranslatedMark 「くすっ♥　淫魔にそういう話を振るってことは、つまりソウイウコトですよねぇ♥」
 								PRINTFORMW %ANAME(TARGET)%抱住%ANAME(MASTER)%，用那柔软的指尖抚摸着全身
 								;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に抱きつき、そのしなやかな指先で全身を撫で上げてきた
@@ -12212,7 +12212,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「啊啊啊♥触摸更多各种各样的地方♥」
 								;TranslatedMark 「あぁん♥　もっと色んな所、触ってぇ♥」
 							CASE 1
-								PRINTFORMW 「啊♥用我的身体，%ANAME(MASTER)%的手洗吧♥」
+								PRINTFORMW 「♥ 用我的身体，给%ANAME(MASTER)%的手清洗吧♥」
 								;TranslatedMark 「あん♥　私の身体、%ANAME(MASTER)%の手で洗ってくださぁい♥」
 							CASE 2
 								PRINTFORMW 「啊啊啊…这气息…。还没有被我俘虏吗？呼呼♥」
@@ -12297,7 +12297,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「啊啊啊♥请触摸更多的地方♥」
 								;TranslatedMark 「あぁん♥　もっと色んな所、触ってください♥」
 							CASE 1
-								PRINTFORMW 「豆馅儿♥用%ANAME(MASTER)%的手把我的身体洗到各个角落吧♥」
+								PRINTFORMW 「♥ 用%ANAME(MASTER)%的手把我的身体清洗干净♥」
 								;TranslatedMark 「あん♥　%ANAME(MASTER)%の手で私の身体、隅々まで洗ってくださぁい♥」
 							CASE 2
 								PRINTFORMW 「啊啊啊…这气息…。还没有被我俘虏吗？呼呼♥」
@@ -12384,7 +12384,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「啊啊啊♥触摸更多各种各样的地方♥」
 								;TranslatedMark 「あぁん♥　もっと色んな所、触ってぇ♥」
 							CASE 1
-								PRINTFORMW 「豆馅儿♥触摸我的身体，心情好吗？那么请再摸一下♥」
+								PRINTFORMW 「♥触摸我的身体，心情好吗？那么请再摸一下♥」
 								;TranslatedMark 「あん♥　私の身体、触っててキモチいいですか？　ならもっと触ってください♥」
 							CASE 2
 								PRINTFORMW 「啊啊啊…这气息…。还没有被我俘虏吗？呼呼♥」
@@ -12409,7 +12409,7 @@ IF SELECTCOM == 320
 					ELSE
 						SELECTCASE RAND:7
 							CASE 0
-								PRINTFORMW 「豆馅儿♥已经，%ANAME(MASTER)%」
+								PRINTFORMW 「♥已经，%ANAME(MASTER)%」
 								;TranslatedMark 「あん♥　もう、%ANAME(MASTER)%ったら」
 							CASE 1
 								PRINTFORMW 「也，再稍微温柔一点…。激烈的是，晚上……对吧♥」
@@ -12494,7 +12494,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「啊啊啊♥触摸更多各种各样的地方♥」
 								;TranslatedMark 「あぁん♥　もっと色んな所、触ってぇ♥」
 							CASE 1
-								PRINTFORMW 「豆馅儿♥触摸我的身体，心情好吗？那么请再摸一下♥」
+								PRINTFORMW 「♥触摸我的身体，心情好吗？那么请再摸一下♥」
 								;TranslatedMark 「あん♥　私の身体、触っててキモチいいですか？　ならもっと触ってください♥」
 							CASE 2
 								PRINTFORMW 「呵呵呵…请注意不要成为我的俘虏哦♥」
@@ -12519,7 +12519,7 @@ IF SELECTCOM == 320
 					ELSE
 						SELECTCASE RAND:7
 							CASE 0
-								PRINTFORMW 「豆馅儿♥已经，%ANAME(MASTER)%」
+								PRINTFORMW 「♥已经，%ANAME(MASTER)%」
 								;TranslatedMark 「あん♥　もう、%ANAME(MASTER)%ったら」
 							CASE 1
 								PRINTFORMW 「也，再稍微温柔一点…。激烈的是，到晚上为止……对吧♥」
@@ -13683,16 +13683,16 @@ IF SELECTCOM == 342
 						CASE 2
 							PRINTFORML 「嗯，嗯，嗯……嗯，呵呵♥怎么样？淫魔口水的味道♥」
 							;TranslatedMark 「んちゅぅぅっ、ぅんれろぉぉ……っ、ふふ♥　どうですかぁ？　淫魔の涎の味は♥」
-							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕着流下唾液
+							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕流下唾液
 							;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の顔をガッシリと固定し、情熱的に舌を絡めて唾液を流し込む
 							PRINTFORML 「淫魔的涎水是被称为"堕落之蜜"的具有中毒性的媚药。请再喝一点啊♥」
 							;TranslatedMark 「淫魔の涎は『堕落の蜜』とも呼ばれるほど中毒性のある媚薬なんですよぉ。もっともっと飲んでくださいねぇ♥」
-							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落的蜜
+							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落之蜜
 							;TranslatedMark %ANAME(MASTER)%は口内に流し込まれる堕落の蜜を恍惚とした表情で飲み込んでいる
 						CASE 3
 							PRINTFORML 「哎呀呀～嗯～……接受…喂，喂，再多嘴多舌一点吧♥」
 							;TranslatedMark 「れろぉぉ～っ、ん～……じゅる…っ、あぁん、もっと舌出してくださぁい♥」
-							PRINTFORML %ANAME(TARGET)%把手放在了%ANAME(MASTER)%的背上和脖子上，像贪图%ANAME(MASTER)%一样用舌头缠着她
+							PRINTFORML %ANAME(TARGET)%把手放在了%ANAME(MASTER)%的背上和脖子上，贪婪的%ANAME(MASTER)%用舌头缠着
 							;TranslatedMark %ANAME(TARGET)%は口付けてきた%ANAME(MASTER)%の背中と首に手を回し、%ANAME(MASTER)%を貪るように舌を絡めている
 							PRINTFORMW 「呼呼♥你看，请再多品味一下淫魔的唾液吧♥」
 							;TranslatedMark 「んっふふふ♥　ほらもっとぉ、淫魔の唾液、いっぱい味わってくださぁい♥」
@@ -13796,16 +13796,16 @@ IF SELECTCOM == 342
 						CASE 2
 							PRINTFORML 「嗯，嗯，嗯……嗯，呵呵♥怎么样？淫魔口水的味道♥」
 							;TranslatedMark 「んちゅぅぅっ、ぅんれろぉぉ……っ、ふふ♥　どうですかぁ？　淫魔の涎の味は♥」
-							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕着流下唾液
+							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕流下唾液
 							;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の顔をガッシリと固定し、情熱的に舌を絡めて唾液を流し込む
 							PRINTFORML 「淫魔的涎水是被称为"堕落之蜜"的具有中毒性的媚药。请再喝一点啊♥」
 							;TranslatedMark 「淫魔の涎は『堕落の蜜』とも呼ばれるほど中毒性のある媚薬なんですよぉ。もっともっと飲んでくださいねぇ♥」
-							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落的蜜
+							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落之蜜
 							;TranslatedMark %ANAME(MASTER)%は口内に流し込まれる堕落の蜜を恍惚とした表情で飲み込んでいる
 						CASE 3
 							PRINTFORML 「哎呀呀～嗯～……接受…嗯，啊，再多吸点我的舌头吧♥」
 							;TranslatedMark 「れろぉぉ～っ、ん～……じゅる…っ、あぁん、もっと私の舌も吸ってくださぁい♥」
-							PRINTFORML %ANAME(TARGET)%把手放在了%ANAME(MASTER)%的背上和脖子上，为了不让她逃走而缠绕着舌头
+							PRINTFORML %ANAME(TARGET)%把手放在了%ANAME(MASTER)%的背上和脖子上，缠绕着舌头防止她挣脱
 							;TranslatedMark %ANAME(TARGET)%は口付けてきた%ANAME(MASTER)%の背中と首に手を回し、逃がさないように舌を絡めている
 							PRINTFORMW 「呼呼♥你看，请再多品味一下淫魔的唾液吧♥」
 							;TranslatedMark 「んっふふふ♥　ほらもっとぉ、淫魔の唾液、いっぱい味わってくださぁい♥」
@@ -14910,7 +14910,7 @@ IF SELECTCOM == 0
 							PRINTFORMW 「呼呼♥请尽情享受淫魔的爱抚吧♥」
 							;TranslatedMark 「うふふ♥　淫魔の愛撫、たっぷり楽しんでくださいねぇ♥」
 						CASE 1
-							PRINTFORMW 「被摸到的地方会变得很敏感吧？呵呵，淫魔的肌肤，请尽情享受吧♥」
+							PRINTFORMW 「被摸到的地方会变得很敏感吧？呵呵，淫魔丝滑肌肤，请尽情享受吧♥」
 							;TranslatedMark 「触られたところがすごく敏感になっていくでしょう？　ふふ、淫魔の肌、堪能してくださいねぇ♥」
 						CASE 2
 							PRINTFORML 「你知道吗？淫魔也能从肌肤吸收精气……♥」
@@ -14967,7 +14967,7 @@ IF SELECTCOM == 0
 							PRINTFORMW 「呼呼♥请尽情享受淫魔的爱抚吧♥」
 							;TranslatedMark 「うふふ♥　淫魔の愛撫、たっぷり楽しんでくださいねぇ♥」
 						CASE 1
-							PRINTFORMW 「被摸到的地方会变得很敏感吧？呵呵，淫魔的肌肤，请尽情享受吧♥」
+							PRINTFORMW 「被摸到的地方会变得很敏感吧？呵呵，淫魔丝滑肌肤，请尽情享受吧♥」
 							;TranslatedMark 「触られたところがすごく敏感になっていくでしょう？　ふふ、淫魔の肌、堪能してくださいねぇ♥」
 						CASE 2
 							PRINTFORML 「你知道吗？淫魔也能从肌肤吸收精气……♥」
@@ -15451,20 +15451,20 @@ IF SELECTCOM == 7
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:4
 						CASE 0
-							PRINTFORMW 「呼呼♥用淫魔的尾巴来让你狂奔吧♥」
+							PRINTFORMW 「呼呼♥ 用淫魔的尾巴来让你高潮吧♥」
 							;TranslatedMark 「うふふ♥　淫魔の尻尾でよがり狂わせてあげますねぇ♥」
 						CASE 1
-							PRINTFORML 「啊哈哈♥连小矮人都害怕♥我会更加更加支持你的♥」
+							PRINTFORML 「啊哈哈♥ 连小鸡鸡都很敏感♥ 我会更加更加支持你的♥」
 							;TranslatedMark 「あはっ♥　おちんぽもビクビクしてる♥　もっともっとズポズポしてあげますねぇ♥」
-							PRINTFORMW %ANAME(TARGET)%把尾巴变形成肉棒一样的形状，刺得更深
+							PRINTFORMW %ANAME(TARGET)%把尾巴变形成阴茎一样的形状，刺得更深
 							;TranslatedMark %ANAME(TARGET)%は尻尾を肉棒のような形に変形させて、より深くまで突きこんでいる
 						CASE 2
-							PRINTFORML 「啊，喘息得那么激烈♥我很喜欢%ANAME(MASTER)%的屁股和淫魔的尾巴呢♥」
+							PRINTFORML 「啊，喘息得那么激烈♥ %ANAME(MASTER)%很喜欢淫魔的尾巴插进屁股呢♥」
 							;TranslatedMark 「あぁん、そんなに激しく喘いじゃって♥　%ANAME(MASTER)%のお尻、淫魔の尻尾がとても気に入ったんですねぇ♥」
-							PRINTFORMW %ANAME(TARGET)%露出了嗜好性的笑容，尾巴的心形前端刺激着%ANAME(MASTER)%的肠壁
+							PRINTFORMW %ANAME(TARGET)%露出了嗜好性的笑容，尾巴的心形前端刺激着%ANAME(MASTER)%的肠道壁
 							;TranslatedMark %ANAME(TARGET)%は嗜虐的な笑みを浮かべ、尻尾のハート型の先端で%ANAME(MASTER)%の腸壁をつんつん刺激している
 						CASE 3
-							PRINTFORMW 「我会把你变成没有淫魔尾巴的身体的…库斯♥」
+							PRINTFORMW 「我会把你变成淫魔尾巴的形状…♥」
 							;TranslatedMark 「淫魔の尻尾無しじゃいられない身体にしてあげますねぇ…くすくすっ♥」
 					ENDSELECT
 				ELSE
@@ -15473,7 +15473,7 @@ IF SELECTCOM == 7
 							PRINTFORMW 「呵呵，被尾巴侵犯的心情怎么样♥」
 							;TranslatedMark 「うふふっ、尻尾に犯される気分はどうですかぁ♥」
 						CASE 1
-							PRINTFORMW 「啊哈哈♥小气鬼。被当成屁股犯，真的那么好吗？」
+							PRINTFORMW 「啊哈哈♥ 小鸡鸡在跳动。屁股被侵犯，真的那么高兴吗？」
 							;TranslatedMark 「あはっ♥　おちんちんビクビクしてますね。お尻犯されるの、そんなにいいですかぁ？」
 						CASE 2
 							PRINTFORMW 「啊啊，喘息得那么可爱♪听到这样的声音，我也会很兴奋的♥」
@@ -15490,7 +15490,7 @@ IF SELECTCOM == 7
 						PRINTFORMW 「用尾巴来侵犯你」
 						;TranslatedMark 「尻尾で犯してあげます」
 					CASE 2
-						PRINTFORMW 「我喘息得那么厉害。被我侵犯屁股很开心呢」
+						PRINTFORMW 「我喘息得那么厉害。被我侵犯的屁股很开心呢」
 						;TranslatedMark 「そんなに喘いじゃって。私にお尻犯されるのがキモチいいんですねぇ」
 				ENDSELECT
 			ENDIF
@@ -15501,9 +15501,9 @@ IF SELECTCOM == 7
 		IF IS_COM_FIRST()
 			;恋慕 or 服従
 			IF TALENT:恋慕 || TALENT:服従
-				PRINTFORML 「把尾巴放在屁股上？　…已经是亨泰先生了吧…♥」
+				PRINTFORML 「尾巴放在屁股上…真是恶趣味…♥」
 				;TranslatedMark 「尻尾をお尻に？　…もう、ヘンタイさんですねぇ…♥」
-				PRINTFORMW 一边这么说，%ANAME(TARGET)%一边兴高采烈地用舌头爬在尾巴上，很滑
+				PRINTFORMW 一边这么说，%ANAME(TARGET)%一边兴高采烈地用舌头把尾巴湿润
 				;TranslatedMark そう言いつつ、%ANAME(TARGET)%はノリノリで尻尾に舌を這わせて滑りを良くしている
 			;それ以外
 			ELSE
@@ -15521,17 +15521,17 @@ IF SELECTCOM == 7
 							PRINTFORMW 「呵呵呵…想用淫魔的尾巴让它狂乱起来呢♥可以啊♥」
 							;TranslatedMark 「うふふ…淫魔の尻尾でよがり狂わせたいんですね♥　いいですよぉ♥」
 						CASE 1
-							PRINTFORML 「啊哈哈♥肉棒都变成这样了♥那样的话，我得更加温柔一点啊♥」
+							PRINTFORML 「啊哈哈♥阴茎都变成这样了♥那样的话，我得更加温柔一点啊♥」
 							;TranslatedMark 「あはっ♥　おちんぽもビクビクしてる♥　それじゃあもっとズポズポしてあげませんとねぇ♥」
-							PRINTFORMW %ANAME(TARGET)%把尾巴变形成肉棒一样的形状，刺得更深
+							PRINTFORMW %ANAME(TARGET)%把尾巴变形成阴茎一样的形状，刺得更深
 							;TranslatedMark %ANAME(TARGET)%は尻尾を肉棒のような形に変形させて、より深くまで突きこんでいる
 						CASE 2
-							PRINTFORML 「啊，喘息得那么激烈♥我很喜欢%ANAME(MASTER)%的屁股和淫魔的尾巴呢♥」
+							PRINTFORML 「啊，喘息得那么激烈♥ %ANAME(MASTER)%很喜欢淫魔的尾巴插进屁股呢♥」
 							;TranslatedMark 「あぁん、そんなに激しく喘いじゃって♥　%ANAME(MASTER)%のお尻、淫魔の尻尾がとても気に入ったんですねぇ♥」
-							PRINTFORMW %ANAME(TARGET)%露出了嗜好性的笑容，尾巴的心形前端刺激着%ANAME(MASTER)%的肠壁
+							PRINTFORMW %ANAME(TARGET)%露出了嗜好性的笑容，尾巴的心形前端刺激着%ANAME(MASTER)%的肠道壁
 							;TranslatedMark %ANAME(TARGET)%は嗜虐的な笑みを浮かべ、尻尾のハート型の先端で%ANAME(MASTER)%の腸壁をつんつん刺激している
 						CASE 3
-							PRINTFORMW 「可以吗？变成了没有淫魔尾巴就不行的身体哦？库斯♥」
+							PRINTFORMW 「可以吗？变成了没有淫魔尾巴就不行的身体？♥」
 							;TranslatedMark 「いいんですかぁ？　淫魔の尻尾無しじゃいられない身体になっちゃいますよぉ？　くすくすっ♥」
 					ENDSELECT
 				ELSE
@@ -15540,7 +15540,7 @@ IF SELECTCOM == 7
 							PRINTFORMW 「呵呵，用尾巴给你好好做哦♥」
 							;TranslatedMark 「うふふっ、尻尾でキモチよくしてあげますよぉ♥」
 						CASE 1
-							PRINTFORMW 「啊哈哈♥小气鬼。我的尾巴有那么好吗？」
+							PRINTFORMW 「啊哈哈♥ 小鸡鸡在跳动。我的尾巴有那么好吗？」
 							;TranslatedMark 「あはっ♥　おちんちんビクビクしてますね。私の尻尾、そんなにいいですかぁ？」
 						CASE 2
 							PRINTFORMW 「啊啊，喘息得那么可爱♥我的尾巴和%ANAME(MASTER)%的屁股非常相配呢♪」
@@ -15895,13 +15895,13 @@ IF SELECTCOM == 11
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:6
 						CASE 0
-							PRINTFORMW 「呼呼♥我会俘虏你的嘴♥嗯…中穗…嗯♥」
+							PRINTFORMW 「呼呼♥我会俘虏你的嘴♥嗯…嗯♥」
 							;TranslatedMark 「ふふふ♥　私のお口の虜にしてあげる♥　ぢゅぅぅぅ…ちゅぷ…っ♥」
 						CASE 1
 							PRINTFORMW 「嗯…熟透了…、呵呵，量很大的忍汁♥全部都是我的东西…♥」
 							;TranslatedMark 「あむ…じゅぷっ…、ふふ、すごい量の我慢汁♥　全部私の物…♥」
 						CASE 2
-							PRINTFORMW 「哦哦哦，哦，啊♥让你的腰那么僵硬♥我的嘴受不了啊♥」
+							PRINTFORMW 「哦哦哦，哦，啊♥ 肉棒如此僵硬♥ 让我的嘴受不了啊♥」
 							;TranslatedMark 「れろぉっ、ん～ちゅっ、あぁん♥　そんなに腰をガクガクさせて♥　私のお口がたまらないんだぁ♥」
 						CASE 3
 							PRINTFORMW 「呼呼♥喜欢在淫魔的口中服务吗？请用精液付钱♥」
@@ -15928,7 +15928,7 @@ IF SELECTCOM == 11
 							PRINTFORML 「嗯，嗯……%ANAME(MASTER)%的，非常棒…♥」
 							;TranslatedMark 「ぁんん、ちゅっ……%ANAME(MASTER)%の、とっても素敵です…♥」
 					ENDSELECT
-					PRINTFORMW %ANAME(TARGET)%深爱着%ANAME(MASTER)%的阴茎吸着
+					PRINTFORMW %ANAME(TARGET)%深情着%ANAME(MASTER)%吸着的肉棒
 					;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%のペニスに愛しげにしゃぶりついている
 				ENDIF
 			;それ以外
@@ -15960,13 +15960,13 @@ IF SELECTCOM == 11
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:6
 						CASE 0
-							PRINTFORMW 「呼呼♥我来俘虏你的嘴♥嗯…中穗…嗯♥」
+							PRINTFORMW 「呼呼♥ 我来俘虏你的嘴♥ 嗯…嗯♥」
 							;TranslatedMark 「ふふふ♥　私のお口の虜にしてあげます♥　ぢゅぅぅぅ…ちゅぷ…っ♥」
 						CASE 1
 							PRINTFORMW 「嗯…熟透了…、呵呵，量很大的忍汁♥都是我的东西♥」
 							;TranslatedMark 「あむ…じゅぷっ…、ふふ、すごい量の我慢汁♥　全部私の物です♥」
 						CASE 2
-							PRINTFORMW 「哦哦哦，哦，啊♥让你的腰那么僵硬♥我的嘴受不了啊♥」
+							PRINTFORMW 「哦哦哦，哦，啊♥ 肉棒如此僵硬♥ 让我的嘴受不了啊♥」
 							;TranslatedMark 「れろぉっ、ん～ちゅっ、あぁん♥　そんなに腰をガクガクさせて♥　私のお口がたまらないんだぁ♥」
 						CASE 3
 							PRINTFORMW 「呼呼♥喜欢在淫魔的口中服务吗？请用精液付钱♥」
@@ -15981,7 +15981,7 @@ IF SELECTCOM == 11
 				ELSE
 					SELECTCASE RAND:4
 						CASE 0
-							PRINTFORML 「嗯，中…哎呀呀…呵呵，被反复舔，心情好吗？」
+							PRINTFORML 「嗯，肉棒…哎呀呀…呵呵，被反复舔，很兴奋吗？」
 							;TranslatedMark 「んんっ、ちゅ…れろれろぉ、…ふふっ、舐め回されるの、キモチいいですかぁ？」
 						CASE 1
 							PRINTFORML 「嗯…中穗…嗯♥」
@@ -16031,25 +16031,25 @@ IF SELECTCOM == 12
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:10
 						CASE 0
-							PRINTFORMW 「呼呼♥在%ANAME(MASTER)%的阴茎上，刻上我乳房的好心情♥」
+							PRINTFORMW 「呼呼♥让%ANAME(MASTER)%的阴茎上，在我欧派上留下印记♥」
 							;TranslatedMark 「ふふふ♥　%ANAME(MASTER)%のペニスに、私のおっぱいの気持ちよさを刻んであげる♥」
 						CASE 1
-							PRINTFORMW 「%ANAME(MASTER)%被我的乳房这样紧紧地吸引着，我很喜欢呢♥」
+							PRINTFORMW 「%ANAME(MASTER)%被我的乳房这样吸引着，我很喜欢呢♥」
 							;TranslatedMark 「%ANAME(MASTER)%は私のおっぱいに、こうしてぎゅうっとされるの、大好きなんですよねぇ♥」
 						CASE 2
-							PRINTFORMW 「啊啊啊♥让你的腰那么僵硬♥我的胸部受不了♥」
+							PRINTFORMW 「啊啊啊♥让你的肉棒那么僵硬♥我的胸部受不了♥」
 							;TranslatedMark 「あぁん♥　そんなに腰をガクガクさせて♥　私のおっぱいがたまらないんだぁ♥」
 						CASE 3
-							PRINTFORMW 「呼呼♥被乳房夹着，眼睛也睁不开了…。就这样成为我的俘虏♥」
+							PRINTFORMW 「豆腐♥ 被乳房夹着，眼睛也迷离了…。就这样成为我的俘虏♥」
 							;TranslatedMark 「うふふ♥　おっぱいで挟まれて、お目目とろ～んってしちゃって…。このまま私の虜にしてあげる♥」
 						CASE 4
 							PRINTFORMW 「在我柔软的乳房里♥射精得让人魂飞魄散吧♥」
 							;TranslatedMark 「私の柔らか～いおっぱいまんこにぃ♥　魂抜けるほどの射精、しちゃいましょう♥」
 						CASE 5
-							PRINTFORMW 「啊啊啊♥快点把%ANAME(MASTER)%的精气撒到我的奶里吧♥」
+							PRINTFORMW 「啊啊啊♥快点把%ANAME(MASTER)%的精液撒到我的欧派吧♥」
 							;TranslatedMark 「ああん♥　早く私のおっぱいに、%ANAME(MASTER)%の精気ぶちまいてぇ♥」
 						CASE 6
-							PRINTFORML 「淫魔的阿婆，心情很好吧？只要猜中就能让对方心情愉快哦」
+							PRINTFORML 「淫荡的欧派，只要射上去就很高兴吧
 							;TranslatedMark 「淫魔のおっぱいって、とってもキモチいいでしょう？　当てるだけで相手をキモチよくさせるんですよ」
 							PRINTFORMW 「这样的乳房，夹着阴茎的话…会变成什么样呢♥」
 							;TranslatedMark 「そんなおっぱいで、ペニスを挟んだら…どうなっちゃうんでしょうね♥」
@@ -16124,10 +16124,10 @@ IF SELECTCOM == 12
 							PRINTFORMW 「呼呼♥把%ANAME(MASTER)%阴茎的味道蹭到我的乳房上♥」
 							;TranslatedMark 「ふふふ♥　私のおっぱいに、%ANAME(MASTER)%のペニスの匂いを擦り付けてぇ♥」
 						CASE 1
-							PRINTFORMW 「%ANAME(MASTER)%被我的乳房这样紧紧地吸引着，我很喜欢呢♥」
+							PRINTFORMW 「%ANAME(MASTER)%被我的乳房这样吸引着，我很喜欢呢♥」
 							;TranslatedMark 「%ANAME(MASTER)%は私のおっぱいに、こうしてぎゅうっとされるの、大好きなんですよねぇ♥」
 						CASE 2
-							PRINTFORMW 「啊啊啊♥让你的腰那么僵硬♥我的胸部受不了♥」
+							PRINTFORMW 「啊啊啊♥让你的肉棒那么僵硬♥我的胸部受不了♥」
 							;TranslatedMark 「あぁん♥　そんなに腰をガクガクさせて♥　私のおっぱいがたまらないんだぁ♥」
 						CASE 3
 							PRINTFORMW 「呼呼♥被乳房夹着，眼睛也睁不开了…。我就这样俘虏你♥」
@@ -16136,7 +16136,7 @@ IF SELECTCOM == 12
 							PRINTFORMW 「用我柔软的乳房♥心情变得好得让人魂飞魄散♥」
 							;TranslatedMark 「私の柔らか～いおっぱいまんこでぇ♥　魂抜けるほどキモチよくなってぇ♥」
 						CASE 5
-							PRINTFORMW 「啊啊啊♥快点把%ANAME(MASTER)%的精气撒到我的奶里吧♥」
+							PRINTFORMW 「啊啊啊♥快点把%ANAME(MASTER)%的精液撒到我的欧派吧♥」
 							;TranslatedMark 「ああん♥　早く私のおっぱいに、%ANAME(MASTER)%の精気ぶちまいてぇ♥」
 						CASE 7
 							PRINTFORMW 「淫魔的乳房啊，请荡得像傻瓜一样♥」
@@ -16451,7 +16451,7 @@ IF SELECTCOM == 17
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:4
 						CASE 0
-							PRINTFORMW 「呼呼♥用淫魔的尾巴，给你看天国♥」
+							PRINTFORMW 「呼呼♥ 用淫魔的尾巴，让你绝顶♥」
 							;TranslatedMark 「うふふ♥　淫魔の尻尾で、天国を見せてあげます♥」
 						CASE 1
 							PRINTFORMW 「我会在%ANAME(MASTER)%的阴茎上刻上尾巴的可爱♥」
@@ -16503,7 +16503,7 @@ IF SELECTCOM == 17
 				IF CFLAG:240 == 3
 					SELECTCASE RAND:4
 						CASE 0
-							PRINTFORMW 「呼呼♥用淫魔的尾巴，给你看天国♥」
+							PRINTFORMW 「呼呼♥ 用淫魔的尾巴，让你绝顶♥」
 							;TranslatedMark 「うふふ♥　淫魔の尻尾で、天国を見せてあげます♥」
 						CASE 1
 							PRINTFORMW 「我会在%ANAME(MASTER)%的阴茎上刻上尾巴的可爱♥」
@@ -19429,10 +19429,10 @@ IF SELECTCOM == 101
 					IF CFLAG:240 == 3
 						SELECTCASE RAND:5
 							CASE 0
-								PRINTFORMW 「呼呼♥淫魔的爱蜜，好好品尝就会中毒吧♥」
+								PRINTFORMW 「呼呼♥淫魔的爱蜜，好好品尝就会上瘾吧♥」
 								;TranslatedMark 「うふふ♥　淫魔の愛蜜、いっぱい味わって中毒になっちゃいましょうね♥」
 							CASE 1
-								PRINTFORMW 「吸进淫魔最情色的味道，让头变得黏糊糊的吧♥」
+								PRINTFORMW 「吸进淫魔最情色的味道，让头变得混沌的♥」
 								;TranslatedMark 「淫魔の一番エッチな匂いを吸い込んでぇ、頭トロトロにしちゃいましょうねー♥」
 							CASE 2
 								PRINTFORMW 「哈哈♥再多吸点，舔一下♥请更加迷恋我吧♥」
@@ -19441,7 +19441,7 @@ IF SELECTCOM == 101
 								PRINTFORMW 「啊哈哈♥舌头再往里伸一点，用沉溺在我的蜜液中吧♥」
 								;TranslatedMark 「あはぁん♥　もっと奥まで舌入れてぇ、私の蜜で溺れてぇ♥」
 							CASE 4
-								PRINTFORMW 「呼呼♥吧你变成没有我的味道就不行的身体…♥」
+								PRINTFORMW 「呼呼♥把你变成没有我的味道就不行的身体…♥」
 								;TranslatedMark 「うふふ♥　私のココの匂い無しじゃイけない身体にしてあげる…♥」
 						ENDSELECT
 					ELSE
@@ -19528,16 +19528,16 @@ IF SELECTCOM == 101
 								PRINTFORMW 「呼呼♥淫魔的爱蜜，请好好品尝后中毒吧♥」
 								;TranslatedMark 「うふふ♥　淫魔の愛蜜、いっぱい味わって中毒になってくださいね♥」
 							CASE 1
-								PRINTFORMW 「吸进淫魔最淫乱的味道，变成头trotro吧♥」
+								PRINTFORMW 「吸进淫魔最淫乱的味道，变成头晕目眩吧♥」
 								;TranslatedMark 「淫魔の一番エッチな匂いを吸い込んでぇ、頭トロトロになっちゃいましょう♥」
 							CASE 2
-								PRINTFORMW 「啊啊啊♥%ANAME(MASTER)%的脸，心情非常好哦♥」
+								PRINTFORMW 「啊啊啊♥%ANAME(MASTER)%的脸，非常红润哦♥」
 								;TranslatedMark 「あぁん♥　%ANAME(MASTER)%の顔、すごくキモチいいですよぉ♥」
 							CASE 3
 								PRINTFORMW 「啊哈哈♥舌头再往里伸一点，用沉溺在我的蜜液中吧♥」
 								;TranslatedMark 「あはぁん♥　もっと奥まで舌入れてぇ、私の蜜で溺れてぇ♥」
 							CASE 4
-								PRINTFORMW 「啊啊啊♥再往脸上挤一挤，请变成没有我这里味道的身体吧♥」
+								PRINTFORMW 「啊啊啊♥ 再往脸上挤一挤，请变成没有我味道就不行的身体吧♥」
 								;TranslatedMark 「あぁん♥　もっと顔押し付けて、私のココの匂い無しじゃいられない身体になってくださいね♥」
 						ENDSELECT
 					ELSE
@@ -21533,7 +21533,7 @@ IF SELECTCOM == 320
 			IF IS_COM_FIRST()
 				;恋人か恋慕
 				IF TALENT:恋人 || TALENT:恋慕
-					PRINTFORMW 「不用客气。不是我和%ANAME(MASTER)%的关系吗♪」
+					PRINTFORMW 「不用客气。我和%ANAME(MASTER)%不是的关系吗♪」
 					;TranslatedMark 「遠慮しなくていいですよ。私と%ANAME(MASTER)%の仲じゃないですか♪」
 				ELSE
 					PRINTFORMW 「虽然有点不好意思…失礼了」
@@ -21550,7 +21550,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「呵呵呵…在这种地方重叠肌肤也不错呢♥」
 								;TranslatedMark 「うふふ…、こういう所で肌を重ねるのもいいですよねぇ♥」
 							CASE 1
-								PRINTFORMW 「库库…怎么了？我的身体，视线好像被钉住了♥」
+								PRINTFORMW 「库库…怎么了？我的身体，视线好像被吸引了♥」
 								;TranslatedMark 「クスクス…どうしたんですかぁ？　私の身体に、視線が釘付けみたいですよぉ♥」
 							CASE 2
 								PRINTFORMW 「竟然和淫魔裸体接触…这已经和做爱是一样的了呢♥」
@@ -21568,7 +21568,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「在浴室里亲热的话，总觉得比平时好…很兴奋呢…♥」
 								;TranslatedMark 「お風呂でイチャイチャしてると、いつもより何だか…興奮してきちゃいますね…♥」
 							CASE 2
-								PRINTFORMW 「赤裸裸的交往…来吧♥」
+								PRINTFORMW 「赤裸裸的接触…来吧♥」
 								;TranslatedMark 「裸の付き合い…シちゃいましょう♥」
 						ENDSELECT
 					ENDIF
@@ -21587,7 +21587,7 @@ IF SELECTCOM == 320
 			IF IS_COM_FIRST()
 				;恋人か恋慕
 				IF TALENT:恋人 || TALENT:恋慕
-					PRINTFORMW 「不用客气。因为是我和%ANAME(MASTER)%的关系呢♪」
+					PRINTFORMW 「不用客气。因为我和%ANAME(MASTER)%是交往呢♪」
 					;TranslatedMark 「遠慮しなくていいですよ。私と%ANAME(MASTER)%の仲ですからね♪」
 				ELSE
 					PRINTFORMW 「有点不好意思…是吗」
@@ -21604,7 +21604,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「呵呵呵…在这种地方重叠肌肤也不错呢♥」
 								;TranslatedMark 「うふふ…、こういう所で肌を重ねるのもいいですよねぇ♥」
 							CASE 1
-								PRINTFORMW 「库库…怎么了？我的身体，视线好像被钉住了♥」
+								PRINTFORMW 「库库…怎么了？我的身体，视线好像被吸引了♥」
 								;TranslatedMark 「クスクス…どうしたんですかぁ？　私の身体に、視線が釘付けみたいですよぉ♥」
 							CASE 2
 								PRINTFORMW 「竟然和淫魔裸体接触…这已经和做爱是一样的了呢♥」
@@ -21622,7 +21622,7 @@ IF SELECTCOM == 320
 								PRINTFORMW 「在浴室里亲热的话，总觉得比平时好…我很兴奋…♥」
 								;TranslatedMark 「お風呂でイチャイチャしてると、いつもより何だか…興奮しちゃいます…♥」
 							CASE 2
-								PRINTFORMW 「赤裸裸的交往…来杯茶吧♥」
+								PRINTFORMW 「赤裸裸的交往…让我们开始吧♥」
 								;TranslatedMark 「裸の付き合い…シちゃいましょ♥」
 						ENDSELECT
 					ENDIF
@@ -21643,7 +21643,7 @@ IF SELECTCOM == 320
 			IF IS_COM_FIRST()
 				;恋人か恋慕
 				IF TALENT:恋人 || TALENT:恋慕
-					PRINTFORMW 「呼呼♥紧身裤♪」
+					PRINTFORMW 「呼呼♥ 燥热♪」
 					;TranslatedMark 「うふふ♥　ボディターッチ♪」
 				ELSE
 					PRINTFORMW 「有点失礼了」
@@ -21675,7 +21675,7 @@ IF SELECTCOM == 320
 					ELSE
 						SELECTCASE RAND:5
 							CASE 0
-								PRINTFORMW 「呼呼♥紧身裤♪」
+								PRINTFORMW 「呼呼♥ 燥热♪」
 								;TranslatedMark 「うふふ♥　ボディターッチ♪」
 							CASE 1
 								PRINTFORMW 「牵手的时候，可以把手指缠绕在一起吗？这样我就放心了♥」
@@ -21764,7 +21764,7 @@ IF SELECTCOM == 320
 					ELSE
 						SELECTCASE RAND:5
 							CASE 0
-								PRINTFORMW 「呼呼♥紧身裤♪」
+								PRINTFORMW 「呼呼♥ 燥热♪」
 								;TranslatedMark 「うふふ♥　ボディターッチ♪」
 							CASE 1
 								PRINTFORMW 「可以牵着手指牵着手吗？这样我就放心了♥」
@@ -21863,7 +21863,7 @@ IF SELECTCOM == 321
 						PRINTFORMW 「好吧好吧……好孩子好孩子……呵呵，脸上看起来很舒服哦♥」
 						;TranslatedMark 「よしよし……いい子いい子……ふふ、気持ち良さそうなお顔してますよ♥」
 					CASE 2
-						PRINTFORMW 「好，好……♪纳德纳德也很开心呢♥」
+						PRINTFORMW 「好，好……♪这样做很有趣呢♥」
 						;TranslatedMark 「よし、よし……♪　ナデナデするのも楽しいですねぇ♥」
 					CASE 3
 						PRINTFORMW 「呵呵…我再给你做点什么吧？」
@@ -21934,7 +21934,7 @@ IF SELECTCOM == 321
 						PRINTFORMW 「好吧好吧……好孩子好孩子……呵呵，脸上看起来很舒服呢♥」
 						;TranslatedMark 「よしよし……いい子いい子……ふふ、気持ち良さそうなお顔してますね♥」
 					CASE 2
-						PRINTFORMW 「好，好……♪纳德纳德也很开心呢♥」
+						PRINTFORMW 「好，好……♪这样做很有趣呢♥」
 						;TranslatedMark 「よし、よし……♪　ナデナデするのも楽しいですねぇ♥」
 					CASE 3
 						PRINTFORMW 「好孩子好孩子……要再做点什么吗？呵呵♪可以哦♥」
@@ -22167,7 +22167,7 @@ IF SELECTCOM == 330
 						CASE 0
 							PRINTFORML 「嗯，嗯♥　……呃…」
 							;TranslatedMark 「んんっ♥　……れろぉ…っじゅぷっ」
-							PRINTFORMW 「%ANAME(MASTER)%的先走汁非常好吃哦♥♥」
+							PRINTFORMW 「%ANAME(MASTER)%的精汁非常好吃哦♥♥」
 							;TranslatedMark 「%ANAME(MASTER)%のガマン汁、すごく美味しいですよぉ♥♥」
 						CASE 1
 							PRINTFORMW 「嗯…♥不管多少我都会喝的，请多射出来啊…♥」
@@ -22201,7 +22201,7 @@ IF SELECTCOM == 330
 							PRINTFORMW 「%ANAME(MASTER)%的…非常好吃…♥」
 							;TranslatedMark 「%ANAME(MASTER)%の…とっても美味しいです…♥」
 						CASE 1
-							PRINTFORMW 「嗯…♥先走汁…好兴奋啊…♥」
+							PRINTFORMW 「嗯…♥精汁…好兴奋啊…♥」
 							;TranslatedMark 「んん…♥　ガマン汁で…、興奮しちゃう…♥」
 						CASE 2
 							PRINTFORMW 「有点想尝尝…♥」
@@ -22215,10 +22215,10 @@ IF SELECTCOM == 330
 							PRINTFORMW 「随时都可以射出来啊…♥」
 							;TranslatedMark 「いつでも出していいですからねぇ…♥」
 						CASE 5
-							PRINTFORMW 「如果看起来很帅的话，就那样说出来也可以哦♥」
+							PRINTFORMW 「如果看起来很爽的话，就那样说出来也可以哦♥」
 							;TranslatedMark 「イキそうだったら、そのままお口に出しちゃってもいいですよぉ♥」
 						CASE 6
-							PRINTFORMW 「呵呵，真的好紧张啊…♥我来给你镇住♥」
+							PRINTFORMW 「呵呵，这么僵硬啊…♥ 我会让你冷静下来♥」
 							;TranslatedMark 「ふふ、ガチガチですね…♥　私が鎮めてあげますよぉ♥」
 					ENDSELECT
 				ENDIF
@@ -22265,7 +22265,7 @@ IF SELECTCOM == 330
 						CASE 0
 							PRINTFORML 「嗯，嗯♥　……呃…」
 							;TranslatedMark 「んんっ♥　……れろぉ…っじゅぷっ」
-							PRINTFORMW 「%ANAME(MASTER)%的先走汁非常好吃哦♥♥」
+							PRINTFORMW 「%ANAME(MASTER)%的精汁非常好吃哦♥♥」
 							;TranslatedMark 「%ANAME(MASTER)%のガマン汁、すごく美味しいですよぉ♥♥」
 						CASE 1
 							PRINTFORMW 「嗯…♥不管多少我都会喝的，请多射出来啊…♥」
@@ -22299,10 +22299,10 @@ IF SELECTCOM == 330
 							PRINTFORMW 「舔了%ANAME(MASTER)%之后，非常兴奋…♥」
 							;TranslatedMark 「%ANAME(MASTER)%の舐めてると、とっても興奮しちゃいます…♥」
 						CASE 1
-							PRINTFORMW 「嗯…♥先走汁…好兴奋啊…♥」
+							PRINTFORMW 「嗯…♥精汁…好兴奋啊…♥」
 							;TranslatedMark 「んん…♥　ガマン汁で…、興奮しちゃう…♥」
 						CASE 2
-							PRINTFORMW 「我来镇你。嗯…♥」
+							PRINTFORMW 「我来让你冷静。嗯…♥」
 							;TranslatedMark 「私が鎮めてあげますね。んん…ちゅっ♥」
 						CASE 3
 							PRINTFORMW 「嗯…♥嗯，中……呼呼♥%ANAME(MASTER)%的美味♪」
@@ -22316,7 +22316,7 @@ IF SELECTCOM == 330
 							PRINTFORMW 「可以射出来哦。我就这样吞下去♥」
 							;TranslatedMark 「お口に出しちゃってもいいですよぉ。そのまま飲み込んであげますから♥」
 						CASE 6
-							PRINTFORMW 「啊，已经很坚挺了呢…。那我就享用了♥」
+							PRINTFORMW 「啊，已经很坚硬了呢…。那我就享用了♥」
 							;TranslatedMark 「ああ、もうガチガチですね…。それじゃあ、シてあげますね♥」
 					ENDSELECT
 				ENDIF
@@ -22696,21 +22696,21 @@ IF SELECTCOM == 342
 							;TranslatedMark %ANAME(TARGET)%は口付けてきた%ANAME(MASTER)%の首に手を回し、積極的に舌を絡めている
 							PRINTFORML 「请好好地呆着，沉溺在我身上吧…嗯，…呃…♥」
 							;TranslatedMark 「いっぱいゴクゴクして、私に溺れてくださいねぇ…、んん、ちゅぷ…れろぉ…♥」
-							PRINTFORMW 口中不断地流出%ANAME(TARGET)%的甜蜜唾液，就像文字一样，被她溺水的感觉袭击……
+							PRINTFORMW 口中不断地流出%ANAME(TARGET)%的甜蜜唾液，觉得自己好像被她淹没了……
 							;TranslatedMark 口内に%ANAME(TARGET)%の甘い唾液がどんどん流し込まれ、文字通り彼女に溺れそうな感覚に襲われる……
 						CASE 2
 							PRINTFORML 「嗯，嗯，嗯……嗯，呵呵♥怎么样？淫魔口水的味道♥」
 							;TranslatedMark 「んちゅぅぅっ、ぅんれろぉぉ……っ、ふふ♥　どうですかぁ？　淫魔の涎の味は♥」
-							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕着流下唾液
+							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕流下唾液
 							;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の顔をガッシリと固定し、情熱的に舌を絡めて唾液を流し込む
 							PRINTFORML 「淫魔的涎水是被称为"堕落之蜜"的具有中毒性的媚药。请再喝一点啊♥」
 							;TranslatedMark 「淫魔の涎は『堕落の蜜』とも呼ばれるほど中毒性のある媚薬なんですよぉ。もっともっと飲んでくださいねぇ♥」
-							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落的蜜
+							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落之蜜
 							;TranslatedMark %ANAME(MASTER)%は口内に流し込まれる堕落の蜜を恍惚とした表情で飲み込んでいる
 						CASE 3
-							PRINTFORML 「哎呀呀～嗯～……接受…喂，喂，再多嘴多舌一点♥」
+							PRINTFORML 「哎呀呀～嗯～……接受…喂，喂，再多舌交一会♥」
 							;TranslatedMark 「れろぉぉ～っ、ん～……じゅる…っ、あぁん、もっと舌出してぇ♥」
-							PRINTFORML %ANAME(TARGET)%用手绕着%ANAME(MASTER)%的背和脖子紧贴在一起，像贪图%ANAME(MASTER)%一样用舌头缠绕着
+							PRINTFORML %ANAME(TARGET)%用手紧紧搂住%ANAME(MASTER)%的背和脖子，贪婪的%ANAME(MASTER)%用舌头缠绕着
 							;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の背中と首に手を回して密着し、%ANAME(MASTER)%を貪るように舌を絡めている
 							PRINTFORMW 「呼呼♥你看，请再多尝一点淫魔的唾液吧♥」
 							;TranslatedMark 「んっふふふ♥　ほらもっとぉ、淫魔の唾液もいっぱい味わってくださぁい♥」
@@ -22797,7 +22797,7 @@ IF SELECTCOM == 342
 							;TranslatedMark 「はぁっ♥んんっ、むぅ、ちゅうぅぅぅ…っ、じゅるっ…ぷあっ、ぁん、まだダメですよぉ♥　はむっ、ちゅぅぅ……」
 							PRINTFORMW %ANAME(TARGET)%为了不让想要喘口气的%ANAME(MASTER)%逃走，把手放在头上并且蹂躏着口内
 							;TranslatedMark %ANAME(TARGET)%は一息つこうとした%ANAME(MASTER)%を逃がさないよう、首に手を回してさらに口内を蹂躙している
-							PRINTFORML 「呼呼♥淫魔に深吻之类的，不可能简单的放开吗。看，我还去呢♥」
+							PRINTFORML 「呼呼♥ 淫魔的深吻之类的，不可能简单就结束的。看，我还要去呢♥」
 							;TranslatedMark 「うふふ♥　淫魔にディープキスなんて、簡単に放すわけ無いじゃないですか。ほら、まだ行きますよぉ♥」
 							PRINTFORMW %ANAME(TARGET)%用大腿刺激着%ANAME(MASTER)%生机勃勃的东西，让肉体更加亲密……
 							;TranslatedMark %ANAME(MASTER)%のいきり立った一物を太ももで刺激しながら、%ANAME(TARGET)%はさらに肉体を密着させる……
@@ -22813,16 +22813,16 @@ IF SELECTCOM == 342
 						CASE 2
 							PRINTFORML 「嗯，嗯，嗯……嗯，呵呵♥怎么样？淫魔口水的味道♥」
 							;TranslatedMark 「んちゅぅぅっ、ぅんれろぉぉ……っ、ふふ♥　どうですかぁ？　淫魔の涎の味は♥」
-							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕着流下唾液
+							PRINTFORMW %ANAME(TARGET)%将%ANAME(MASTER)%的脸紧紧固定，热情地用舌头缠绕流下唾液
 							;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%の顔をガッシリと固定し、情熱的に舌を絡めて唾液を流し込む
 							PRINTFORML 「淫魔的涎水是被称为"堕落之蜜"的具有中毒性的媚药。请再喝一点啊♥」
 							;TranslatedMark 「淫魔の涎は『堕落の蜜』とも呼ばれるほど中毒性のある媚薬なんですよぉ。もっともっと飲んでくださいねぇ♥」
-							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落的蜜
+							PRINTFORMW %ANAME(MASTER)%用恍惚的表情咽下了口内被冲走的堕落之蜜
 							;TranslatedMark %ANAME(MASTER)%は口内に流し込まれる堕落の蜜を恍惚とした表情で飲み込んでいる
 						CASE 3
 							PRINTFORML 「哎呀呀～嗯～……接受…嗯，啊，再多吸点我的舌头吧♥」
 							;TranslatedMark 「れろぉぉ～っ、ん～……じゅる…っ、あぁん、もっと私の舌も吸ってくださぁい♥」
-							PRINTFORML %ANAME(TARGET)%把手放在%ANAME(MASTER)%的背上和脖子上，为了不让她逃走而缠着舌头
+							PRINTFORML %ANAME(TARGET)%紧紧搂住%ANAME(MASTER)%的背和脖子，舌头缠绕防止挣脱
 							;TranslatedMark %ANAME(TARGET)%は口付けに応じた%ANAME(MASTER)%の背中と首に手を回し、逃がさないように舌を絡めている
 							PRINTFORMW 「呼呼♥你看，请再多品味一下淫魔的唾液吧♥」
 							;TranslatedMark 「んっふふふ♥　ほらもっとぉ、淫魔の唾液、いっぱい味わってくださぁい♥」
@@ -23141,10 +23141,10 @@ IF NOWEX:MASTER:射精 > 0
 					CASE 4
 						PRINTFORML 「啊，啊……！」
 						;TranslatedMark 「っあ、あぁッ……！」
-						PRINTFORML 「……啊，好厉害啊，优质的精气……♥」
+						PRINTFORML 「……啊，好厉害啊，优质的精汁……♥」
 						;TranslatedMark 「……あ、は、すごっ、上質な精気ぃっ……♥」
 					CASE 5
-						PRINTFORML 「哈，肚子里，射精了……嘿！」
+						PRINTFORML 「哈，在阴道里，射精了……嘿！」
 						;TranslatedMark 「はぁ、お腹の中っ、射精てますぅ……っ！」
 						PRINTFORML 「……呐，可以请你再做一点吧……？」
 						;TranslatedMark 「……ね、もっと、してくださいますよね……？」
@@ -23163,12 +23163,12 @@ IF NOWEX:MASTER:射精 > 0
 						CASE 0
 							PRINTFORML 「啊啊啊啊♥热精液满满♥」
 							;TranslatedMark 「あぁんっ♥　熱い精液がいっぱいぃ♥」
-							PRINTFORML 「还没出够吧？请再射精一点啊♥」
+							PRINTFORML 「还没射够吧？请再射精一点啊♥」
 							;TranslatedMark 「まだ出し足りないですよね？　もっともっと射精してくださいねぇ♥」
 						CASE 1
 							PRINTFORML 「啊哈哈♥再多拿一点♥请再多放在我身上♥」
 							;TranslatedMark 「あはぁっ♥　もっと出して♥　もっと私の中に出してぇッ♥」
-							PRINTFORML %ANAME(TARGET)%的阴道肉淫荡地蠢动着，向%ANAME(MASTER)%的阴茎请求更进一步的射精
+							PRINTFORML %ANAME(TARGET)%的阴道壁紧贴着阴茎，向%ANAME(MASTER)%的阴茎请求更进一步的射精
 							;TranslatedMark %ANAME(TARGET)%の膣肉は淫らに蠢き、%ANAME(MASTER)%のペニスに更なる射精を強請っている
 						CASE 2
 							PRINTFORML 「嗯♥　……呵呵，淫魔的阴道怎么样啊♥」
@@ -23178,7 +23178,7 @@ IF NOWEX:MASTER:射精 > 0
 						CASE 3
 							PRINTFORML 「啊，哈♥%ANAME(MASTER)%的精气，非常好吃哦♥」
 							;TranslatedMark 「ぁんっ、はぁっ♥　%ANAME(MASTER)%の精気、すごく美味しいですよぉ♥」
-							PRINTFORML %ANAME(TARGET)%的淫荡肉壶吸着%ANAME(MASTER)%的阴茎，将精液一滴不剩地吸走……
+							PRINTFORML %ANAME(TARGET)%的淫荡肉壶吸着%ANAME(MASTER)%的阴茎，将精液一滴不剩的榨干……
 							;TranslatedMark %ANAME(TARGET)%の淫らな肉壷は%ANAME(MASTER)%のペニスに吸い付き、精液を一滴残らず吸い上げている……
 						CASE 4
 							PRINTFORML 「啊哈哈♥美味的精液满满…♥请再多拿一点啊♥」
@@ -23186,7 +23186,7 @@ IF NOWEX:MASTER:射精 > 0
 							PRINTFORML %ANAME(TARGET)%露出淫靡的笑容，向%ANAME(MASTER)%请求更进一步的射精
 							;TranslatedMark %ANAME(TARGET)%は淫靡に微笑み、%ANAME(MASTER)%に更なる射精を強請っている
 						CASE 5
-							PRINTFORML 「啊啊，啊…嗯♥%ANAME(MASTER)%是喜欢淫魔的好精灵呢。请再拿一点♥」
+							PRINTFORML 「啊啊，啊…嗯♥ %ANAME(MASTER)%是淫魔最喜欢的精液。请再拿一点♥」
 							;TranslatedMark 「ふあぁっ、はぁ…っ♥　%ANAME(MASTER)%のって、淫魔好みのいい精気ですねぇ。もっと出してください♥」
 						CASE 6
 							PRINTFORML 「哈哈♥更多♥请给我更多%ANAME(MASTER)%的精液♥」
@@ -23202,10 +23202,10 @@ IF NOWEX:MASTER:射精 > 0
 						CASE 1
 							PRINTFORML 「啊啊啊！　…已经，这样射出来了」
 							;TranslatedMark 「ふああぁっ！　…もう、こんなに出して」
-							PRINTFORML 「在我心中，有那么好吗？呼呼♥」
+							PRINTFORML 「我的身体真的那么好吗？呼呼♥」
 							;TranslatedMark 「私の中、そんなに良かったですかぁ？　うふふ♥」
 						CASE 2
-							PRINTFORML 「嗯！　……哈，淫魔的血快要沸腾了♥」
+							PRINTFORML 「嗯……哈，淫魔快要高潮了♥」
 							;TranslatedMark 「んんっ！　……はぁっ、淫魔の血が滾ってしまいそう♥」
 						CASE 3
 							PRINTFORML 「嗯，哈，好烫，好舒服……♥」
@@ -23214,7 +23214,7 @@ IF NOWEX:MASTER:射精 > 0
 							PRINTFORML 「啊啊！　…其中，%ANAME(MASTER)%的…满满的…♥」
 							;TranslatedMark 「あぁっ！　…中にっ、%ANAME(MASTER)%の…いっぱい…♥」
 						CASE 5
-							PRINTFORML 「啊、啊啊、啊…嗯♥%ANAME(MASTER)%的精灵，成了我的癖好呢♥」
+							PRINTFORML 「啊、啊啊、啊…嗯♥%ANAME(MASTER)%的精液，成了我的癖好呢♥」
 							;TranslatedMark 「っ、ああぁっ、はぁ…っ♥　%ANAME(MASTER)%の精、クセになっちゃいますねぇ♥」
 					ENDSELECT
 				ENDIF
@@ -23315,7 +23315,7 @@ IF NOWEX:MASTER:射精 > 0
 					CASE 6
 						PRINTFORML 「嗯……你射精了啊」
 						;TranslatedMark 「ん……射精してくださったんですね」
-						PRINTFORML 「不好意思，可以再交往一下吗？我想再稍微满足一点……」
+						PRINTFORML 「不好意思，可以再来一次吗？我想再稍微满足一点……」
 						;TranslatedMark 「悪いけど、もう少しつきあってくださいますか？　もう少し、満たされたいんです……」
 				ENDSELECT
 			;恋慕 or 服従
@@ -23339,7 +23339,7 @@ IF NOWEX:MASTER:射精 > 0
 					;TranslatedMark %ANAME(TARGET)%は妖艶な表情で、手に出された%ANAME(MASTER)%の精液を見せ付けるように舐めあげた
 					DATAFORM 为了不让%ANAME(TARGET)%溢出，将手中的精液喝干了
 					;TranslatedMark 手に出された精液を、%ANAME(TARGET)%は溢さないように飲み干した
-					DATAFORM %ANAME(TARGET)%在看到%ANAME(MASTER)%出的白浊后，高兴地在眼前将白浊带到嘴里咽了下去
+					DATAFORM %ANAME(TARGET)%在看到%ANAME(MASTER)%射出的白汁后，高兴地在眼前将白汁用嘴咽了下去
 					;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に出された白濁を見せつけた後、目の前で嬉しそうに口に運んで飲み込んだ
 				ENDDATA
 			;それ以外
@@ -23409,11 +23409,11 @@ IF NOWEX:MASTER:射精 > 0
 						;TranslatedMark 「あぁん、んちゅぅ…ぷはぁっ。…濃いの、ありがとうございますねぇ♥」
 				ENDSELECT
 				PRINTDATAL
-					DATAFORM %ANAME(TARGET)%高兴地咽下了放在嘴里的%ANAME(MASTER)%的精液
+					DATAFORM %ANAME(TARGET)%高兴地咽下嘴里的%ANAME(MASTER)%的精液
 					;TranslatedMark %ANAME(TARGET)%は口内に放たれた%ANAME(MASTER)%の精液を、嬉しそうに飲み込んでいった
-					DATAFORM %ANAME(TARGET)%的喉咙里响着，美味地吞下了口中的精液
+					DATAFORM 美味咽下的精液在%ANAME(TARGET)%的喉咙里响着
 					;TranslatedMark 口の中に出された精液を、%ANAME(TARGET)%は喉を鳴らして美味しそうに飲み込んだ
-					DATAFORM %ANAME(TARGET)%在%ANAME(MASTER)%看到嘴里的白浊后，幸福地在眼前喝干了
+					DATAFORM %ANAME(TARGET)%让%ANAME(MASTER)%看到嘴里白汁，幸福地在喝干了
 					;TranslatedMark %ANAME(TARGET)%は%ANAME(MASTER)%に口内の白濁を見せつけた後、目の前で幸せそうに飲み干した
 				ENDDATA
 			;それ以外
@@ -23445,7 +23445,7 @@ IF NOWEX:MASTER:射精 > 0
 						PRINTFORML %ANAME(TARGET)%伸出舌头舔着挂在胸前的精液……
 						;TranslatedMark 胸にかかった精液を、%ANAME(TARGET)%は舌を伸ばして舐め取っている……
 					CASE 3
-						PRINTFORML 「出现了很多呢……呵呵，谢谢♪」
+						PRINTFORML 「出来了很多呢……呵呵，谢谢♪」
 						;TranslatedMark 「沢山出ましたねぇ……ふふ、ありがとうございます♪」
 					CASE 4
 						PRINTFORML 「看起来很舒服的表情呢……」
@@ -23462,7 +23462,7 @@ IF NOWEX:MASTER:射精 > 0
 					CASE 6
 						PRINTFORML 「嗯……你射精了啊」
 						;TranslatedMark 「ん……射精してくださったんですね」
-						PRINTFORML 「不好意思，可以再交往一下吗？我想更被满足……♥」
+						PRINTFORML 「不好意思，可以再来一次吗？我想更被满足……♥」
 						;TranslatedMark 「悪いけど、もう少しつきあってくださいますか？　もっと、満たされたいんです……♥」
 				ENDSELECT
 			;恋慕 or 服従
@@ -23481,7 +23481,7 @@ IF NOWEX:MASTER:射精 > 0
 						PRINTFORML 「在胸口被摩擦，好吗？呼呼♥」
 						;TranslatedMark 「胸で擦られるの、良かった？　ふふ♥」
 					CASE 4
-						PRINTFORML 「啊…%ANAME(MASTER)%的精灵，温暖而好闻的味道…♥」
+						PRINTFORML 「啊…%ANAME(MASTER)%的精液，温暖而好闻的味道…♥」
 						;TranslatedMark 「あっ…、%ANAME(MASTER)%の精、あったかくていい匂い…♥」
 				ENDSELECT
 				PRINTDATAL
@@ -23489,7 +23489,7 @@ IF NOWEX:MASTER:射精 > 0
 					;TranslatedMark 胸にかかった精液を、%ANAME(TARGET)%は嬉しそうに塗り広げている
 					DATAFORM %ANAME(TARGET)%用手指舀出放在胸前的精液，美味地含在嘴里
 					;TranslatedMark %ANAME(TARGET)%は胸に出された精液を指ですくって、美味しそうに口に含んだ
-					DATAFORM %ANAME(TARGET)%像是印入了%ANAME(MASTER)%的味道一样，把沐浴的精液粘糊糊地涂上
+					DATAFORM %ANAME(TARGET)%像是喜欢%ANAME(MASTER)%的味道一样，把沐浴的粘糊糊精液涂胸上
 					;TranslatedMark %ANAME(MASTER)%の匂いを刷り込むように、%ANAME(TARGET)%は浴びせられた精液をにちゃにちゃと音を立てて塗り込む
 				ENDDATA
 			;それ以外
@@ -23532,10 +23532,10 @@ IF NOWEX:MASTER:射精 > 0
 						PRINTFORML 「呵呵呵…♥出现了很多呢……♥」
 						;TranslatedMark 「うふふ…♥　いっぱい出ましたねぇ……♥」
 					CASE 1
-						PRINTFORML 「啊…%ANAME(MASTER)%的精灵，好温暖……♥」
+						PRINTFORML 「啊…%ANAME(MASTER)%的精液，好温暖……♥」
 						;TranslatedMark 「あっ…、%ANAME(MASTER)%の精、あったかい……♥」
 					CASE 2
-						PRINTFORML 「啊，黏糊糊的…♥这次在里面……♥」
+						PRINTFORML 「啊，这次里面…♥黏糊糊的……♥」
 						;TranslatedMark 「あぁ、べとべと…♥　今度は中に……♥」
 				ENDSELECT
 			;それ以外
@@ -23583,7 +23583,7 @@ IF NOWEX:MASTER:射精 > 0
 					CASE 5
 						PRINTFORML 「嗯……」
 						;TranslatedMark 「ん、……」
-						PRINTFORML 「男人喜欢挂在脸上」
+						PRINTFORML 「男人喜欢射在脸上」
 						;TranslatedMark 「男の人って、顔にかけるのって好きですね」
 						PRINTFORML 「%ANAME(MASTER)%也是这样吗？」
 						;TranslatedMark 「%ANAME(MASTER)%もそうなんですか？」
@@ -23625,9 +23625,9 @@ IF NOWEX:MASTER:射精 > 0
 			IF KDVAR:小悪魔_精気吸収_調教中
 				SELECTCASE RAND:12
 					CASE 0
-						PRINTFORML 「……嗯……你被头发射精了吗？」
+						PRINTFORML 「……嗯……你想在头发射精了吗？」
 						;TranslatedMark 「……んん……髪に射精されたんですか？」
-						PRINTFORML 「是即席的洗发水吗？怎么，呵呵」
+						PRINTFORML 「是白乎乎的洗发水吗？怎么，呵呵」
 						;TranslatedMark 「即席のシャンプーですか？　なんて、ふふ」
 					CASE 1
 						PRINTFORML 「嗯……头发？」
@@ -23653,17 +23653,17 @@ IF NOWEX:MASTER:射精 > 0
 						PRINTFORML 「你喜欢戴在头发上吗？」
 						;TranslatedMark 「髪に掛けるの好きなんですか？」
 					CASE 2
-						PRINTFORML 「啊，黏糊糊的…♥这次在里面……♥」
+						PRINTFORML 「啊，这次里面…♥黏糊糊的……♥」
 						;TranslatedMark 「あぁ、べとべと…♥　今度は中に……♥」
 					CASE 3
-						PRINTFORML 「已经，要是挂在头发上就不容易掉下来了…真是没办法的人啊♥」
+						PRINTFORML 「已经，要是粘在头发上就不容易掉下来了…真是没办法的人啊♥」
 						;TranslatedMark 「もう、髪に掛かると落としにくいのに…仕方ない人ですねぇ♥」
 				ENDSELECT
 			;それ以外
 			ELSE
 				SELECTCASE RAND:2
 					CASE 0
-						PRINTFORML 「如果挂在头发上的话，很难掉下来…」
+						PRINTFORML 「如果粘在头发上的话，很难掉下来…」
 						;TranslatedMark 「髪に掛かると、落としにくいんですけど…」
 					CASE 1
 						PRINTFORML 「嗯！……」
@@ -23697,7 +23697,7 @@ IF NOWEX:MASTER:射精 > 0
 			IF TALENT:恋慕 || TALENT:服従
 				SELECTCASE RAND:3
 					CASE 0
-						PRINTFORML 「啊♥　…%CALLNAME:MASTER%的精灵，好烫……♥」
+						PRINTFORML 「啊♥　…%CALLNAME:MASTER%的精液，好烫……♥」
 						;TranslatedMark 「あっ♥　…%CALLNAME:MASTER%の精、熱い……♥」
 					CASE 1
 						PRINTFORML 「啊…♥这次就放到里面吧……♥」
@@ -23738,7 +23738,7 @@ ELSEIF MAS_EX_LV > 0 && TAR_EX_LV <= 4
 				PRINTFORMW 「啊…是啊♥呵呵，那请再感受一下吧♥」
 				;TranslatedMark 「あっ…イったんですね♥　うふふ、じゃあもっと感じてくださいね♥」
 			CASE 3
-				PRINTFORMW 「库斯♥是非常好的脸哦♥」
+				PRINTFORMW 「♥是张高潮的脸哦♥」
 				;TranslatedMark 「くすくす♥　とってもいい顔ですよぉ♥」
 		ENDSELECT
 	;それ以外
@@ -23782,7 +23782,7 @@ SELECTCASE RAND:10
 		PRINTFORML 「射出来♥射出来♥%ANAME(MASTER)%的种子♥请多拿一点♥」
 		;TranslatedMark 「出して♥出して♥　%ANAME(MASTER)%のっ♥いっぱい出してくださいっ♥」
 	CASE 3
-		PRINTFORML 「哈，嗯♥帅哥♥%ANAME(MASTER)%♥帅哥♥」
+		PRINTFORML 「哈，嗯♥  %ANAME(MASTER)%♥ 」
 		;TranslatedMark 「はぁっ、んんっ♥　イカせてぇっ♥　%ANAME(MASTER)%っ♥　イカせてぇっ♥」
 	CASE 4
 		PRINTFORML 「嗯♥啊♥好的♥好的♥在里面♥放到里面去吧♥」
