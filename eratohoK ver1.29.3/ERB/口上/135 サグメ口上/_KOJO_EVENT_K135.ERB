@@ -472,13 +472,13 @@ IF ARG == 30
 	;恋慕 or 服従
 	IF TALENT:恋慕 || TALENT:服従
 		IF RAND:3 == 0
-			PRINTFORMW %ANAME(TARGET)%：……哎呀，说多了作战失败了……」
+			PRINTFORMW %ANAME(TARGET)%「……哎呀，说多了作战失败了……」
 			;TranslatedMark %ANAME(TARGET)%「……おっと、余り喋っては作戦が失敗する……」
 		ELSEIF RAND:2 == 0
-			PRINTFORMW %ANAME(TARGET)%：…文件工作很累…」
+			PRINTFORMW %ANAME(TARGET)%「…文件工作很累…」
 			;TranslatedMark %ANAME(TARGET)%「…書類仕事は疲れる…」
 		ELSE
-			PRINTFORMW %ANAME(TARGET)%：…一定…我会赢的」
+			PRINTFORMW %ANAME(TARGET)%「…一定…我会赢的」
 			;TranslatedMark %ANAME(TARGET)%「…きっと…私が勝つわ」
 		ENDIF
 	ENDIF
@@ -495,7 +495,7 @@ IF ARG == 31
 			PRINTFORMW %ANAME(TARGET)%「到底会变成什么样呢…命运会改变吗？」
 			;TranslatedMark %ANAME(TARGET)%「果たしてどうなるやら…運命は変わるのかしら？」
 		ELSEIF RAND:2 == 0
-			PRINTFORMW %ANAME(TARGET)%：…快去敌人的根据地！」
+			PRINTFORMW %ANAME(TARGET)%「…快去敌人的根据地！」
 			;TranslatedMark %ANAME(TARGET)%「…いざ敵の本拠地に向かえ！」
 		ELSE
 			PRINTFORMW %ANAME(TARGET)%「不管怎么样…%ANAME(MASTER)%的话」

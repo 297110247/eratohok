@@ -773,26 +773,26 @@ IF ARG == 30
 		IF CFLAG:240 == 3
 			SELECTCASE RAND:3
 				CASE 0
-					PRINTFORML 啊，怎么办呢……会不会欲求不满呢…」
+					PRINTFORML %ANAME(TARGET)%「啊，怎么办呢……会不会欲求不满呢…」
 					;TranslatedMark %ANAME(TARGET)%「あぁん、どうしましょう……欲求不満にならないかしら…」
 				CASE 1
-					PRINTFORML 如果有人能给我美味的精气就好了…」
+					PRINTFORML %ANAME(TARGET)%「如果有人能给我美味的精气就好了…」
 					;TranslatedMark %ANAME(TARGET)%「美味しい精気をくれる人がいたらいいんですが…」
 				CASE 2
-					PRINTFORML %ANAME(TARGET)%♥　…一个人安慰也很空虚呢……好想快点得到阴茎啊…」
+					PRINTFORML %ANAME(TARGET)%「♥　…一个人安慰也很空虚呢……好想快点得到阴茎啊…」
 					;TranslatedMark %ANAME(TARGET)%「んん、っ♥　…一人で慰めるのも虚しいですねぇ……早くペニスが欲しいわぁ…」
 			ENDSELECT 
 		;通常
 		ELSE
 			SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
 				CASE 0
-					PRINTFORML %ANAME(TARGET)%：啊…怎么办呢……」
+					PRINTFORML %ANAME(TARGET)%「啊…怎么办呢……」
 					;TranslatedMark %ANAME(TARGET)%「はあ…どうしましょう……」
 				CASE 1
-					PRINTFORML %ANAME(TARGET)%：…如果觉得是个小假期的话，这里也会去东京…不行啊…」
+					PRINTFORML %ANAME(TARGET)%「…如果觉得是个小假期的话，这里也会去东京…不行啊…」
 					;TranslatedMark %ANAME(TARGET)%「…ちょっとした休暇だと思えばここも都に…なりませんねぇ…」
 				CASE 2
-					PRINTFORML %ANAME(TARGET)%：…好想看那个人的脸啊……」
+					PRINTFORML %ANAME(TARGET)%「…好想看那个人的脸啊……」
 					;TranslatedMark %ANAME(TARGET)%「…あの人の顔が見たいな……」
 			ENDSELECT 
 		ENDIF
@@ -801,38 +801,38 @@ IF ARG == 30
 		IF CFLAG:240 == 3
 			SELECTCASE RAND:5
 				CASE 0
-					PRINTFORML 可以在战场上找个男人吗？如果是敌兵的话，可以把他吸死吧♥」
+					PRINTFORML %ANAME(TARGET)%「可以在战场上找个男人吗？如果是敌兵的话，可以把他吸死吧♥」
 					;TranslatedMark %ANAME(TARGET)%「ちょっと戦場で男漁りをしても構いませんか？　敵兵だったら吸い殺してもいいですよね♥」
 				CASE 1
-					PRINTFORML 如果有像%ANAME(MASTER)%那样精气美味的人就好了…」
+					PRINTFORML %ANAME(TARGET)%「如果有像%ANAME(MASTER)%那样精气美味的人就好了…」
 					;TranslatedMark %ANAME(TARGET)%「%ANAME(MASTER)%くらい精気が美味しそうな人がいたらいいんですが…」
 				CASE 2
-					PRINTFORML %ANAME(TARGET)%♥　…那我走了，%ANAME(MASTER)%♥」
+					PRINTFORML %ANAME(TARGET)%「♥　…那我走了，%ANAME(MASTER)%♥」
 					;TranslatedMark %ANAME(TARGET)%「んん、ちゅっ♥　…それじゃあ行って来ますね、%ANAME(MASTER)%♥」
 				CASE 3
-					PRINTFORML 请小心啊。如果不能做爱的话就太可惜了吧？」
+					PRINTFORML %ANAME(TARGET)%「请小心啊。如果不能做爱的话就太可惜了吧？」
 					;TranslatedMark %ANAME(TARGET)%「気をつけてくださいね%ANAME(MASTER)%。セックス出来なくなったら勿体無いですよ？」
 				CASE 4
-					PRINTFORML 暂时不能见面了。…为了不寂寞，你会抱我一次吗♥」
+					PRINTFORML %ANAME(TARGET)%「暂时不能见面了。…为了不寂寞，你会抱我一次吗♥」
 					;TranslatedMark %ANAME(TARGET)%「しばらく会えなくなりますね。…寂しくないよう、一回私を抱いていっちゃいますかぁ？　なんて♥」
 			ENDSELECT 
 		;通常
 		ELSE
 			SELECTCASE RAND:5
 				CASE 0
-					PRINTFORML 请慢走」
+					PRINTFORML %ANAME(TARGET)%「请慢走」
 					;TranslatedMark %ANAME(TARGET)%「いってらっしゃいませー」
 				CASE 1
-					PRINTFORML %ANAME(MASTER)%，回去后再去吃蛋糕吧♪」
+					PRINTFORML %ANAME(TARGET)%「%ANAME(MASTER)%，回去后再去吃蛋糕吧♪」
 					;TranslatedMark %ANAME(TARGET)%「%ANAME(MASTER)%、帰ったらまたケーキを食べに行きましょう♪」
 				CASE 2
-					PRINTFORML 我喜欢混沌的世界，但是讨厌被卷入其中…」
+					PRINTFORML %ANAME(TARGET)%「我喜欢混沌的世界，但是讨厌被卷入其中…」
 					;TranslatedMark %ANAME(TARGET)%「混沌の世は好きなんですが、巻き込まれるのは嫌なんですよねぇ…」
 				CASE 3
-					PRINTFORML 战斗开始后会从无聊的杂务中解放出来…。稍微伸展一下翅膀吧！」
+					PRINTFORML %ANAME(TARGET)%「战斗开始后会从无聊的杂务中解放出来…。稍微伸展一下翅膀吧！」
 					;TranslatedMark %ANAME(TARGET)%「戦が始まると退屈な雑務から開放される…。ちょっと羽を伸ばしますよー！」
 				CASE 4
-					PRINTFORML 我祈祷大家平安无事。请小心」
+					PRINTFORML %ANAME(TARGET)%「我祈祷大家平安无事。请小心」
 					;TranslatedMark %ANAME(TARGET)%「皆さんの無事を祈ってます。どうかお気をつけて」
 			ENDSELECT 
 		ENDIF
@@ -840,13 +840,13 @@ IF ARG == 30
 	ELSEIF !RAND:2
 		SELECTCASE RAND:3
 			CASE 0
-				PRINTFORML 大家请慢走」
+				PRINTFORML %ANAME(TARGET)%「大家请慢走」
 				;TranslatedMark %ANAME(TARGET)%「皆さん、いってらっしゃいませ」
 			CASE 1
-				PRINTFORML %ANAME(TARGET)%："稍微把翅膀伸出来吧♪」
+				PRINTFORML %ANAME(TARGET)%「%ANAME(TARGET)%「"稍微把翅膀伸出来吧♪」
 				;TranslatedMark %ANAME(TARGET)%「ちょっと羽を伸ばそうっと♪」
 			CASE 2
-				PRINTFORML 不被卷入纷争的话…」
+				PRINTFORML %ANAME(TARGET)%「不被卷入纷争的话…」
 				;TranslatedMark %ANAME(TARGET)%「争い事には巻き込まれないようにしないと…」
 		ENDSELECT 
 	ENDIF
@@ -865,26 +865,26 @@ IF ARG == 31
 		IF CFLAG:240 == 3
 			SELECTCASE RAND:3
 				CASE 0
-					PRINTFORML 啊，请再多摸我的身体…」
+					PRINTFORML %ANAME(TARGET)%「啊，请再多摸我的身体…」
 					;TranslatedMark %ANAME(TARGET)%「あぁん、もっと私の身体まさぐってくださぁい…」
 				CASE 1
-					PRINTFORML %ANAME(TARGET)%：嗯，哼！　……哈，这样的话只有手淫才行…
+					PRINTFORML %ANAME(TARGET)%「嗯，哼！　……哈，这样的话只有手淫才行…
 					;TranslatedMark %ANAME(TARGET)%「んっ、ふうっ！　……はぁ、このままじゃオナニーだけ上手くなっちゃいそう…
 				CASE 2
-					PRINTFORML %ANAME(TARGET)%：啊…我想快点变得自由，尽情地做爱…」
+					PRINTFORML %ANAME(TARGET)%「啊…我想快点变得自由，尽情地做爱…」
 					;TranslatedMark %ANAME(TARGET)%「はぁ…、早く自由になって好きなだけセックスがしたいなぁ…」
 			ENDSELECT 
 		;通常
 		ELSE
 			SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
 				CASE 0
-					PRINTFORML %ANAME(TARGET)%：啊…怎么也逃不掉啊……」
+					PRINTFORML %ANAME(TARGET)%「啊…怎么也逃不掉啊……」
 					;TranslatedMark %ANAME(TARGET)%「はあ…何とか逃げれないものでしょうか……」
 				CASE 1
-					PRINTFORML %ANAME(TARGET)%：…想要一张睡起来更舒服的床呢…」
+					PRINTFORML %ANAME(TARGET)%「…想要一张睡起来更舒服的床呢…」
 					;TranslatedMark %ANAME(TARGET)%「…もっと寝心地良いベッドがほしいですねぇ…」
 				CASE 2
-					PRINTFORML %ANAME(TARGET)%：…我想听那个人的声音……请快点来救我啊…」
+					PRINTFORML %ANAME(TARGET)%「…我想听那个人的声音……请快点来救我啊…」
 					;TranslatedMark %ANAME(TARGET)%「…あの人の声が聞きたい……早く助けに来てくださいよぉ…」
 			ENDSELECT 
 		ENDIF
@@ -893,38 +893,38 @@ IF ARG == 31
 		IF CFLAG:240 == 3
 			SELECTCASE RAND:5
 				CASE 0
-					PRINTFORML 虽然在战场上吃得很多，但总觉得不太好…。果然还是%ANAME(MASTER)%最棒棒了啊♥」
+					PRINTFORML %ANAME(TARGET)%「虽然在战场上吃得很多，但总觉得不太好…。果然还是%ANAME(MASTER)%最棒棒了啊♥」
 					;TranslatedMark %ANAME(TARGET)%「戦場でつまみ食いしてきましたけど、どうもイマイチで…。やっぱり%ANAME(MASTER)%が一番ですねぇ♥」
 				CASE 1
-					PRINTFORML 果然像%ANAME(MASTER)%那样精气美味的人很少有啊…」
+					PRINTFORML %ANAME(TARGET)%「果然像%ANAME(MASTER)%那样精气美味的人很少有啊…」
 					;TranslatedMark %ANAME(TARGET)%「やっぱり%ANAME(MASTER)%くらい精気が美味しそうな人って、滅多にいないんですねぇ…」
 				CASE 2
-					PRINTFORML %ANAME(MASTER)%，欢迎回来，啵♥　…如果只是接吻不够的话请告诉我哦♥」
+					PRINTFORML %ANAME(TARGET)%「%ANAME(MASTER)%，欢迎回来，啵♥　…如果只是接吻不够的话请告诉我哦♥」
 					;TranslatedMark %ANAME(TARGET)%「%ANAME(MASTER)%、お帰りなさい、ちゅっ♥　…キスだけで足りないようなら言ってくださいねぇ♥」
 				CASE 3
-					PRINTFORML 辛苦了，%ANAME(MASTER)%。身体不兴奋吗？如果可以的话和我…吗♥」
+					PRINTFORML %ANAME(TARGET)%「辛苦了，%ANAME(MASTER)%。身体不兴奋吗？如果可以的话和我…吗♥」
 					;TranslatedMark %ANAME(TARGET)%「お疲れ様です、%ANAME(MASTER)%。身体は昂ってないですか？　良かったら私と…なーんて♥」
 				CASE 4
-					PRINTFORML 有点失礼了♥紧紧地……啊，啊♥果然还是%ANAME(MASTER)%的味道最让人放心♥」
+					PRINTFORML %ANAME(TARGET)%「有点失礼了♥紧紧地……啊，啊♥果然还是%ANAME(MASTER)%的味道最让人放心♥」
 					;TranslatedMark %ANAME(TARGET)%「ちょっと失礼しますね♥　ぎゅーっ……、あぁ♥　やっぱり%ANAME(MASTER)%の匂いが一番安心します♥」
 			ENDSELECT 
 		;通常
 		ELSE
 			SELECTCASE RAND:5
 				CASE 0
-					PRINTFORML 欢迎回来。身体怎么样了？」
+					PRINTFORML %ANAME(TARGET)%「欢迎回来。身体怎么样了？」
 					;TranslatedMark %ANAME(TARGET)%「お帰りなさいませ。調子はどうでしたか？」
 				CASE 1
-					PRINTFORML 辛苦了。不去吃甜食吗？」
+					PRINTFORML %ANAME(TARGET)%「辛苦了。不去吃甜食吗？」
 					;TranslatedMark %ANAME(TARGET)%「お疲れ様です%ANAME(MASTER)%。甘い物でも食べに行きませんか？」
 				CASE 2
-					PRINTFORML 我还以为会被杀…。果然和平是最好的」
+					PRINTFORML %ANAME(TARGET)%「我还以为会被杀…。果然和平是最好的」
 					;TranslatedMark %ANAME(TARGET)%「こ、殺されるかと思った…。やっぱり平和が一番ですねぇ」
 				CASE 3
-					PRINTFORML %ANAME(TARGET)%：翅膀伸展完成。那么，工作加油吧」
+					PRINTFORML %ANAME(TARGET)%「翅膀伸展完成。那么，工作加油吧」
 					;TranslatedMark %ANAME(TARGET)%「羽伸ばし完了っと。さーて、お仕事頑張らないと」
 				CASE 4
-					PRINTFORML %ANAME(MASTER)%没事真是太好了…。真的很担心呢？」
+					PRINTFORML %ANAME(TARGET)%「%ANAME(MASTER)%没事真是太好了…。真的很担心呢？」
 					;TranslatedMark %ANAME(TARGET)%「%ANAME(MASTER)%が無事で良かった…。ホントに心配してたんですよ？」
 			ENDSELECT 
 		ENDIF
@@ -932,13 +932,13 @@ IF ARG == 31
 	ELSEIF !RAND:2
 		SELECTCASE RAND:3
 			CASE 0
-				PRINTFORML 大家，欢迎回来」
+				PRINTFORML %ANAME(TARGET)%「大家，欢迎回来」
 				;TranslatedMark %ANAME(TARGET)%「皆さん、お帰りなさいませ」
 			CASE 1
-				PRINTFORML %ANAME(TARGET)%：翅膀伸展完成」
+				PRINTFORML %ANAME(TARGET)%「翅膀伸展完成」
 				;TranslatedMark %ANAME(TARGET)%「羽伸ばし完了ーっと」
 			CASE 2
-				PRINTFORML 我还以为会被杀…。果然和平是最好的」
+				PRINTFORML %ANAME(TARGET)%「我还以为会被杀…。果然和平是最好的」
 				;TranslatedMark %ANAME(TARGET)%「こ、殺されるかと思った…。やっぱり平和が一番です」
 		ENDSELECT 
 	ENDIF
@@ -1858,28 +1858,28 @@ IF ARG == 300
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%…猎物太多了，让人眼花缭乱呢♥」
+				PRINTFORML %ANAME(TARGET)%「…猎物太多了，让人眼花缭乱呢♥」
 				;TranslatedMark %ANAME(TARGET)%「うふふ…、獲物がいっぱいで目移りしちゃいますねぇ♥」
 			CASE 1 
-				PRINTFORML 不要再战斗了，和我做好事吧？呵呵呵…♥」
+				PRINTFORML %ANAME(TARGET)%「不要再战斗了，和我做好事吧？呵呵呵…♥」
 				;TranslatedMark %ANAME(TARGET)%「戦いなんて止めてぇ、私とイイコト、しませんかぁ？　うふふ…♥」
 			CASE 2 
-				PRINTFORML 啊，真是粗暴的战斗啊。嘛，我也不讨厌那样的…♥」
+				PRINTFORML %ANAME(TARGET)%「啊，真是粗暴的战斗啊。嘛，我也不讨厌那样的…♥」
 				;TranslatedMark %ANAME(TARGET)%「あぁんっ、乱暴な戦いですねぇ。まあ、そういうのも嫌いじゃあないですけど…♥」
 			CASE 3
-				PRINTFORML %ANAME(TARGET)%…啊，扰乱士兵的心是淫魔的得意之处…♥」
+				PRINTFORML %ANAME(TARGET)%「…啊，扰乱士兵的心是淫魔的得意之处…♥」
 				;TranslatedMark %ANAME(TARGET)%「くすくす…っ、兵の心を乱すのは淫魔の得意とするところです…♥」
 		ENDSELECT
 	ELSE
 		SELECTCASE RAND:3
 			CASE 0
-				PRINTFORML 就算是恶魔！我也不会原谅你的！」
+				PRINTFORML %ANAME(TARGET)%「就算是恶魔！我也不会原谅你的！」
 				;TranslatedMark %ANAME(TARGET)%「仮にも悪魔です！　容赦しませんよー！」
 			CASE 1 
-				PRINTFORML 虽然不知道是什么，但还是趁现在袭击吧」
+				PRINTFORML %ANAME(TARGET)%「虽然不知道是什么，但还是趁现在袭击吧」
 				;TranslatedMark %ANAME(TARGET)%「何だか知りませんが、今のうちに襲っちゃいましょう」
 			CASE 2 
-				PRINTFORML 大家要小心啊？」
+				PRINTFORML %ANAME(TARGET)%「大家要小心啊？」
 				;TranslatedMark %ANAME(TARGET)%「皆さん、気をつけてくださいねぇ？」
 		ENDSELECT
 	ENDIF
@@ -1891,40 +1891,40 @@ ELSEIF ARG == 301
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:6
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%…猎物好多啊♥」
+				PRINTFORML %ANAME(TARGET)%「…猎物好多啊♥」
 				;TranslatedMark %ANAME(TARGET)%「うふふ…、獲物がいっぱいですねぇ♥」
 			CASE 1 
-				PRINTFORML 和我做好事吧？呵呵呵…♥」
+				PRINTFORML %ANAME(TARGET)%「和我做好事吧？呵呵呵…♥」
 				;TranslatedMark %ANAME(TARGET)%「私とイイコト、しちゃいましょう？　うふふ…♥」
 			CASE 2 
-				PRINTFORML 如果你把它给我，我会做很多让你开心的事♥」
+				PRINTFORML %ANAME(TARGET)%「如果你把它给我，我会做很多让你开心的事♥」
 				;TranslatedMark %ANAME(TARGET)%「明け渡してくれたら、いっぱいキモチいいこと、してあげますよぉ♥」
 			CASE 3
-				PRINTFORML %ANAME(TARGET)%…啊，扰乱士兵的心是淫魔的得意之处…♥」
+				PRINTFORML %ANAME(TARGET)%「…啊，扰乱士兵的心是淫魔的得意之处…♥」
 				;TranslatedMark %ANAME(TARGET)%「くすくす…っ、兵の心を乱すのは淫魔の得意とするところです…♥」
 			CASE 4
-				PRINTFORML 生命终结之时的精液的味道…好期待啊…♥」
+				PRINTFORML %ANAME(TARGET)%「生命终结之时的精液的味道…好期待啊…♥」
 				;TranslatedMark %ANAME(TARGET)%「命が尽きる際の精の味…、楽しみですねぇ…♥」
 			CASE 5
-				PRINTFORML %ANAME(TARGET)%♥被那样拼命抵抗的话会很兴奋呢…♥」
+				PRINTFORML %ANAME(TARGET)%「♥被那样拼命抵抗的话会很兴奋呢…♥」
 				;TranslatedMark %ANAME(TARGET)%「あぁん♥　そんな必死に抵抗されると興奮しちゃいますねぇ…♥」
 		ENDSELECT
 	ELSE
 		SELECTCASE RAND:5
 			CASE 0
-				PRINTFORML 就算是恶魔！我也不会原谅你的！」
+				PRINTFORML %ANAME(TARGET)%「就算是恶魔！我也不会原谅你的！」
 				;TranslatedMark %ANAME(TARGET)%「仮にも悪魔です！　容赦しませんよー！」
 			CASE 1 
-				PRINTFORML 请允许我骑马」
+				PRINTFORML %ANAME(TARGET)%「请允许我骑马」
 				;TranslatedMark %ANAME(TARGET)%「勝ち馬に乗らせていただきますね」
 			CASE 2 
-				PRINTFORML 用我的知识呼唤胜利吧！」
+				PRINTFORML %ANAME(TARGET)%「用我的知识呼唤胜利吧！」
 				;TranslatedMark %ANAME(TARGET)%「私の知識で勝利を呼びましょう！」
 			CASE 3
-				PRINTFORML 我不会输的！」
+				PRINTFORML %ANAME(TARGET)%「我不会输的！」
 				;TranslatedMark %ANAME(TARGET)%「負けませんよー！」
 			CASE 4
-				PRINTFORML 如果不想成为恶魔的牺牲品的话请投降吧？」
+				PRINTFORML %ANAME(TARGET)%「如果不想成为恶魔的牺牲品的话请投降吧？」
 				;TranslatedMark %ANAME(TARGET)%「悪魔の生贄になりたくなかったら降参してくださいね？」
 		ENDSELECT
 	ENDIF
@@ -1936,40 +1936,40 @@ ELSEIF ARG == 302
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:6
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%♥被那样强行要求的话会很兴奋…♥」
+				PRINTFORML %ANAME(TARGET)%「♥被那样强行要求的话会很兴奋…♥」
 				;TranslatedMark %ANAME(TARGET)%「あぁん♥　そんな強引に求められたら興奮しちゃいます…♥」
 			CASE 1 
-				PRINTFORML 不要再战斗了，和我做好事吧？呵呵呵…♥」
+				PRINTFORML %ANAME(TARGET)%「不要再战斗了，和我做好事吧？呵呵呵…♥」
 				;TranslatedMark %ANAME(TARGET)%「戦なんてやめてぇ、私とイイコト、しませんかぁ？　うふふ…♥」
 			CASE 2 
-				PRINTFORML 啊，好激烈啊。虽然也不是讨厌那样的…♥」
+				PRINTFORML %ANAME(TARGET)%「啊，好激烈啊。虽然也不是讨厌那样的…♥」
 				;TranslatedMark %ANAME(TARGET)%「やぁん、激しいですねぇ。そういうのも嫌いじゃあないですけど…♥」
 			CASE 3
-				PRINTFORML %ANAME(TARGET)%…啊，特意来送我精啊…♥」
+				PRINTFORML %ANAME(TARGET)%「…啊，特意来送我精啊…♥」
 				;TranslatedMark %ANAME(TARGET)%「くすくす…っ、わざわざ精を運んで来てくれたんですねぇ…♥」
 			CASE 4
-				PRINTFORML 不要进行无谓的战斗…和我一起做开心的事吧♥」
+				PRINTFORML %ANAME(TARGET)%「不要进行无谓的战斗…和我一起做开心的事吧♥」
 				;TranslatedMark %ANAME(TARGET)%「無意味な戦いなんてやめてぇ…、私とキモチいいこと、しませんかぁ♥」
 			CASE 5
-				PRINTFORML 这是扰乱士兵心的淫魔的得意之处…♥」
+				PRINTFORML %ANAME(TARGET)%「这是扰乱士兵心的淫魔的得意之处…♥」
 				;TranslatedMark %ANAME(TARGET)%「くすくすっ、兵の心を乱すのは淫魔の得意とするところです…♥」
 		ENDSELECT
 	ELSE
 		SELECTCASE RAND:5
 			CASE 0
-				PRINTFORML 就算是恶魔！我也不会输的！」
+				PRINTFORML %ANAME(TARGET)%「就算是恶魔！我也不会输的！」
 				;TranslatedMark %ANAME(TARGET)%「仮にも悪魔です！　負けませんよー！」
 			CASE 1 
-				PRINTFORML 请出去吧」
+				PRINTFORML %ANAME(TARGET)%「请出去吧」
 				;TranslatedMark %ANAME(TARGET)%「出て行ってくださいよー」
 			CASE 2 
-				PRINTFORML 用我的知识来凌驾于你面前！」
+				PRINTFORML %ANAME(TARGET)%「用我的知识来凌驾于你面前！」
 				;TranslatedMark %ANAME(TARGET)%「私の知識で凌いで見せます！」
 			CASE 3
-				PRINTFORML 就算力量不足，我也会用知识来保护你」
+				PRINTFORML %ANAME(TARGET)%「就算力量不足，我也会用知识来保护你」
 				;TranslatedMark %ANAME(TARGET)%「力は足りなくても知識で守って見せます」
 			CASE 4
-				PRINTFORML 不想成为恶魔的牺牲品的话请回去吧？」
+				PRINTFORML %ANAME(TARGET)%「不想成为恶魔的牺牲品的话请回去吧？」
 				;TranslatedMark %ANAME(TARGET)%「悪魔の生贄になりたくなかったら帰ってくださいね？」
 		ENDSELECT
 	ENDIF
@@ -1986,25 +1986,25 @@ IF ARG == 310
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:3
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%…淫魔的坏主意，不能小看哦♥」
+				PRINTFORML %ANAME(TARGET)%「…淫魔的坏主意，不能小看哦♥」
 				;TranslatedMark %ANAME(TARGET)%「うふふ…、淫魔の悪知恵、甘く見ちゃだめですよぉ♥」
 			CASE 1 
-				PRINTFORML 我会邀请你做一个愉快的梦哦…♥」
+				PRINTFORML %ANAME(TARGET)%「我会邀请你做一个愉快的梦哦…♥」
 				;TranslatedMark %ANAME(TARGET)%「キモチいい夢に誘ってあげますよぉ…♥」
 			CASE 2 
-				PRINTFORML 哼，真是岂有此理♥」
+				PRINTFORML %ANAME(TARGET)%「哼，真是岂有此理♥」
 				;TranslatedMark %ANAME(TARGET)%「うふふ、とんでもないことになぁれ♥」
 		ENDSELECT
 	ELSE
 		SELECTCASE RAND:3
 			CASE 0
-				PRINTFORML 恶魔是狡猾聪明的哟？」
+				PRINTFORML %ANAME(TARGET)%「恶魔是狡猾聪明的哟？」
 				;TranslatedMark %ANAME(TARGET)%「悪魔は狡賢いんですよー？」
 			CASE 1 
-				PRINTFORML 即使是小恶魔，也能取得大战果哦！」
+				PRINTFORML %ANAME(TARGET)%「即使是小恶魔，也能取得大战果哦！」
 				;TranslatedMark %ANAME(TARGET)%「小悪魔でも戦果は大きくいきますよ！」
 			CASE 2 
-				PRINTFORML 呵呵，会变成意想不到的事情的♪」
+				PRINTFORML %ANAME(TARGET)%「呵呵，会变成意想不到的事情的♪」
 				;TranslatedMark %ANAME(TARGET)%「うふふ、とんでもないことになーれ♪」
 		ENDSELECT
 	ENDIF
@@ -2018,10 +2018,10 @@ ELSEIF ARG == 311
 ELSEIF ARG == 312
 	SETCOLOR 0xB40404
 	IF CFLAG:240 == 3
-		PRINTFORML %ANAME(TARGET)%…♥请多关照啊♥」
+		PRINTFORML %ANAME(TARGET)%「…♥请多关照啊♥」
 		;TranslatedMark %ANAME(TARGET)%「くすくす…♥　いっぱい逝ってくださいねぇ♥」
 	ELSE
-		PRINTFORML 这是我的珍藏品！」
+		PRINTFORML %ANAME(TARGET)%「这是我的珍藏品！」
 		;TranslatedMark %ANAME(TARGET)%「これが私のとっておきです！」
 	ENDIF
 	RESETCOLOR
@@ -2040,31 +2040,31 @@ IF ARG == 330
 	IF CFLAG:240 == 3
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML 啊，抓到了…」
+				PRINTFORML %ANAME(TARGET)%「啊，抓到了…」
 				;TranslatedMark %ANAME(TARGET)%「あぁん、捕まっちゃいました…」
 			CASE 1 
-				PRINTFORML 你、请再温柔一点吧…」
+				PRINTFORML %ANAME(TARGET)%「你、请再温柔一点吧…」
 				;TranslatedMark %ANAME(TARGET)%「あん、イヤッ、もっと優しくしてくださいよぉ…」
 			CASE 2 
-				PRINTFORML %ANAME(TARGET)%：…呵呵，今后会变成什么样呢……♥」
+				PRINTFORML %ANAME(TARGET)%「…呵呵，今后会变成什么样呢……♥」
 				;TranslatedMark %ANAME(TARGET)%「…うふふ、これからどうなっちゃうんでしょうか……♥」
 			CASE 3
-				PRINTFORML 啊，没那么…如果胸部被勒紧了，会很兴奋……♥」
+				PRINTFORML %ANAME(TARGET)%「啊，没那么…如果胸部被勒紧了，会很兴奋……♥」
 				;TranslatedMark %ANAME(TARGET)%「あぁんっ、そんなにっ、…おっぱいきつくされたら、興奮しちゃう……♥」
 		ENDSELECT
 	ELSE
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORMW 被抓住了…」
+				PRINTFORMW %ANAME(TARGET)%「被抓住了…」
 				;TranslatedMark %ANAME(TARGET)%「捕まっちゃいました…」
 			CASE 1 
-				PRINTFORML %ANAME(TARGET)%：嗯…不做过分的事情的话会很开心的……啊，啊哈哈…」
+				PRINTFORML %ANAME(TARGET)%「嗯…不做过分的事情的话会很开心的……啊，啊哈哈…」
 				;TranslatedMark %ANAME(TARGET)%「ひ…酷いことはしないでくれると嬉しいなーって……、あ、あはは…」
 			CASE 2 
-				PRINTFORML 啊，啊哈哈…。嗯，谢谢……」
+				PRINTFORML %ANAME(TARGET)%「啊，啊哈哈…。嗯，谢谢……」
 				;TranslatedMark %ANAME(TARGET)%「あ、あはは…。ど、どうも……」
 			CASE 3
-				PRINTFORML 嗯，不要那么紧地绑着胸部啊…」
+				PRINTFORML %ANAME(TARGET)%「嗯，不要那么紧地绑着胸部啊…」
 				;TranslatedMark %ANAME(TARGET)%「あんっ、そんなにっ、おっぱいきつく縛らないでくださいよぉ…」
 		ENDSELECT
 	ENDIF
@@ -2077,7 +2077,7 @@ ENDIF
 ;-------------------------------------------------
 IF ARG == 331
 	SETCOLOR 0xB40404
-	PRINTFORMW 我的野心啊……」
+	PRINTFORMW %ANAME(TARGET)%「我的野心啊……」
 	;TranslatedMark %ANAME(TARGET)%「私の野望がぁー……」
 	RESETCOLOR
 	RETURN 0

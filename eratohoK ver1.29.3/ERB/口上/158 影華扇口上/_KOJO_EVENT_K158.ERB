@@ -661,13 +661,13 @@ IF ARG == 30
 	IF CFLAG:捕虜先 && !RAND:2
 		SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%：…封住鬼的链条，做得很好」
+				PRINTFORML %ANAME(TARGET)%「…封住鬼的链条，做得很好」
 				;TranslatedMark %ANAME(TARGET)%「…鬼を封じる鎖、よく出来ているじゃないか」
 			CASE 1
 				PRINTFORML %ANAME(TARGET)%「比箱子里好吗…」
 				;TranslatedMark %ANAME(TARGET)%「箱の中よりかはマシか…」
 			CASE 2
-				PRINTFORML %ANAME(TARGET)%：…我想看看那家伙的脸……」
+				PRINTFORML %ANAME(TARGET)%「…我想看看那家伙的脸……」
 				;TranslatedMark %ANAME(TARGET)%「…あいつの顔が見たいな……」
 		ENDSELECT 
 	;親愛 or 隷属

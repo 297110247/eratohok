@@ -709,7 +709,7 @@ IF ARG == 30
 				PRINTFORML %ANAME(TARGET)%「戒指什么的都被拿走了…随便把这些拿出去卖的话，可不是免费的……」
 				;TranslatedMark %ANAME(TARGET)%「指輪とかも全部取られちゃった…勝手に売っぱらったらタダじゃおかないわよ」
 			CASE 1
-				PRINTFORML %ANAME(TARGET)%：…我想快点摆脱这样不舒服的地方」
+				PRINTFORML %ANAME(TARGET)%「…我想快点摆脱这样不舒服的地方」
 				;TranslatedMark %ANAME(TARGET)%「…こんなしみったれた所とか一日も早く抜け出したいわ」
 			CASE 2
 				PRINTFORML %ANAME(TARGET)%「那家伙还好吗。…快来救我啊…」
@@ -719,7 +719,7 @@ IF ARG == 30
 	ELSEIF TALENT:親愛
 		;親愛イベント前
 		IF !CFLAG:240 == 1
-			PRINTFORML %ANAME(TARGET)%：………………嘶」
+			PRINTFORML %ANAME(TARGET)%「………………嘶」
 			;TranslatedMark %ANAME(TARGET)%「………………ッ」
 			RESETCOLOR
 			PRINTFORML %ANAME(TARGET)%似乎想起了什么，低着头，快步走了……
@@ -823,7 +823,7 @@ IF ARG == 31
 	IF CFLAG:捕虜先 && !RAND:2
 		SELECTCASE IFRAND("0TO1", 1, "2", TALENT:恋慕)
 			CASE 0
-				PRINTFORML %ANAME(TARGET)%：「……这些家伙是不是不知道自己捉到了疫病神或者说干脆是一群白痴啊…。啊，真是的！」
+				PRINTFORML %ANAME(TARGET)%「「……这些家伙是不是不知道自己捉到了疫病神或者说干脆是一群白痴啊…。啊，真是的！」
 				;TranslatedMark %ANAME(TARGET)%「……疫病神を捕らえておくとかアホなのかしらこいつら…。あーっもう！」
 			CASE 1
 				PRINTFORML %ANAME(TARGET)%「如果是姐姐的话，在这种地方也能睡得很安稳吧…但我讨厌！」
@@ -836,7 +836,7 @@ IF ARG == 31
 	ELSEIF TALENT:親愛
 		;親愛イベント前
 		IF !CFLAG:240 == 1
-			PRINTFORML %ANAME(TARGET)%：………哦，欢迎回来………」
+			PRINTFORML %ANAME(TARGET)%「………哦，欢迎回来………」
 			;TranslatedMark %ANAME(TARGET)%「………お、お帰り………」
 			RESETCOLOR
 			PRINTFORML %ANAME(TARGET)%用不自然的样子打了招呼，然后快步走了……
@@ -863,7 +863,7 @@ IF ARG == 31
 					PRINTFORML %ANAME(TARGET)%「欢迎回来，%ANAME(MASTER)%。……那个…可以抱一下吗？」
 					;TranslatedMark %ANAME(TARGET)%「お帰りなさい、%ANAME(MASTER)%。……その、…ちょっとだけ抱きついても、いい？」
 				CASE 6
-					PRINTFORML %ANAME(TARGET)%：……不能和%ANAME(MASTER)%见面的时间，感觉好漫长啊…。终于结束了呢…♥」
+					PRINTFORML %ANAME(TARGET)%「……不能和%ANAME(MASTER)%见面的时间，感觉好漫长啊…。终于结束了呢…♥」
 					;TranslatedMark %ANAME(TARGET)%「……%ANAME(MASTER)%と会えない時間、すごく長く感じたわ…。やっとそれが終わったのね…♥」
 				CASE 7
 					PRINTFORML %ANAME(TARGET)%「姐姐，有好好干活吗？偷懒的话就没饭吃了」
@@ -898,7 +898,7 @@ IF ARG == 31
 				PRINTFORML %ANAME(TARGET)%「欢迎回来，%ANAME(MASTER)%。……嗯，那个…可以抱一下吗？」
 				;TranslatedMark %ANAME(TARGET)%「お帰り、%ANAME(MASTER)%。……え、えーと、その…ちょっとだけ抱きついても、いい？」
 			CASE 6
-				PRINTFORML %ANAME(TARGET)%：……不能和%ANAME(MASTER)%见面的时间感觉好漫长啊…」
+				PRINTFORML %ANAME(TARGET)%「……不能和%ANAME(MASTER)%见面的时间感觉好漫长啊…」
 				;TranslatedMark %ANAME(TARGET)%「……%ANAME(MASTER)%と会えない時間がやたら長く感じたわー…」
 			CASE 7
 				PRINTFORML %ANAME(TARGET)%「姐姐，真的有好好干活吗？」
@@ -1795,7 +1795,7 @@ IF ARG == 310
 			PRINTFORML %ANAME(TARGET)%「后悔与我们为敌吧！」
 			;TranslatedMark %ANAME(TARGET)%「私たちを敵に回したことを後悔しなさい！」
 		CASE 1
-			PRINTFORML %ANAME(TARGET)%：那么…要不要从那家伙那里发财呢♪」
+			PRINTFORML %ANAME(TARGET)%「那么…要不要从那家伙那里发财呢♪」
 			;TranslatedMark %ANAME(TARGET)%「さーて、…アイツらから根こそぎ巻き上げてやろうかしらね♪」
 	ENDSELECT
 	RESETCOLOR
